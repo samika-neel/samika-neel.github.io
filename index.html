@@ -19,7 +19,7 @@
 <meta name="twitter:image" content="https://samika-neel.github.io/assets/og-image.jpg" />
 <link rel="preconnect" href="https://fonts.googleapis.com" />
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;1,400;1,500&family=Jost:wght@300;400;500&family=Amita:wght@400;700&display=swap" rel="stylesheet" />
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;1,400;1,500&family=Jost:wght@300;400;500&family=Amita:wght@400;700&family=Pinyon+Script&display=swap" rel="stylesheet" />
 <link rel="icon" type="image/png" sizes="64x64" href="assets/tinted/favicon-64.png" />
 <link rel="apple-touch-icon" href="assets/tinted/apple-touch-icon.png" />
 <style>
@@ -338,8 +338,12 @@
   }
   .event-card > .content { position: relative; z-index: 1; }
 
+  /* event names use the designer's copperplate script */
   .event-name {
-    font-size: clamp(2.3rem, 9vw, 3.6rem);
+    font-family: "Pinyon Script", var(--serif);
+    font-weight: 400;
+    font-size: clamp(2.9rem, 11vw, 4.4rem);
+    line-height: 1.15;
   }
   .event-when span { white-space: nowrap; }
   .event-when {
@@ -383,39 +387,56 @@
     color: var(--ink-soft);
   }
 
-  /* each celebration gets its own hue, drawn from the event itself */
+  /* palettes lifted from the designer's printed invitation suite
+     (assets/static-invitation-cards/) */
   .event-card--satsang {
-    background: #f5ecdc; /* sandalwood */
+    background: #fdfcfa; /* white card, dusty-rose ink */
+    border-color: rgba(164, 136, 136, 0.28);
   }
+  .event-card--satsang .backdrop .art { background-image: url("assets/tinted/branch9_rose.png"); opacity: 0.38; }
+  .event-card--satsang .event-name { color: #b08585; }
+  .event-card--satsang .event-when { color: #9d8080; }
+  .event-card--satsang .event-where,
+  .event-card--satsang .event-desc,
+  .event-card--satsang .event-dress,
+  .event-card--satsang .event-dress-note { color: #b49694; }
 
   .event-card--haldi {
-    background: #f2e6bd; /* soft haldi turmeric */
-    border-color: rgba(90, 84, 30, 0.22);
+    background: #bab689; /* sage card, deep olive ink */
+    border-color: rgba(57, 53, 17, 0.3);
   }
+  .event-card--haldi .backdrop .art { background-image: url("assets/tinted/branch11_olive.png"); opacity: 0.3; }
+  .event-card--haldi .event-name { color: #403c1c; }
+  .event-card--haldi .event-when { color: #45411f; }
+  .event-card--haldi .event-where,
+  .event-card--haldi .event-desc,
+  .event-card--haldi .event-dress,
+  .event-card--haldi .event-dress-note { color: #56522c; }
 
   .event-card--sangeet {
-    background: #392b3d; /* deep plum evening */
-    border-color: rgba(240, 233, 216, 0.16);
-    color: var(--cream);
+    background: #fdfdf9; /* white card, pale khaki ink */
+    border-color: rgba(63, 61, 36, 0.2);
   }
-  .event-card--sangeet .backdrop .art { background-image: url("assets/tinted/branch1_cream.png"); opacity: 0.1; }
-  .event-card--sangeet .event-when { color: var(--cream); }
+  .event-card--sangeet .backdrop .art { background-image: url("assets/tinted/branch1_khaki.png"); opacity: 0.42; }
+  .event-card--sangeet .event-name { color: #3f3d24; }
+  .event-card--sangeet .event-when { color: #8b895f; }
   .event-card--sangeet .event-where,
-  .event-card--sangeet .event-desc { color: rgba(240, 233, 216, 0.68); }
+  .event-card--sangeet .event-desc,
   .event-card--sangeet .event-dress,
-  .event-card--sangeet .event-dress-note { color: rgba(240, 233, 216, 0.6); }
+  .event-card--sangeet .event-dress-note { color: #a3a17e; }
 
-  /* the wedding card goes dark for contrast */
-  .event-card--forest {
-    background: var(--forest);
-    border-color: rgba(240, 233, 216, 0.16);
-    color: var(--cream);
+  .event-card--wedding {
+    background: #e8baba; /* dusty pink card, white ink */
+    border-color: rgba(255, 255, 255, 0.45);
+    color: #fffdfc;
   }
-  .event-card--forest .backdrop .art { background-image: url("assets/tinted/branch9_cream.png"); opacity: 0.1; }
-  .event-card--forest .event-when { color: var(--cream); }
-  .event-card--forest .event-where,
-  .event-card--forest .event-desc { color: rgba(240, 233, 216, 0.68); }
-  .event-card--forest .event-dress { color: rgba(240, 233, 216, 0.6); }
+  .event-card--wedding .backdrop .art { background-image: url("assets/tinted/branch9_white.png"); opacity: 0.3; }
+  .event-card--wedding .event-name { color: #b5868b; }
+  .event-card--wedding .event-when { color: #fffdfc; }
+  .event-card--wedding .event-where,
+  .event-card--wedding .event-desc { color: rgba(255, 250, 249, 0.85); }
+  .event-card--wedding .event-dress,
+  .event-card--wedding .event-dress-note { color: rgba(255, 250, 249, 0.78); }
 
   /* ================= VENUE ================= */
   .venue {
@@ -648,7 +669,7 @@
         </div>
       </article>
 
-      <article class="event-card event-card--forest">
+      <article class="event-card event-card--wedding">
         <div class="backdrop"><div class="art art--branch9"></div></div>
         <div class="content">
           <h3 class="display event-name">The Wedding</h3>
