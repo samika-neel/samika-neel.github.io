@@ -1,0 +1,779 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Samika &amp; Neelotpal — November 2026</title>
+<meta name="description" content="Join us as we celebrate the wedding of Samika & Neelotpal, November 25–26, 2026 at Namah by Radisson, Jim Corbett." />
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;1,400;1,500&family=Jost:wght@300;400;500&family=Tiro+Devanagari+Hindi&display=swap" rel="stylesheet" />
+<style>
+  :root {
+    --paper: #f7f3ea;
+    --paper-deep: #f0eadb;
+    --ink: #283828;
+    --ink-soft: rgba(40, 56, 40, 0.66);
+    --gold: #a5804c;
+    --forest: #223226;
+    --cream: #f0e9d8;
+    --hairline: rgba(40, 56, 40, 0.18);
+    --serif: "Cormorant Garamond", "Times New Roman", serif;
+    --sans: "Jost", "Helvetica Neue", sans-serif;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  html { scroll-behavior: smooth; }
+
+  body {
+    background: var(--paper);
+    color: var(--ink);
+    font-family: var(--sans);
+    font-weight: 300;
+    line-height: 1.65;
+    overflow-x: hidden;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  ::selection { background: var(--gold); color: var(--paper); }
+
+  /* ---------- Botanical artwork ----------
+     Pre-tinted PNGs (assets/tinted/, built from the artist's originals) used as
+     background images. Plain image fetches work from file:// and every host —
+     unlike CSS mask-image, whose CORS-mode fetch fails on local files. */
+  .art {
+    display: block;
+    background-repeat: no-repeat;
+    background-size: contain;
+    background-position: center;
+    pointer-events: none;
+  }
+  .art--branch1  { background-image: url("assets/tinted/branch1_ink.png");  aspect-ratio: 883 / 788; }
+  .art--branch2  { background-image: url("assets/tinted/branch2_ink.png");  aspect-ratio: 350 / 425; }
+  .art--branch3  { background-image: url("assets/tinted/branch3_ink.png");  aspect-ratio: 546 / 762; }
+  .art--branch4  { background-image: url("assets/tinted/branch4_ink.png");  aspect-ratio: 685 / 1207; }
+  .art--branch6  { background-image: url("assets/tinted/branch6_ink.png");  aspect-ratio: 998 / 1077; }
+  .art--branch8  { background-image: url("assets/tinted/branch8_ink.png");  aspect-ratio: 819 / 965; }
+  .art--branch9  { background-image: url("assets/tinted/branch9_ink.png");  aspect-ratio: 588 / 742; }
+  .art--branch10 { background-image: url("assets/tinted/branch10_ink.png"); aspect-ratio: 976 / 1383; }
+  .art--branch11 { background-image: url("assets/tinted/branch11_ink.png"); aspect-ratio: 481 / 400; }
+  .art--bird1    { background-image: url("assets/tinted/bird1_ink.png");    aspect-ratio: 259 / 276; }
+  .art--bird2    { background-image: url("assets/tinted/bird2_ink.png");    aspect-ratio: 253 / 253; }
+
+  .plx { will-change: transform; }
+
+  /* ---------- Typography helpers ---------- */
+  .ganesh {
+    font-family: "Tiro Devanagari Hindi", var(--serif);
+    font-size: clamp(0.95rem, 3vw, 1.15rem);
+    color: var(--gold);
+    margin-bottom: 1.4rem;
+  }
+  .eyebrow {
+    font-family: var(--sans);
+    font-size: clamp(0.65rem, 1.8vw, 0.78rem);
+    font-weight: 400;
+    letter-spacing: 0.42em;
+    text-indent: 0.42em; /* balance the tracking */
+    text-transform: uppercase;
+    color: var(--gold);
+  }
+  .display {
+    font-family: var(--serif);
+    font-weight: 500;
+    line-height: 1.05;
+  }
+
+  .divider-sprig {
+    width: 64px; /* same rendered size as the old sprig (aspect ratios nearly match) */
+    margin: 1.4rem auto;
+    opacity: 0.8;
+    background-image: url("assets/tinted/branch11_gold.png");
+  }
+
+  section { position: relative; }
+
+  .center-col {
+    position: relative;
+    z-index: 2;
+    max-width: 34rem;
+    margin: 0 auto;
+    padding: 0 1.5rem;
+    text-align: center;
+  }
+
+  /* ---------- Reveal on scroll ---------- */
+  .reveal {
+    opacity: 0;
+    transform: translateY(26px);
+    transition: opacity 1s cubic-bezier(0.2, 0.6, 0.2, 1), transform 1s cubic-bezier(0.2, 0.6, 0.2, 1);
+  }
+  .reveal.is-in { opacity: 1; transform: none; }
+  .reveal[data-delay="1"] { transition-delay: 0.15s; }
+  .reveal[data-delay="2"] { transition-delay: 0.3s; }
+  .reveal[data-delay="3"] { transition-delay: 0.45s; }
+
+  /* ================= HERO ================= */
+  .hero {
+    min-height: 100svh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 7rem 0 6rem;
+    overflow: hidden;
+  }
+  /* corner botanicals hug the actual page edges */
+  .hero-corner-tl {
+    position: absolute;
+    top: -2%; left: 0;
+    width: clamp(150px, 38vw, 380px);
+    opacity: 0.85;
+    z-index: 1;
+  }
+  /* branch3 was drawn for a right edge (straight crease on its right end) —
+     mirror it so the crease sits flush against the left edge of the page */
+  .hero-corner-tl .art { transform: scaleX(-1); }
+  .hero-corner-tr {
+    position: absolute;
+    top: -2%; right: -3%;
+    width: clamp(110px, 28vw, 220px);
+    opacity: 0.85;
+    z-index: 1;
+  }
+  /* the drawing only fills the left ~40% of branch10's canvas — crop to that
+     region (background-size: cover, anchored left) and flip so it hugs the right edge */
+  .hero-corner-tr .art {
+    aspect-ratio: 430 / 1383;
+    background-size: cover;
+    background-position: left top;
+    transform: scaleX(-1);
+  }
+
+  .hero-names {
+    font-size: clamp(3.1rem, 12vw, 6.2rem);
+    letter-spacing: 0.02em;
+  }
+  .hero-names .amp {
+    display: block;
+    font-style: italic;
+    font-weight: 400;
+    font-size: 0.42em;
+    color: var(--gold);
+    margin: 0.1em 0;
+  }
+  .hero-sub {
+    margin-top: 1.6rem;
+    font-size: clamp(0.8rem, 2.4vw, 0.95rem);
+    letter-spacing: 0.22em;
+    text-transform: uppercase;
+    color: var(--ink-soft);
+  }
+  .hero-sub strong { font-weight: 400; color: var(--ink); }
+
+  .countdown {
+    display: flex;
+    justify-content: center;
+    gap: clamp(1.1rem, 5vw, 2.4rem);
+    margin-top: 2.6rem;
+  }
+  .countdown .unit { text-align: center; }
+  .countdown .num {
+    font-family: var(--serif);
+    font-size: clamp(1.7rem, 6vw, 2.4rem);
+    font-weight: 500;
+    line-height: 1;
+    font-variant-numeric: tabular-nums;
+  }
+  .countdown .lbl {
+    margin-top: 0.35rem;
+    font-size: 0.6rem;
+    letter-spacing: 0.3em;
+    text-transform: uppercase;
+    color: var(--gold);
+  }
+  .countdown .sep {
+    font-family: var(--serif);
+    font-size: clamp(1.4rem, 5vw, 2rem);
+    color: var(--hairline);
+    align-self: flex-start;
+    padding-top: 0.2em;
+  }
+
+  .scroll-cue {
+    position: absolute;
+    bottom: 2rem; left: 50%;
+    transform: translateX(-50%);
+    z-index: 2;
+    font-size: 0.6rem;
+    letter-spacing: 0.34em;
+    text-indent: 0.34em;
+    text-transform: uppercase;
+    color: var(--ink-soft);
+    text-align: center;
+  }
+  .scroll-cue::after {
+    content: "";
+    display: block;
+    width: 1px; height: 44px;
+    margin: 0.7rem auto 0;
+    background: linear-gradient(var(--gold), transparent);
+    animation: cue 2.4s ease-in-out infinite;
+    transform-origin: top;
+  }
+  @keyframes cue {
+    0%, 100% { transform: scaleY(0.5); opacity: 0.4; }
+    50% { transform: scaleY(1); opacity: 1; }
+  }
+
+  /* ================= INVITATION ================= */
+  .invite {
+    padding: 9rem 0 10rem;
+    overflow: hidden;
+  }
+  .invite-bird-l, .invite-bird-r {
+    position: absolute;
+    width: clamp(74px, 15vw, 120px);
+    opacity: 0.85;
+    z-index: 1;
+  }
+  .invite-bird-l { left: clamp(0.6rem, 4vw, 4rem); top: 12%; }
+  .invite-bird-r { right: clamp(0.6rem, 4vw, 4rem); bottom: 8%; }
+  .invite-bird-l .art { transform: rotate(-6deg); }
+  .invite-bird-r .art { transform: rotate(4deg); }
+
+  .invite-quote {
+    font-family: var(--serif);
+    font-style: italic;
+    font-weight: 400;
+    font-size: clamp(1.45rem, 5vw, 2rem);
+    line-height: 1.5;
+    color: var(--ink);
+  }
+  .invite-body {
+    margin-top: 1.8rem;
+    font-size: clamp(0.92rem, 2.6vw, 1rem);
+    color: var(--ink-soft);
+  }
+
+  /* ================= EVENTS — sticky card stack ================= */
+  .events { padding: 4rem 0 22vh; }
+  .events-head { margin-bottom: 4.5rem; }
+  .events-head h2 {
+    font-size: clamp(2.1rem, 7.5vw, 3.2rem);
+  }
+  .events-head p {
+    margin-top: 0.9rem;
+    color: var(--ink-soft);
+    font-size: 0.95rem;
+  }
+
+  .stack {
+    position: relative;
+    max-width: 42rem;
+    margin: 0 auto;
+    padding: 0 1.1rem;
+  }
+  .event-card {
+    position: sticky;
+    top: clamp(3.5rem, 9vh, 6rem);
+    min-height: min(76svh, 620px);
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    text-align: center;
+    padding: clamp(2.4rem, 7vw, 4rem) clamp(1.4rem, 6vw, 3.5rem);
+    margin-bottom: 12vh;
+    background: var(--paper-deep);
+    border: 1px solid var(--hairline);
+    border-radius: 18px;
+    box-shadow: 0 30px 60px -30px rgba(40, 56, 40, 0.35);
+    overflow: hidden;
+    transform-origin: center top;
+  }
+  .event-card:nth-child(2) { top: calc(clamp(3.5rem, 9vh, 6rem) + 16px); }
+  .event-card:nth-child(3) { top: calc(clamp(3.5rem, 9vh, 6rem) + 32px); }
+  .event-card:nth-child(4) { top: calc(clamp(3.5rem, 9vh, 6rem) + 48px); }
+  .event-card:last-child { margin-bottom: 0; }
+
+  .event-card .backdrop {
+    position: absolute;
+    inset: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 0;
+  }
+  .event-card .backdrop .art {
+    width: 78%;
+    max-width: 430px;
+    opacity: 0.09;
+  }
+  .event-card > .content { position: relative; z-index: 1; }
+
+  .event-no {
+    font-family: var(--serif);
+    font-style: italic;
+    font-size: 1rem;
+    color: var(--gold);
+    letter-spacing: 0.2em;
+  }
+  .event-name {
+    font-size: clamp(2.3rem, 9vw, 3.6rem);
+    margin-top: 0.4rem;
+  }
+  .event-when span { white-space: nowrap; }
+  .event-when {
+    margin-top: 1.3rem;
+    font-size: 0.78rem;
+    letter-spacing: 0.26em;
+    text-indent: 0.26em;
+    text-transform: uppercase;
+    color: var(--ink);
+  }
+  .event-where {
+    margin-top: 0.35rem;
+    font-size: 0.72rem;
+    letter-spacing: 0.22em;
+    text-indent: 0.22em;
+    text-transform: uppercase;
+    color: var(--ink-soft);
+  }
+  .event-desc {
+    max-width: 26rem;
+    margin: 1.5rem auto 0;
+    font-size: 0.95rem;
+    color: var(--ink-soft);
+  }
+  .event-dress {
+    display: inline-block;
+    margin-top: 1.8rem;
+    padding: 0.55rem 1.3rem;
+    border: 1px solid var(--hairline);
+    border-radius: 999px;
+    font-size: 0.62rem;
+    letter-spacing: 0.28em;
+    text-indent: 0.28em;
+    text-transform: uppercase;
+    color: var(--gold);
+  }
+
+  .event-dress-note {
+    margin-top: 0.8rem;
+    font-family: var(--serif);
+    font-style: italic;
+    font-size: 0.95rem;
+    color: var(--ink-soft);
+  }
+
+  /* each celebration gets its own hue, drawn from the event itself */
+  .event-card--satsang {
+    background: #f5ecdc; /* sandalwood */
+  }
+  .event-card--satsang .event-no,
+  .event-card--satsang .event-dress { color: #a06b28; }
+
+  .event-card--haldi {
+    background: #f2e6bd; /* soft haldi turmeric */
+    border-color: rgba(90, 84, 30, 0.22);
+  }
+  .event-card--haldi .event-no,
+  .event-card--haldi .event-dress { color: #8a6d1f; }
+  .event-card--haldi .event-dress { border-color: rgba(90, 84, 30, 0.28); }
+
+  .event-card--sangeet {
+    background: #392b3d; /* deep plum evening */
+    border-color: rgba(240, 233, 216, 0.16);
+    color: var(--cream);
+  }
+  .event-card--sangeet .backdrop .art { background-image: url("assets/tinted/branch1_cream.png"); opacity: 0.1; }
+  .event-card--sangeet .event-when { color: var(--cream); }
+  .event-card--sangeet .event-where,
+  .event-card--sangeet .event-desc { color: rgba(240, 233, 216, 0.68); }
+  .event-card--sangeet .event-dress-note { color: rgba(240, 233, 216, 0.6); }
+  .event-card--sangeet .event-no,
+  .event-card--sangeet .event-dress { color: #d8a48f; }
+  .event-card--sangeet .event-dress { border-color: rgba(240, 233, 216, 0.25); }
+
+  /* the wedding card goes dark for contrast */
+  .event-card--forest {
+    background: var(--forest);
+    border-color: rgba(240, 233, 216, 0.16);
+    color: var(--cream);
+  }
+  .event-card--forest .backdrop .art { background-image: url("assets/tinted/branch9_cream.png"); opacity: 0.1; }
+  .event-card--forest .event-when { color: var(--cream); }
+  .event-card--forest .event-where,
+  .event-card--forest .event-desc { color: rgba(240, 233, 216, 0.68); }
+  .event-card--forest .event-dress { border-color: rgba(240, 233, 216, 0.25); color: #c9a86a; }
+  .event-card--forest .event-no { color: #c9a86a; }
+
+  /* ================= VENUE ================= */
+  .venue {
+    padding: 10rem 0 11rem;
+    overflow: hidden;
+  }
+  .venue-edge {
+    position: absolute;
+    left: -8%;
+    top: 50%;
+    width: clamp(150px, 30vw, 300px);
+    opacity: 0.14; /* stays legible when the column overlaps it on small screens */
+    z-index: 0;
+  }
+  @media (min-width: 68rem) {
+    .venue-edge { opacity: 0.5; } /* column is narrow here; the branch sits clear of it */
+  }
+  .venue-backdrop {
+    position: absolute;
+    right: -22%;
+    bottom: -6%;
+    width: clamp(320px, 60vw, 640px);
+    opacity: 0.055;
+    z-index: 0;
+  }
+  .venue .center-col { max-width: 30rem; }
+  .venue h2 { font-size: clamp(2.1rem, 7.5vw, 3.1rem); }
+  .venue-name {
+    margin-top: 2.2rem;
+    font-family: var(--serif);
+    font-size: clamp(1.6rem, 5.5vw, 2.1rem);
+    font-weight: 500;
+  }
+  .venue-addr {
+    margin-top: 0.5rem;
+    font-size: 0.8rem;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--ink-soft);
+  }
+  .btn {
+    display: inline-block;
+    margin-top: 2.6rem;
+    padding: 0.95rem 2.6rem;
+    background: var(--ink);
+    color: var(--paper);
+    text-decoration: none;
+    border-radius: 999px;
+    font-size: 0.68rem;
+    letter-spacing: 0.3em;
+    text-indent: 0.3em;
+    text-transform: uppercase;
+    transition: background 0.3s ease, transform 0.3s ease;
+  }
+  .btn:hover { background: var(--forest); transform: translateY(-2px); }
+  .btn--ghost {
+    background: transparent;
+    color: var(--ink);
+    border: 1px solid var(--ink);
+  }
+  .btn--ghost:hover { background: var(--ink); color: var(--paper); }
+
+  /* ================= RSVP ================= */
+  .rsvp {
+    padding: 9rem 0 16rem; /* extra room below for the closing corner botanical */
+    background: var(--paper-deep);
+    overflow: hidden;
+  }
+  .rsvp-corner {
+    position: absolute;
+    bottom: -6%;
+    left: 0; /* rotated 180°, branch3's straight crease lands on the left edge */
+    width: clamp(150px, 34vw, 320px);
+    opacity: 0.85;
+    z-index: 0;
+  }
+  .rsvp-corner .art { transform: rotate(180deg); }
+  .btn-row {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 0.9rem 1rem;
+    margin-top: 2.6rem;
+  }
+  .btn-row .btn { margin-top: 0; }
+  .rsvp-watermark {
+    /* centered without transform — the parallax script owns this element's transform */
+    position: absolute;
+    left: calc(50% - min(39vw, 240px));
+    top: 14%;
+    width: min(78vw, 480px);
+    opacity: 0.06;
+    z-index: 0;
+  }
+  .rsvp-sprig {
+    width: clamp(120px, 26vw, 170px);
+    margin: 0 auto 1.6rem;
+    opacity: 0.85;
+  }
+  .rsvp h2 { font-size: clamp(2.1rem, 7.5vw, 3.1rem); }
+  .rsvp p {
+    margin-top: 1.3rem;
+    color: var(--ink-soft);
+    font-size: 0.95rem;
+  }
+  .rsvp .deadline {
+    margin-top: 1.6rem;
+    font-size: 0.72rem;
+    letter-spacing: 0.28em;
+    text-indent: 0.28em;
+    text-transform: uppercase;
+    color: var(--gold);
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    html { scroll-behavior: auto; }
+    .reveal { opacity: 1; transform: none; transition: none; }
+    .plx { transform: none !important; }
+    .scroll-cue::after { animation: none; }
+  }
+</style>
+</head>
+<body>
+
+  <!-- ============ HERO ============ -->
+  <section class="hero">
+    <div class="hero-corner-tl plx" data-plx="0.12"><div class="art art--branch3"></div></div>
+    <div class="hero-corner-tr plx" data-plx="0.2"><div class="art art--branch10"></div></div>
+
+    <div class="center-col">
+      <p class="ganesh reveal is-in" lang="hi">श्री गणेशाय नमः</p>
+      <p class="eyebrow reveal is-in">Together with their families</p>
+      <h1 class="display hero-names reveal is-in" data-delay="1">
+        Samika
+        <span class="amp">and</span>
+        Neelotpal
+      </h1>
+      <div class="art art--branch11 divider-sprig reveal is-in" data-delay="2"></div>
+      <p class="hero-sub reveal is-in" data-delay="2">
+        <strong>November 25 – 26, 2026</strong><br />
+        Namah by Radisson &middot; Jim Corbett
+      </p>
+      <div class="countdown reveal is-in" data-delay="3" id="countdown" aria-label="Countdown to the wedding">
+        <div class="unit"><div class="num" id="cd-d">–</div><div class="lbl">Days</div></div>
+        <div class="sep">·</div>
+        <div class="unit"><div class="num" id="cd-h">–</div><div class="lbl">Hours</div></div>
+        <div class="sep">·</div>
+        <div class="unit"><div class="num" id="cd-m">–</div><div class="lbl">Mins</div></div>
+        <div class="sep">·</div>
+        <div class="unit"><div class="num" id="cd-s">–</div><div class="lbl">Secs</div></div>
+      </div>
+    </div>
+
+    <div class="scroll-cue">Scroll</div>
+  </section>
+
+  <!-- ============ INVITATION ============ -->
+  <section class="invite">
+    <div class="invite-bird-l plx" data-plx="-0.18"><div class="art art--bird1"></div></div>
+    <div class="invite-bird-r plx" data-plx="0.14"><div class="art art--bird2"></div></div>
+
+    <div class="center-col">
+      <p class="invite-quote reveal">
+        &ldquo;Two gardens, one spring&nbsp;&mdash;
+        we&rsquo;d be honoured to have you there
+        when ours begin to grow together.&rdquo;
+      </p>
+      <div class="art art--branch11 divider-sprig reveal" data-delay="1"></div>
+      <p class="invite-body reveal" data-delay="1">
+        With divine blessings and the love of our families, we invite you
+        to share in our joy — from Guruji&rsquo;s Satsang in New Delhi to
+        two days of colour, music and vows amidst the forests of Jim Corbett.
+      </p>
+    </div>
+  </section>
+
+  <!-- ============ EVENTS ============ -->
+  <section class="events" id="events">
+    <div class="center-col events-head">
+      <p class="eyebrow reveal">November 2026</p>
+      <h2 class="display reveal" data-delay="1">The Celebrations</h2>
+      <div class="art art--branch11 divider-sprig reveal" data-delay="2"></div>
+      <p class="reveal" data-delay="2">Each card is a chapter — keep scrolling.</p>
+    </div>
+
+    <div class="stack" id="stack">
+      <article class="event-card event-card--satsang">
+        <div class="backdrop"><div class="art art--branch2"></div></div>
+        <div class="content">
+          <div class="event-no">No. 01</div>
+          <h3 class="display event-name">Guruji&rsquo;s Satsang</h3>
+          <p class="event-when"><span>Sunday, November 15</span> <span>&middot; 8:00 PM onwards</span></p>
+          <p class="event-where">NSCI Club &middot; New Delhi</p>
+          <p class="event-desc">
+            With divine blessings and gratitude, we invite you to join us
+            for Guruji&rsquo;s Satsang, as our families come together to seek
+            blessings for the journey ahead.
+          </p>
+        </div>
+      </article>
+
+      <article class="event-card event-card--haldi">
+        <div class="backdrop"><div class="art art--branch11"></div></div>
+        <div class="content">
+          <div class="event-no">No. 02</div>
+          <h3 class="display event-name">Mehendi &amp; Haldi</h3>
+          <p class="event-when"><span>Wednesday, November 25</span> <span>&middot; 2:00 PM onwards</span></p>
+          <p class="event-where">Namah by Radisson &middot; Jim Corbett</p>
+          <p class="event-desc">
+            In warm golden hues, join us as the celebrations begin —
+            with colour, laughter, music and cherished traditions.
+          </p>
+          <span class="event-dress">Dress code &middot; A pop of colour</span>
+          <p class="event-dress-note">Bright hues, playful accents, and your happiest shade.</p>
+        </div>
+      </article>
+
+      <article class="event-card event-card--sangeet">
+        <div class="backdrop"><div class="art art--branch1"></div></div>
+        <div class="content">
+          <div class="event-no">No. 03</div>
+          <h3 class="display event-name">The Sangeet Soir&eacute;e</h3>
+          <p class="event-when"><span>Wednesday, November 25</span> <span>&middot; 6:00 PM onwards</span></p>
+          <p class="event-where">Namah by Radisson &middot; Jim Corbett</p>
+          <p class="event-desc">
+            We invite you to an evening of music, dance and grand celebration,
+            as our two families come together in melody and joy.
+          </p>
+          <span class="event-dress">Dress code &middot; Glitz, glam &amp; statement silhouettes</span>
+          <p class="event-dress-note">You bring the spark, we bring the music.</p>
+        </div>
+      </article>
+
+      <article class="event-card event-card--forest">
+        <div class="backdrop"><div class="art art--branch9"></div></div>
+        <div class="content">
+          <div class="event-no">No. 04</div>
+          <h3 class="display event-name">The Wedding</h3>
+          <p class="event-when"><span>Thursday, November 26</span> <span>&middot; 4:00 PM onwards</span></p>
+          <p class="event-where">Namah by Radisson &middot; Jim Corbett</p>
+          <p class="event-desc">
+            Bestow your blessings beneath the winter sun and into golden hour,
+            as Samika &amp; Neel exchange their wedding vows — and celebrate
+            a love built on friendship and partnership.
+          </p>
+          <span class="event-dress">Dress code &middot; Pastel hues, celebratory daywear</span>
+        </div>
+      </article>
+    </div>
+  </section>
+
+  <!-- ============ VENUE ============ -->
+  <section class="venue">
+    <div class="venue-edge plx" data-plx="0.16"><div class="art art--branch4"></div></div>
+    <div class="venue-backdrop plx" data-plx="-0.06"><div class="art art--branch6"></div></div>
+
+    <div class="center-col">
+      <p class="eyebrow reveal">Getting There</p>
+      <h2 class="display reveal" data-delay="1">The Venue</h2>
+      <div class="art art--branch11 divider-sprig reveal" data-delay="1"></div>
+
+      <p class="venue-name reveal" data-delay="2">Namah by Radisson</p>
+      <p class="venue-addr reveal" data-delay="2">Jim Corbett &middot; Uttarakhand</p>
+
+      <a class="btn btn--ghost reveal" data-delay="2" href="https://maps.google.com/?q=Namah+by+Radisson+Jim+Corbett" target="_blank" rel="noopener">Open in Google Maps</a>
+    </div>
+  </section>
+
+  <!-- ============ RSVP (final page) ============ -->
+  <section class="rsvp">
+    <div class="rsvp-watermark plx" data-plx="0.05"><div class="art art--branch8"></div></div>
+    <div class="rsvp-corner plx" data-plx="-0.06"><div class="art art--branch3"></div></div>
+
+    <div class="center-col">
+      <div class="art art--branch11 rsvp-sprig reveal"></div>
+      <p class="eyebrow reveal">Kindly Respond</p>
+      <h2 class="display reveal" data-delay="1">Will you join us?</h2>
+      <p class="reveal" data-delay="2">
+        We would be honoured to have you with us as we begin this
+        new chapter. Kindly let us know if you will be joining the
+        celebrations.
+      </p>
+      <div class="btn-row reveal" data-delay="2">
+        <a class="btn" href="https://wa.me/4917668647361" target="_blank" rel="noopener">RSVP by WhatsApp</a>
+        <a class="btn btn--ghost" href="mailto:neelotpalnag@gmail.com?subject=RSVP%20—%20Samika%20%26%20Neel">RSVP by Email</a>
+      </div>
+      <p class="deadline reveal" data-delay="3">Please respond by August 1, 2026</p>
+    </div>
+  </section>
+
+<script>
+  // ---------- Countdown ----------
+  (function () {
+    var target = new Date("2026-11-26T16:00:00+05:30").getTime();
+    var d = document.getElementById("cd-d"),
+        h = document.getElementById("cd-h"),
+        m = document.getElementById("cd-m"),
+        s = document.getElementById("cd-s");
+    function tick() {
+      var diff = Math.max(0, target - Date.now());
+      d.textContent = Math.floor(diff / 864e5);
+      h.textContent = String(Math.floor(diff / 36e5) % 24).padStart(2, "0");
+      m.textContent = String(Math.floor(diff / 6e4) % 60).padStart(2, "0");
+      s.textContent = String(Math.floor(diff / 1e3) % 60).padStart(2, "0");
+    }
+    tick();
+    setInterval(tick, 1000);
+  })();
+
+  var reducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+
+  // ---------- Reveal on scroll ----------
+  (function () {
+    var els = document.querySelectorAll(".reveal");
+    if (reducedMotion || !("IntersectionObserver" in window)) {
+      els.forEach(function (el) { el.classList.add("is-in"); });
+      return;
+    }
+    var io = new IntersectionObserver(function (entries) {
+      entries.forEach(function (e) {
+        if (e.isIntersecting) {
+          e.target.classList.add("is-in");
+          io.unobserve(e.target);
+        }
+      });
+    }, { threshold: 0.18, rootMargin: "0px 0px -6% 0px" });
+    els.forEach(function (el) { io.observe(el); });
+  })();
+
+  // ---------- Parallax + card-stack depth ----------
+  (function () {
+    if (reducedMotion) return;
+    var plxEls = Array.prototype.slice.call(document.querySelectorAll(".plx"));
+    var cards = Array.prototype.slice.call(document.querySelectorAll(".event-card"));
+    var vh = window.innerHeight;
+    window.addEventListener("resize", function () { vh = window.innerHeight; });
+
+    var ticking = false;
+    function update() {
+      ticking = false;
+      // parallax: drift each decorative element relative to viewport centre
+      plxEls.forEach(function (el) {
+        var speed = parseFloat(el.dataset.plx || "0.1");
+        var r = el.getBoundingClientRect();
+        var offset = (r.top + r.height / 2) - vh / 2;
+        el.style.transform = "translate3d(0," + (-offset * speed).toFixed(1) + "px,0)";
+      });
+      // stack: as the next card slides over, settle the previous one back
+      cards.forEach(function (card, i) {
+        var next = cards[i + 1];
+        if (!next) return;
+        var stickyTop = card.getBoundingClientRect().top;
+        var nextTop = next.getBoundingClientRect().top;
+        var p = Math.min(1, Math.max(0, 1 - (nextTop - stickyTop) / (vh * 0.75)));
+        card.style.transform = "scale(" + (1 - p * 0.05).toFixed(4) + ")";
+        card.style.filter = "brightness(" + (1 - p * 0.08).toFixed(3) + ")";
+      });
+    }
+    function onScroll() {
+      if (!ticking) {
+        ticking = true;
+        requestAnimationFrame(update);
+      }
+    }
+    window.addEventListener("scroll", onScroll, { passive: true });
+    update();
+  })();
+</script>
+</body>
+</html>
