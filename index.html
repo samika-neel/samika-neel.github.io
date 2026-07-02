@@ -19,7 +19,9 @@
 <meta name="twitter:image" content="https://samika-neel.github.io/assets/og-image.jpg" />
 <link rel="preconnect" href="https://fonts.googleapis.com" />
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;1,400;1,500&family=Jost:wght@300;400;500&family=Tiro+Devanagari+Hindi&display=swap" rel="stylesheet" />
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;1,400;1,500&family=Jost:wght@300;400;500&family=Amita:wght@400;700&display=swap" rel="stylesheet" />
+<link rel="icon" type="image/png" sizes="64x64" href="assets/tinted/favicon-64.png" />
+<link rel="apple-touch-icon" href="assets/tinted/apple-touch-icon.png" />
 <style>
   :root {
     --paper: #f7f3ea;
@@ -72,15 +74,27 @@
   .art--branch11 { background-image: url("assets/tinted/branch11_ink.png"); aspect-ratio: 481 / 400; }
   .art--bird1    { background-image: url("assets/tinted/bird1_ink.png");    aspect-ratio: 259 / 276; }
   .art--bird2    { background-image: url("assets/tinted/bird2_ink.png");    aspect-ratio: 253 / 253; }
+  .art--logo     { background-image: url("assets/tinted/logo_ink.png");     aspect-ratio: 265 / 188; }
+
+  .hero-logo {
+    width: clamp(68px, 17vw, 92px);
+    margin: 0 auto 1.4rem;
+  }
+  .rsvp-mark {
+    width: 78px;
+    margin: 3.2rem auto 0;
+    background-image: url("assets/tinted/logo_gold.png");
+    opacity: 0.9;
+  }
 
   .plx { will-change: transform; }
 
   /* ---------- Typography helpers ---------- */
   .ganesh {
-    font-family: "Tiro Devanagari Hindi", var(--serif);
-    font-size: clamp(0.95rem, 3vw, 1.15rem);
+    font-family: "Amita", var(--serif); /* calligraphic Devanagari */
+    font-size: clamp(1.1rem, 3.4vw, 1.35rem);
     color: var(--gold);
-    margin-bottom: 1.4rem;
+    margin-bottom: 1.3rem;
   }
   .eyebrow {
     font-family: var(--sans);
@@ -549,6 +563,7 @@
     <div class="hero-corner-tr plx" data-plx="0.2"><div class="art art--branch10"></div></div>
 
     <div class="center-col">
+      <div class="art art--logo hero-logo reveal is-in" role="img" aria-label="S and N monogram"></div>
       <p class="ganesh reveal is-in" lang="hi">श्री गणेशाय नमः</p>
       <p class="eyebrow reveal is-in">Together with their families</p>
       <h1 class="display hero-names reveal is-in" data-delay="1">
@@ -706,6 +721,7 @@
         <a class="btn btn--ghost" href="mailto:neelotpalnag@gmail.com?subject=RSVP%20—%20Samika%20%26%20Neel">RSVP by Email</a>
       </div>
       <p class="deadline reveal" data-delay="3">Please respond by August 1, 2026</p>
+      <div class="art art--logo rsvp-mark reveal" data-delay="3" role="img" aria-label="S and N monogram"></div>
     </div>
   </section>
 
