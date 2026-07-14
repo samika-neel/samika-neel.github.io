@@ -1,0 +1,14 @@
+asset,cell,anchor,rotation,size_pct,mirror,notes
+branch10,H-A1,TL,0,85,FALSE,left column cascade
+branch3,H-F1,TR,0,100,FALSE,top strip
+bird1,H-F5,TR,0,100,TRUE,bird
+branch9,H-A6,C,30,80,FALSE
+branch6,H-F6,TL,0,100,FALSE,right edge mid
+branch1,H-A8,TL,90,100,FALSE,
+branch6,H-F9,TR,90,80,FALSE,right edge mid
+branch9,R-C2,BR,90,100,FALSE
+branch4,R-A5,TR,0,130,TRUE
+branch8,R-F4,TL,0,130,FALSE
+bird2,R-E9,TR,0,100,TRUE
+branch11,R-A10,C,45,140,FALSE
+branch11,R-F10,C,45,140,TRUE

@@ -3,26 +3,36 @@
 <head>
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-<title>Samika &amp; Neelotpal — November 2026</title>
-<meta name="description" content="Join us as we celebrate the wedding of Samika & Neelotpal, November 25–26, 2026 at Namah by Radisson, Jim Corbett." />
+<title>Save the Date — Samika &amp; Neelotpal</title>
+<meta name="description" content="Save the Date — Samika & Neelotpal, November 25–26, 2026 at Namah by Radisson, Jim Corbett." />
 <!-- Link previews (WhatsApp, iMessage, Slack, etc.) -->
 <meta property="og:type" content="website" />
-<meta property="og:title" content="Samika & Neelotpal — November 25–26, 2026" />
-<meta property="og:description" content="Join us for the wedding celebrations at Namah by Radisson, Jim Corbett." />
+<meta property="og:title" content="Save the Date — Samika & Neelotpal" />
+<meta property="og:description" content="November 25–26, 2026 · Namah by Radisson, Jim Corbett." />
 <meta property="og:url" content="https://samika-neel.github.io/" />
 <meta property="og:image" content="https://samika-neel.github.io/assets/og-image.jpg" />
 <meta property="og:image:width" content="1200" />
 <meta property="og:image:height" content="630" />
 <meta name="twitter:card" content="summary_large_image" />
-<meta name="twitter:title" content="Samika & Neelotpal — November 25–26, 2026" />
-<meta name="twitter:description" content="Join us for the wedding celebrations at Namah by Radisson, Jim Corbett." />
+<meta name="twitter:title" content="Save the Date — Samika & Neelotpal" />
+<meta name="twitter:description" content="November 25–26, 2026 · Namah by Radisson, Jim Corbett." />
 <meta name="twitter:image" content="https://samika-neel.github.io/assets/og-image.jpg" />
 <link rel="preconnect" href="https://fonts.googleapis.com" />
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;1,400;1,500&family=Jost:wght@300;400;500&family=Amita:wght@400;700&family=Pinyon+Script&display=swap" rel="stylesheet" />
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;1,400;1,500&family=Jost:wght@300;400;500&family=Amita:wght@400;700&display=swap" rel="stylesheet" />
 <link rel="icon" type="image/png" sizes="64x64" href="assets/tinted/favicon-64.png" />
 <link rel="apple-touch-icon" href="assets/tinted/apple-touch-icon.png" />
 <style>
+  /* Self-hosted script font — Cultivated Mind's Citadel Script Std Regular.
+     Used only on .display headings; too flourished for small caps / body copy. */
+  @font-face {
+    font-family: "Citadel Script";
+    src: url("assets/fonts/citadel-script-std-regular.otf") format("opentype");
+    font-weight: 400;
+    font-style: normal;
+    font-display: swap;
+  }
+
   :root {
     --paper: #f7f3ea;
     --paper-deep: #f0eadb;
@@ -33,15 +43,19 @@
     --cream: #f0e9d8;
     --hairline: rgba(40, 56, 40, 0.18);
     --serif: "Cormorant Garamond", "Times New Roman", serif;
+    --script: "Citadel Script", "Pinyon Script", "Cormorant Garamond", cursive;
     --sans: "Jost", "Helvetica Neue", sans-serif;
   }
 
   * { margin: 0; padding: 0; box-sizing: border-box; }
 
-  html { scroll-behavior: smooth; }
+  html {
+    scroll-behavior: smooth;
+    scroll-snap-type: y proximity;
+  }
 
   body {
-    background: var(--paper);
+    background: var(--paper-deep);
     color: var(--ink);
     font-family: var(--sans);
     font-weight: 300;
@@ -50,12 +64,32 @@
     -webkit-font-smoothing: antialiased;
   }
 
+  /* ---------- Phone frame ----------
+     The whole design lives in one fixed portrait column. Its width is the
+     container that every cqw unit below resolves against, so art and text
+     scale to THIS frame — never the monitor. Nothing spreads apart when the
+     window widens; a desktop just shows the same thin phone, centered. */
+  .phone {
+    width: min(100%, 400px);   /* thin portrait column; raise 400px to scale up */
+    margin: 0 auto;
+    position: relative;
+    background: var(--paper-deep);
+    container-type: inline-size;
+    container-name: phone;
+    overflow: hidden;          /* keep bleeding botanicals inside the frame */
+  }
+  /* On screens wider than the frame, set it off like a device on a surface */
+  @media (min-width: 460px) {
+    body { background: #d9d1bd; }
+    .phone { box-shadow: 0 26px 70px -26px rgba(40, 56, 40, 0.45); }
+  }
+
   ::selection { background: var(--gold); color: var(--paper); }
 
   /* ---------- Botanical artwork ----------
-     Pre-tinted PNGs (assets/tinted/, built from the artist's originals) used as
-     background images. Plain image fetches work from file:// and every host —
-     unlike CSS mask-image, whose CORS-mode fetch fails on local files. */
+     Pre-tinted PNGs (assets/tinted/) used as background images. Plain image
+     fetches work from file:// and every host — unlike CSS mask-image, whose
+     CORS-mode fetch fails on local files. */
   .art {
     display: block;
     background-repeat: no-repeat;
@@ -77,13 +111,13 @@
   .art--logo     { background-image: url("assets/tinted/logo_ink.png");     aspect-ratio: 265 / 188; }
 
   .hero-logo {
-    width: clamp(68px, 17vw, 92px);
-    margin: 0 auto 1.4rem;
+    width: clamp(56px, 13cqw, 74px);
+    margin: -1rem auto 1.4rem;
     background-image: url("assets/tinted/logo_gold.png"); /* gold crest, not raw ink */
   }
   .rsvp-mark {
-    width: 78px;
-    margin: 3.2rem auto 0;
+    width: 58px;
+    margin: 4.8rem auto 0;
     background-image: url("assets/tinted/logo_gold.png");
     opacity: 0.9;
   }
@@ -93,13 +127,14 @@
   /* ---------- Typography helpers ---------- */
   .ganesh {
     font-family: "Amita", var(--serif); /* calligraphic Devanagari */
-    font-size: clamp(1.1rem, 3.4vw, 1.35rem);
+    font-size: clamp(1.1rem, 3.4cqw, 1.35rem);
     color: var(--gold);
+    margin-top: -0.6rem;
     margin-bottom: 1.3rem;
   }
   .eyebrow {
     font-family: var(--sans);
-    font-size: clamp(0.65rem, 1.8vw, 0.78rem);
+    font-size: clamp(0.65rem, 1.8cqw, 0.78rem);
     font-weight: 400;
     letter-spacing: 0.42em;
     text-indent: 0.42em; /* balance the tracking */
@@ -107,13 +142,13 @@
     color: var(--gold);
   }
   .display {
-    font-family: var(--serif);
-    font-weight: 500;
-    line-height: 1.05;
+    font-family: var(--script);
+    font-weight: 400;
+    line-height: 1.1;
   }
 
   .divider-sprig {
-    width: 64px; /* same rendered size as the old sprig (aspect ratios nearly match) */
+    width: 64px;
     margin: 1.4rem auto;
     opacity: 0.8;
     background-image: url("assets/tinted/branch11_gold.png");
@@ -123,7 +158,7 @@
 
   .center-col {
     position: relative;
-    z-index: 2;
+    z-index: 3;
     max-width: 34rem;
     margin: 0 auto;
     padding: 0 1.5rem;
@@ -140,58 +175,118 @@
   .reveal[data-delay="1"] { transition-delay: 0.15s; }
   .reveal[data-delay="2"] { transition-delay: 0.3s; }
   .reveal[data-delay="3"] { transition-delay: 0.45s; }
+  .reveal[data-delay="4"] { transition-delay: 0.6s; }
 
-  /* ================= HERO ================= */
-  .hero {
-    min-height: 100svh;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    padding: 7rem 0 6rem;
-    overflow: hidden;
-  }
-  /* corner botanicals hug the actual page edges */
-  .hero-corner-tl {
-    position: absolute;
-    top: 0; left: 0;
-    width: clamp(150px, 38vw, 380px);
-    opacity: 0.85;
-    z-index: 1;
-  }
-  /* branch3 was drawn for a right edge (straight crease on its right end) —
-     mirror it so the crease sits flush against the left edge of the page */
-  .hero-corner-tl .art { transform: scaleX(-1); }
-  .hero-corner-tr {
-    position: absolute;
-    top: 0; right: -3%;
-    width: clamp(110px, 28vw, 220px);
-    opacity: 0.85;
-    z-index: 1;
-  }
-  /* the drawing only fills the left ~40% of branch10's canvas — crop to that
-     region (background-size: cover, anchored left) and flip so it hugs the right edge */
-  .hero-corner-tr .art {
+  /* ======================================================================
+     Shared botanical framing — big branches hug the corners, birds fly
+     inward. Orientation follows assets/ASSET_NOTES.md:
+       branch3  — corner piece, weight top-left, crease on its RIGHT end
+       branch10 — corner piece, drawing fills the LEFT ~40% of its canvas
+       branch2  — upright bouquet, grows up from a single stem
+       bird1    — faces RIGHT (place on the left)
+       bird2    — faces LEFT  (place on the right)
+     ====================================================================== */
+  .frame { position: absolute; z-index: 1; opacity: 0.85; }
+
+  /* top-left: mirror branch3 so its straight crease sits flush on the left */
+  .corner-tl { top: 0; left: 0; width: clamp(210px, 54cqw, 560px); }
+  .corner-tl .art { transform: scaleX(-1); }
+
+  /* top-right: crop branch10 to the drawn left region, then flip to hug right */
+  .corner-tr { top: 0; right: -3%; width: clamp(155px, 40cqw, 330px); }
+  .corner-tr .art {
     aspect-ratio: 430 / 1383;
     background-size: cover;
     background-position: left top;
     transform: scaleX(-1);
   }
 
-  .hero-names {
-    font-size: clamp(3.1rem, 12vw, 6.2rem);
-    letter-spacing: 0.02em;
+  /* bottom-left: rotate the top-right branch10 crop 180° to hang from bottom-left */
+  .corner-bl { bottom: 0; left: -3%; width: clamp(155px, 40cqw, 330px); }
+  .corner-bl .art {
+    aspect-ratio: 430 / 1383;
+    background-size: cover;
+    background-position: left top;
+    transform: rotate(180deg);
   }
+
+  /* bottom-right: rotate branch3 180° so its weight lands in the bottom-right */
+  .corner-br { bottom: 0; right: 0; width: clamp(210px, 54cqw, 560px); }
+  .corner-br .art { transform: rotate(180deg); }
+
+  .rsvp-bird-l, .rsvp-bird-r {
+    position: absolute;
+    width: clamp(70px, 15cqw, 118px);
+    opacity: 0.85;
+    z-index: 2;
+  }
+  .rsvp-bird-l .art { transform: rotate(-6deg); }
+  .rsvp-bird-r .art { transform: rotate(5deg); }
+
+  /* ================= HERO — the Save-the-Date "top page" ================= */
+  .hero {
+    min-height: 222cqw;   /* ≈ 360:800 portrait ratio, locked to the frame width */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 7rem 0 6rem;
+    overflow: hidden;
+    scroll-snap-align: start;
+  }
+
+  /* ---- Grid-anchored placement helper ----
+     Each botanical is a .place wrapper with data-* attrs:
+       data-cell:   "H-A1" or "R-F10" (section prefix + col letter + row #)
+       data-anchor: TL | TR | BL | BR | C   (default C)
+       data-rot:    rotation in degrees, clockwise (default 0)
+       data-w:      element width in px (matches "size × default reference")
+     The JS at the bottom of the page computes left/top so that AFTER rotation,
+     the specified corner of the rotated bounding box sits at the specified
+     corner of the specified cell. Rotate-then-align semantics.               */
+  .place {
+    position: absolute;
+    z-index: 1;
+    transform-origin: center center;
+    pointer-events: none;
+  }
+  body.dev-grid-mode .place {
+    outline: 1px solid #00ff88;
+    outline-offset: 0px;
+  }
+  /* Per-asset crops for artwork whose canvas is bigger than its drawing.
+     Ensures the wrapper's center = the DRAWING's visible center. */
+  .place .art--branch10 {
+    aspect-ratio: 430 / 1383;         /* drawing occupies left ~44% of canvas */
+    background-size: cover;
+    background-position: left top;
+  }
+
+  .hero-names {
+    font-size: clamp(4.2rem, 16cqw, 8rem);
+    letter-spacing: 0;
+    line-height: 0.95;
+  }
+  /* Keep the ampersand line in the italic serif — it contrasts the script
+     and stays legible where the flourished "and" would blur together. */
   .hero-names .amp {
     display: block;
+    font-family: var(--serif);
     font-style: italic;
     font-weight: 400;
-    font-size: 0.42em;
+    font-size: 0.28em;
     color: var(--gold);
-    margin: 0.1em 0;
+    margin: 0.2em 0;
+  }
+  .save-line {
+    margin-top: 1.9rem;
+    font-family: var(--serif);
+    font-style: italic;
+    font-size: clamp(1.15rem, 4cqw, 1.6rem);
+    color: var(--gold);
   }
   .hero-sub {
-    margin-top: 1.6rem;
-    font-size: clamp(0.8rem, 2.4vw, 0.95rem);
+    margin-top: 1rem;
+    font-size: clamp(0.8rem, 2.4cqw, 0.95rem);
     letter-spacing: 0.22em;
     text-transform: uppercase;
     color: var(--ink-soft);
@@ -201,13 +296,13 @@
   .countdown {
     display: flex;
     justify-content: center;
-    gap: clamp(1.1rem, 5vw, 2.4rem);
-    margin-top: 2.6rem;
+    gap: clamp(1.1rem, 5cqw, 2.4rem);
+    margin-top: 1.2rem;
   }
   .countdown .unit { text-align: center; }
   .countdown .num {
     font-family: var(--serif);
-    font-size: clamp(1.7rem, 6vw, 2.4rem);
+    font-size: clamp(1.7rem, 6cqw, 2.4rem);
     font-weight: 500;
     line-height: 1;
     font-variant-numeric: tabular-nums;
@@ -221,7 +316,7 @@
   }
   .countdown .sep {
     font-family: var(--serif);
-    font-size: clamp(1.4rem, 5vw, 2rem);
+    font-size: clamp(1.4rem, 5cqw, 2rem);
     color: var(--hairline);
     align-self: flex-start;
     padding-top: 0.2em;
@@ -229,257 +324,64 @@
 
   .scroll-cue {
     position: absolute;
-    bottom: 2rem; left: 50%;
+    bottom: 2.4rem; left: 50%;
     transform: translateX(-50%);
-    z-index: 2;
-    font-size: 0.6rem;
-    letter-spacing: 0.34em;
-    text-indent: 0.34em;
-    text-transform: uppercase;
-    color: var(--ink-soft);
-    text-align: center;
-  }
-  .scroll-cue::after {
-    content: "";
-    display: block;
-    width: 1px; height: 44px;
-    margin: 0.7rem auto 0;
-    background: linear-gradient(var(--gold), transparent);
-    animation: cue 2.4s ease-in-out infinite;
-    transform-origin: top;
+    z-index: 3;
+    width: 1px; height: 52px;
+    background: linear-gradient(var(--gold), rgba(165, 128, 76, 0.15));
+    animation: cue 1.8s ease-in-out infinite;
   }
   @keyframes cue {
-    0%, 100% { transform: scaleY(0.5); opacity: 0.4; }
-    50% { transform: scaleY(1); opacity: 1; }
+    0%, 100% { transform: translate(-50%, 0); opacity: 0.55; }
+    50%      { transform: translate(-50%, 14px); opacity: 1; }
   }
 
-  /* ================= INVITATION ================= */
-  .invite {
-    padding: 9rem 0 10rem;
-    overflow: hidden;
-  }
-  .invite-bird-l, .invite-bird-r {
-    position: absolute;
-    width: clamp(74px, 15vw, 120px);
-    opacity: 0.85;
-    z-index: 1;
-  }
-  .invite-bird-l { left: clamp(0.6rem, 4vw, 4rem); top: 12%; }
-  .invite-bird-r { right: clamp(0.6rem, 4vw, 4rem); bottom: 8%; }
-  .invite-bird-l .art { transform: rotate(-6deg); }
-  .invite-bird-r .art { transform: rotate(4deg); }
-
-  .invite-quote {
-    font-family: var(--serif);
-    font-style: italic;
-    font-weight: 400;
-    font-size: clamp(1.45rem, 5vw, 2rem);
-    line-height: 1.5;
-    color: var(--ink);
-  }
-  .invite-body {
-    margin-top: 1.8rem;
-    font-size: clamp(0.92rem, 2.6vw, 1rem);
-    color: var(--ink-soft);
-  }
-
-  /* ================= EVENTS — sticky card stack ================= */
-  .events { padding: 4rem 0 22vh; }
-  .events-head { margin-bottom: 4.5rem; }
-  .events-head h2 {
-    font-size: clamp(2.1rem, 7.5vw, 3.2rem);
-  }
-  .events-head p {
-    margin-top: 0.9rem;
-    color: var(--ink-soft);
-    font-size: 0.95rem;
-  }
-
-  .stack {
-    position: relative;
-    max-width: 42rem;
-    margin: 0 auto;
-    padding: 0 1.1rem;
-  }
-  .event-card {
-    position: sticky;
-    top: clamp(3.5rem, 9vh, 6rem);
-    min-height: min(76svh, 620px);
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    text-align: center;
-    padding: clamp(2.4rem, 7vw, 4rem) clamp(1.4rem, 6vw, 3.5rem);
-    margin-bottom: 12vh;
-    background: var(--paper-deep);
-    border: 1px solid var(--hairline);
-    border-radius: 18px;
-    box-shadow: 0 30px 60px -30px rgba(40, 56, 40, 0.35);
-    overflow: hidden;
-    transform-origin: center top;
-  }
-  .event-card:nth-child(2) { top: calc(clamp(3.5rem, 9vh, 6rem) + 16px); }
-  .event-card:nth-child(3) { top: calc(clamp(3.5rem, 9vh, 6rem) + 32px); }
-  .event-card:nth-child(4) { top: calc(clamp(3.5rem, 9vh, 6rem) + 48px); }
-  .event-card:last-child { margin-bottom: 0; }
-
-  .event-card .backdrop {
-    position: absolute;
-    inset: 0;
+  /* ================= RSVP — revealed on scroll ================= */
+  .rsvp {
+    min-height: 222cqw;   /* ≈ 360:800 portrait ratio, locked to the frame width */
     display: flex;
     align-items: center;
     justify-content: center;
-    z-index: 0;
-  }
-  .event-card .backdrop .art {
-    width: 78%;
-    max-width: 430px;
-    opacity: 0.09;
-  }
-  .event-card > .content { position: relative; z-index: 1; }
-
-  /* event names use the designer's copperplate script */
-  .event-name {
-    font-family: "Pinyon Script", var(--serif);
-    font-weight: 400;
-    font-size: clamp(2.9rem, 11vw, 4.4rem);
-    line-height: 1.15;
-  }
-  .event-when span { white-space: nowrap; }
-  .event-when {
-    margin-top: 1.3rem;
-    font-size: 0.78rem;
-    letter-spacing: 0.26em;
-    text-indent: 0.26em;
-    text-transform: uppercase;
-    color: var(--ink);
-  }
-  .event-where {
-    margin-top: 0.35rem;
-    font-size: 0.72rem;
-    letter-spacing: 0.22em;
-    text-indent: 0.22em;
-    text-transform: uppercase;
-    color: var(--ink-soft);
-  }
-  .event-desc {
-    max-width: 26rem;
-    margin: 1.5rem auto 0;
-    font-size: 0.95rem;
-    color: var(--ink-soft);
-  }
-  /* dress code is a quiet footnote, not a highlight */
-  .event-dress {
-    display: block;
-    margin-top: 1.9rem;
-    font-size: 0.68rem;
-    letter-spacing: 0.2em;
-    text-indent: 0.2em;
-    text-transform: uppercase;
-    color: var(--ink-soft);
-  }
-
-  .event-dress-note {
-    margin-top: 0.35rem;
-    font-family: var(--serif);
-    font-style: italic;
-    font-size: 0.92rem;
-    color: var(--ink-soft);
-  }
-
-  /* palettes lifted from the designer's printed invitation suite
-     (assets/static-invitation-cards/) */
-  .event-card--satsang {
-    background: #fdfcfa; /* white card, dusty-rose ink */
-    border-color: rgba(164, 136, 136, 0.28);
-  }
-  .event-card--satsang .backdrop .art { background-image: url("assets/tinted/branch9_rose.png"); opacity: 0.26; }
-  .event-card--satsang .event-name { color: #9b6a6a; }
-  .event-card--satsang .event-when { color: #7e5d5d; }
-  .event-card--satsang .event-where,
-  .event-card--satsang .event-desc,
-  .event-card--satsang .event-dress,
-  .event-card--satsang .event-dress-note { color: #8f6d6b; }
-
-  .event-card--haldi {
-    background: #bab689; /* sage card, deep olive ink */
-    border-color: rgba(57, 53, 17, 0.3);
-  }
-  .event-card--haldi .backdrop .art { background-image: url("assets/tinted/branch11_olive.png"); opacity: 0.22; }
-  .event-card--haldi .event-name { color: #33300f; }
-  .event-card--haldi .event-when { color: #332f10; }
-  .event-card--haldi .event-where,
-  .event-card--haldi .event-desc,
-  .event-card--haldi .event-dress,
-  .event-card--haldi .event-dress-note { color: #3f3b1a; }
-
-  .event-card--sangeet {
-    background: #fdfdf9; /* white card, pale khaki ink */
-    border-color: rgba(63, 61, 36, 0.2);
-  }
-  .event-card--sangeet .backdrop .art { background-image: url("assets/tinted/branch1_khaki.png"); opacity: 0.3; }
-  .event-card--sangeet .event-name { color: #3f3d24; }
-  .event-card--sangeet .event-when { color: #5e5c39; }
-  .event-card--sangeet .event-where,
-  .event-card--sangeet .event-desc,
-  .event-card--sangeet .event-dress,
-  .event-card--sangeet .event-dress-note { color: #71704a; }
-
-  .event-card--wedding {
-    background: #e8baba; /* dusty pink card, white botanicals, deep rosewood ink */
-    border-color: rgba(255, 255, 255, 0.45);
-    color: #6e4247;
-  }
-  .event-card--wedding .backdrop .art { background-image: url("assets/tinted/branch9_white.png"); opacity: 0.35; }
-  .event-card--wedding .event-name { color: #7d474d; }
-  .event-card--wedding .event-when { color: #5d383c; }
-  .event-card--wedding .event-where,
-  .event-card--wedding .event-desc { color: #6e4247; }
-  .event-card--wedding .event-dress,
-  .event-card--wedding .event-dress-note { color: #7a4d52; }
-
-  /* ================= VENUE ================= */
-  .venue {
-    padding: 10rem 0 11rem;
+    padding: 8rem 0 9rem;
+    background: var(--paper-deep);
     overflow: hidden;
+    scroll-snap-align: start;
   }
-  .venue-edge {
+  .rsvp-watermark {
+    /* centered without transform — the parallax script owns this transform */
     position: absolute;
-    left: -8%;
-    top: 50%;
-    width: clamp(150px, 30vw, 300px);
-    opacity: 0.14; /* stays legible when the column overlaps it on small screens */
+    left: calc(50% - min(42cqw, 300px));
+    top: 12%;
+    width: min(84cqw, 600px);
+    opacity: 0.06;
     z-index: 0;
   }
-  @media (min-width: 68rem) {
-    .venue-edge { opacity: 0.5; } /* column is narrow here; the branch sits clear of it */
+  .rsvp-bird-l { top: 16%; left: clamp(0.5rem, 6cqw, 6rem); }
+  .rsvp-bird-r { top: 12%; right: clamp(0.5rem, 6cqw, 6rem); }
+
+  .rsvp-sprig {
+    width: clamp(120px, 26cqw, 170px);
+    margin: 0 auto 1.6rem;
+    opacity: 0.85;
+    background-image: url("assets/tinted/branch11_ink.png");
   }
-  .venue-backdrop {
-    position: absolute;
-    right: -22%;
-    bottom: -6%;
-    width: clamp(320px, 60vw, 640px);
-    opacity: 0.055;
-    z-index: 0;
-  }
-  .venue .center-col { max-width: 30rem; }
-  .venue h2 { font-size: clamp(2.1rem, 7.5vw, 3.1rem); }
-  .venue-name {
-    margin-top: 2.2rem;
-    font-family: var(--serif);
-    font-size: clamp(1.6rem, 5.5vw, 2.1rem);
-    font-weight: 500;
-  }
-  .venue-addr {
-    margin-top: 0.5rem;
-    font-size: 0.8rem;
-    letter-spacing: 0.2em;
-    text-transform: uppercase;
+  .rsvp h2 { font-size: clamp(3rem, 11cqw, 4.4rem); }
+  .rsvp p {
+    margin-top: 1.3rem;
     color: var(--ink-soft);
+    font-size: 0.95rem;
   }
+  .rsvp .deadline {
+    margin-top: 1.6rem;
+    font-size: 0.72rem;
+    letter-spacing: 0.28em;
+    text-indent: 0.28em;
+    text-transform: uppercase;
+    color: var(--gold);
+  }
+
   .btn {
     display: inline-block;
-    margin-top: 2.6rem;
     padding: 0.95rem 2.6rem;
     background: var(--ink);
     color: var(--paper);
@@ -498,22 +400,19 @@
     border: 1px solid var(--ink);
   }
   .btn--ghost:hover { background: var(--ink); color: var(--paper); }
-
-  /* ================= RSVP ================= */
-  .rsvp {
-    padding: 9rem 0 16rem; /* extra room below for the closing corner botanical */
-    background: var(--paper-deep);
-    overflow: hidden;
+  .btn--small {
+    padding: 0.72rem 1.9rem;
+    font-size: 0.6rem;
   }
-  .rsvp-corner {
-    position: absolute;
-    bottom: -6%;
-    left: 0; /* rotated 180°, branch3's straight crease lands on the left edge */
-    width: clamp(150px, 34vw, 320px);
-    opacity: 0.85;
-    z-index: 0;
+  .rsvp-intro {
+    margin-top: 2.6rem;
   }
-  .rsvp-corner .art { transform: rotate(180deg); }
+  .rsvp-contacts {
+    margin-top: 1.4rem;
+    font-size: 0.78rem;
+    line-height: 1.9;
+    color: var(--ink-soft);
+  }
   .btn-row {
     display: flex;
     flex-wrap: wrap;
@@ -521,65 +420,88 @@
     gap: 0.9rem 1rem;
     margin-top: 2.6rem;
   }
-  .btn-row .btn { margin-top: 0; }
-  .rsvp-watermark {
-    /* centered without transform — the parallax script owns this element's transform */
+
+  /* ================= DEV GRID OVERLAY =================
+     Enable by appending ?grid=1 to the URL. Draws a labeled 8-col × 16-row
+     grid over each of .hero and .rsvp so we can reference cells by name
+     (e.g. H-C4 for hero column C row 4, R-F11 for rsvp column F row 11).
+     Purely a design tool — never shipped to guests unless the flag is on. */
+  .dev-grid {
     position: absolute;
-    left: calc(50% - min(39vw, 240px));
-    top: 14%;
-    width: min(78vw, 480px);
-    opacity: 0.06;
-    z-index: 0;
+    inset: 0;
+    z-index: 900;
+    pointer-events: none;
+    display: grid;
+    grid-template-columns: repeat(6, 1fr);
+    grid-template-rows: repeat(10, 1fr);
+    font-family: var(--sans);
   }
-  .rsvp-sprig {
-    width: clamp(120px, 26vw, 170px);
-    margin: 0 auto 1.6rem;
-    opacity: 0.85;
+  .dev-grid .cell {
+    border-right: 1px dashed rgba(200, 60, 60, 0.32);
+    border-bottom: 1px dashed rgba(200, 60, 60, 0.32);
+    position: relative;
   }
-  .rsvp h2 { font-size: clamp(2.1rem, 7.5vw, 3.1rem); }
-  .rsvp p {
-    margin-top: 1.3rem;
-    color: var(--ink-soft);
-    font-size: 0.95rem;
+  .dev-grid .cell:nth-child(6n) { border-right: none; }
+  .dev-grid .cell:nth-last-child(-n+6) { border-bottom: none; }
+  .dev-grid .cell::after {
+    content: attr(data-label);
+    position: absolute;
+    top: 4px;
+    left: 5px;
+    font-size: 11px;
+    font-weight: 500;
+    letter-spacing: 0.02em;
+    color: rgba(200, 60, 60, 0.9);
+    background: rgba(247, 243, 234, 0.7);
+    padding: 1px 5px;
+    border-radius: 3px;
+    line-height: 1.4;
   }
-  .rsvp .deadline {
-    margin-top: 1.6rem;
-    font-size: 0.72rem;
-    letter-spacing: 0.28em;
-    text-indent: 0.28em;
-    text-transform: uppercase;
-    color: var(--gold);
+  .dev-grid-legend {
+    position: fixed;
+    bottom: 10px;
+    right: 10px;
+    z-index: 1000;
+    background: rgba(40, 56, 40, 0.9);
+    color: var(--paper);
+    font-family: var(--sans);
+    font-size: 11px;
+    padding: 8px 12px;
+    border-radius: 6px;
+    letter-spacing: 0.05em;
   }
 
   @media (prefers-reduced-motion: reduce) {
     html { scroll-behavior: auto; }
     .reveal { opacity: 1; transform: none; transition: none; }
     .plx { transform: none !important; }
-    .scroll-cue::after { animation: none; }
+    .scroll-cue { animation: none; transform: translateX(-50%); }
   }
 </style>
 </head>
 <body>
 
-  <!-- ============ HERO ============ -->
+  <div class="phone">
+
+  <!-- ============ HERO — the Save the Date ============ -->
   <section class="hero">
-    <!-- corner pieces sit flush with the page top — no parallax, which would push them off the edge -->
-    <div class="hero-corner-tl"><div class="art art--branch3"></div></div>
-    <div class="hero-corner-tr"><div class="art art--branch10"></div></div>
+    <!-- Botanicals are injected here at runtime from botanicals.csv (see
+         the "Grid-anchored placement layout" script at the bottom). Edit
+         the CSV and refresh — no HTML changes needed. -->
 
     <div class="center-col">
       <div class="art art--logo hero-logo reveal is-in" role="img" aria-label="S and N monogram"></div>
       <p class="ganesh reveal is-in" lang="hi">॥ श्री गणेशाय नमः ॥</p>
-      <p class="eyebrow reveal is-in">Together with their families</p>
+      <p class="eyebrow reveal is-in">Mark Your Calendars</p>
       <h1 class="display hero-names reveal is-in" data-delay="1">
         Samika
         <span class="amp">and</span>
         Neelotpal
       </h1>
-      <div class="art art--branch11 divider-sprig reveal is-in" data-delay="2"></div>
+      <p class="save-line reveal is-in" data-delay="2">are getting married</p>
       <p class="hero-sub reveal is-in" data-delay="2">
         <strong>November 25 – 26, 2026</strong><br />
-        Namah by Radisson &middot; Jim Corbett
+        Jim Corbett &middot; Uttarakhand
       </p>
       <div class="countdown reveal is-in" data-delay="3" id="countdown" aria-label="Countdown to the wedding">
         <div class="unit"><div class="num" id="cd-d">–</div><div class="lbl">Days</div></div>
@@ -592,138 +514,35 @@
       </div>
     </div>
 
-    <div class="scroll-cue">Scroll</div>
+    <div class="scroll-cue" aria-hidden="true"></div>
   </section>
 
-  <!-- ============ INVITATION ============ -->
-  <section class="invite">
-    <div class="invite-bird-l plx" data-plx="-0.18"><div class="art art--bird1"></div></div>
-    <div class="invite-bird-r plx" data-plx="0.14"><div class="art art--bird2"></div></div>
-
-    <div class="center-col">
-      <p class="invite-quote reveal">
-        &ldquo;Two gardens, one spring&nbsp;&mdash;
-        we&rsquo;d be honoured to have you there
-        when ours begin to grow together.&rdquo;
-      </p>
-      <div class="art art--branch11 divider-sprig reveal" data-delay="1"></div>
-      <p class="invite-body reveal" data-delay="1">
-        With divine blessings and the love of our families, we invite you
-        to share in our joy — from Guruji&rsquo;s Satsang in New Delhi to
-        two days of colour, music and vows amidst the forests of Jim Corbett.
-      </p>
-    </div>
-  </section>
-
-  <!-- ============ EVENTS ============ -->
-  <section class="events" id="events">
-    <div class="center-col events-head">
-      <p class="eyebrow reveal">November 2026</p>
-      <h2 class="display reveal" data-delay="1">The Celebrations</h2>
-      <div class="art art--branch11 divider-sprig reveal" data-delay="2"></div>
-      <p class="reveal" data-delay="2">Each card is a chapter — keep scrolling.</p>
-    </div>
-
-    <div class="stack" id="stack">
-      <article class="event-card event-card--satsang">
-        <div class="backdrop"><div class="art art--branch9"></div></div>
-        <div class="content">
-          <h3 class="display event-name">Guruji&rsquo;s Satsang</h3>
-          <p class="event-when"><span>Sunday, November 15</span> <span>&middot; 8:00 PM onwards</span></p>
-          <p class="event-where">NSCI Club &middot; New Delhi</p>
-          <p class="event-desc">
-            With divine blessings and gratitude, we invite you to join us
-            for Guruji&rsquo;s Satsang, as our families come together to seek
-            blessings for the journey ahead.
-          </p>
-        </div>
-      </article>
-
-      <article class="event-card event-card--haldi">
-        <div class="backdrop"><div class="art art--branch11"></div></div>
-        <div class="content">
-          <h3 class="display event-name">Mehendi &amp; Haldi</h3>
-          <p class="event-when"><span>Wednesday, November 25</span> <span>&middot; 2:00 PM onwards</span></p>
-          <p class="event-where">Namah by Radisson &middot; Jim Corbett</p>
-          <p class="event-desc">
-            In warm golden hues, join us as the celebrations begin —
-            with colour, laughter, music and cherished traditions.
-          </p>
-          <span class="event-dress">Dress code &middot; A pop of colour</span>
-          <p class="event-dress-note">Bright hues, playful accents, and your happiest shade.</p>
-        </div>
-      </article>
-
-      <article class="event-card event-card--sangeet">
-        <div class="backdrop"><div class="art art--branch1"></div></div>
-        <div class="content">
-          <h3 class="display event-name">The Sangeet Soir&eacute;e</h3>
-          <p class="event-when"><span>Wednesday, November 25</span> <span>&middot; 6:00 PM onwards</span></p>
-          <p class="event-where">Namah by Radisson &middot; Jim Corbett</p>
-          <p class="event-desc">
-            We invite you to an evening of music, dance and grand celebration,
-            as our two families come together in melody and joy.
-          </p>
-          <span class="event-dress">Dress code &middot; Glitz, glam &amp; statement silhouettes</span>
-          <p class="event-dress-note">You bring the spark, we bring the music.</p>
-        </div>
-      </article>
-
-      <article class="event-card event-card--wedding">
-        <div class="backdrop"><div class="art art--branch9"></div></div>
-        <div class="content">
-          <h3 class="display event-name">The Wedding</h3>
-          <p class="event-when"><span>Thursday, November 26</span> <span>&middot; 4:00 PM onwards</span></p>
-          <p class="event-where">Namah by Radisson &middot; Jim Corbett</p>
-          <p class="event-desc">
-            Bestow your blessings beneath the winter sun and into golden hour,
-            as Samika &amp; Neel exchange their wedding vows — and celebrate
-            a love built on friendship and partnership.
-          </p>
-          <span class="event-dress">Dress code &middot; Pastel hues, celebratory daywear</span>
-        </div>
-      </article>
-    </div>
-  </section>
-
-  <!-- ============ VENUE ============ -->
-  <section class="venue">
-    <div class="venue-edge plx" data-plx="0.16"><div class="art art--branch4"></div></div>
-    <div class="venue-backdrop plx" data-plx="-0.06"><div class="art art--branch6"></div></div>
-
-    <div class="center-col">
-      <p class="eyebrow reveal">Getting There</p>
-      <h2 class="display reveal" data-delay="1">The Venue</h2>
-
-      <p class="venue-name reveal" data-delay="2">Namah by Radisson</p>
-      <p class="venue-addr reveal" data-delay="2">Jim Corbett &middot; Uttarakhand</p>
-
-      <a class="btn btn--ghost reveal" data-delay="2" href="https://maps.google.com/?q=Namah+by+Radisson+Jim+Corbett" target="_blank" rel="noopener">Open in Google Maps</a>
-    </div>
-  </section>
-
-  <!-- ============ RSVP (final page) ============ -->
+  <!-- ============ RSVP — revealed on scroll ============ -->
   <section class="rsvp">
-    <div class="rsvp-watermark plx" data-plx="0.05"><div class="art art--branch8"></div></div>
-    <div class="rsvp-corner plx" data-plx="-0.06"><div class="art art--branch3"></div></div>
+    <!-- Botanicals are injected here at runtime from botanicals.csv. -->
 
     <div class="center-col">
-      <div class="art art--branch11 rsvp-sprig reveal"></div>
-      <p class="eyebrow reveal">Kindly Respond</p>
-      <h2 class="display reveal" data-delay="1">Will you join us?</h2>
-      <p class="reveal" data-delay="2">
-        We would be honoured to have you with us as we begin this
-        new chapter. Kindly let us know if you will be joining the
-        celebrations.
+      <div class="art rsvp-sprig reveal"></div>
+      <p class="rsvp-intro reveal">
+        After years of friendship, adventures and journeys across
+        continents, Samika and Neel are tying the knot.
       </p>
+      <h2 class="display reveal" data-delay="1">Will you join us</h2>
       <div class="btn-row reveal" data-delay="2">
-        <a class="btn" href="https://wa.me/4917668647361" target="_blank" rel="noopener">RSVP by WhatsApp</a>
-        <a class="btn btn--ghost" href="mailto:neelotpalnag@gmail.com?subject=RSVP%20—%20Samika%20%26%20Neel">RSVP by Email</a>
+        <a class="btn btn--small" href="https://wa.me/919244530725?text=RSVP" target="_blank" rel="noopener">RSVP by WhatsApp</a>
+        <a class="btn btn--ghost btn--small" href="mailto:samika.neel.2026@gmail.com?subject=RSVP">RSVP by Email</a>
       </div>
       <p class="deadline reveal" data-delay="3">Please respond by August 1, 2026</p>
+      <p class="rsvp-contacts reveal" data-delay="3">
+        Akash Yadav &amp; Team &middot; +91 7080837133<br />
+        Sanjeev Wadhwa &middot; +91 9818511000<br />
+        Satyabrata Nag &middot; +91 9229674479
+      </p>
       <div class="art art--logo rsvp-mark reveal" data-delay="3" role="img" aria-label="S and N monogram"></div>
     </div>
   </section>
+
+  </div>
 
 <script>
   // ---------- Countdown ----------
@@ -764,33 +583,187 @@
     els.forEach(function (el) { io.observe(el); });
   })();
 
-  // ---------- Parallax + card-stack depth ----------
+  // ---------- Grid-anchored placement layout (CSV-driven) ----------
+  // botanicals.csv is the single source of truth for every framing branch
+  // and bird. Columns: asset,cell,anchor,rotation,size_pct,mirror,notes
+  //   asset      — matches .art--{asset}   (branch1..branch11, bird1, bird2, logo)
+  //   cell       — "H-A1".."H-F10" or "R-A1".."R-F10"  (section-col-row)
+  //   anchor     — TL | TR | BL | BR | C   (which corner of the piece
+  //                lands on that corner of the cell, AFTER rotation)
+  //   rotation   — degrees, clockwise
+  //   size_pct   — % of the asset's default reference width (see botanicals.html)
+  //   mirror     — TRUE to flip horizontally, FALSE otherwise
+  //   notes      — free text, ignored by the loader
+  // Edit the CSV, save, and refresh the page — no HTML/JS edits needed.
+  (function () {
+    var COLS = "ABCDEF";
+    var CW = 100 / 6;    // cell width in cqw
+    var CH = 222 / 10;   // cell height in cqw
+    var phoneEl = document.querySelector(".phone");
+
+    // Default reference width (px) per asset — matches botanicals.html.
+    var DEFAULT_W = {
+      branch1: 220, branch2: 140, branch3: 200, branch4: 160,
+      branch6: 240, branch8: 230, branch9: 160, branch10: 200,
+      branch11: 110, bird1: 90, bird2: 90, logo: 90
+    };
+
+    function parseCSV(text) {
+      var lines = text.replace(/\r\n/g, "\n").split("\n").filter(function (l) { return l.trim() !== ""; });
+      var header = lines[0].split(",").map(function (h) { return h.trim(); });
+      return lines.slice(1).map(function (line) {
+        var cells = line.split(",").map(function (c) { return c.trim(); });
+        var row = {};
+        header.forEach(function (h, i) { row[h] = cells[i] !== undefined ? cells[i] : ""; });
+        return row;
+      });
+    }
+
+    function buildPlaceElement(row) {
+      var el = document.createElement("div");
+      el.className = "place";
+      el.dataset.cell = row.cell;
+      el.dataset.anchor = (row.anchor || "C").toUpperCase();
+      el.dataset.rot = row.rotation || "0";
+      var pct = parseFloat(row.size_pct || "100") / 100;
+      var defaultW = DEFAULT_W[row.asset] || 200;
+      el.dataset.w = Math.round(defaultW * pct);
+      el.dataset.mirror = /^true$/i.test(row.mirror || "") ? "1" : "0";
+
+      var art = document.createElement("div");
+      art.className = "art art--" + row.asset;
+      el.appendChild(art);
+      return el;
+    }
+
+    function loadFromCSV() {
+      // cache: "no-store" + a timestamp param — the dev server sends no
+      // Cache-Control header, so browsers can otherwise serve a stale copy
+      // of the CSV on refresh even after you've saved new edits to disk.
+      return fetch("botanicals.csv?t=" + Date.now(), { cache: "no-store" })
+        .then(function (res) {
+          if (!res.ok) throw new Error("botanicals.csv fetch failed: " + res.status);
+          return res.text();
+        })
+        .then(function (text) {
+          var rows = parseCSV(text);
+          var heroEl = document.querySelector(".hero");
+          var rsvpEl = document.querySelector(".rsvp");
+          rows.forEach(function (row) {
+            if (!row.asset || !row.cell) return;
+            var section = row.cell.charAt(0).toUpperCase();
+            var parent = section === "H" ? heroEl : section === "R" ? rsvpEl : null;
+            if (!parent) return;
+            var el = buildPlaceElement(row);
+            parent.appendChild(el);
+          });
+        })
+        .catch(function (err) {
+          console.warn("Botanical placement CSV not loaded:", err);
+        });
+    }
+
+    function layoutOne(el) {
+      var m = (el.dataset.cell || "").match(/^([HR])-([A-F])(\d+)$/);
+      if (!m) return;
+      var colIdx = COLS.indexOf(m[2]);
+      var row = parseInt(m[3], 10);
+      var anchor = (el.dataset.anchor || "C").toUpperCase();
+      var rot = parseFloat(el.dataset.rot || "0");
+      var wPx = parseFloat(el.dataset.w || "200");
+      var mirror = el.dataset.mirror === "1" ? -1 : 1;
+
+      el.style.width = wPx + "px";
+      el.style.transform = "scaleX(" + mirror + ") rotate(" + rot + "deg)";
+      el.style.left = "0px";
+      el.style.top = "0px";
+
+      var w = el.offsetWidth;
+      var h = el.offsetHeight;
+      var phoneW = phoneEl.getBoundingClientRect().width;
+      var cqw = phoneW / 100;
+
+      var cxCqw, cyCqw;
+      switch (anchor) {
+        case "TL": cxCqw = colIdx * CW;         cyCqw = (row - 1) * CH;   break;
+        case "TR": cxCqw = (colIdx + 1) * CW;   cyCqw = (row - 1) * CH;   break;
+        case "BL": cxCqw = colIdx * CW;         cyCqw = row * CH;         break;
+        case "BR": cxCqw = (colIdx + 1) * CW;   cyCqw = row * CH;         break;
+        case "C":  cxCqw = (colIdx + 0.5) * CW; cyCqw = (row - 0.5) * CH; break;
+        default: return;
+      }
+      var cxPx = cxCqw * cqw;
+      var cyPx = cyCqw * cqw;
+
+      var rRad = rot * Math.PI / 180;
+      var bw = Math.abs(w * Math.cos(rRad)) + Math.abs(h * Math.sin(rRad));
+      var bh = Math.abs(w * Math.sin(rRad)) + Math.abs(h * Math.cos(rRad));
+
+      var px, py;
+      switch (anchor) {
+        case "TL": px = cxPx - w/2 + bw/2; py = cyPx - h/2 + bh/2; break;
+        case "TR": px = cxPx - w/2 - bw/2; py = cyPx - h/2 + bh/2; break;
+        case "BL": px = cxPx - w/2 + bw/2; py = cyPx - h/2 - bh/2; break;
+        case "BR": px = cxPx - w/2 - bw/2; py = cyPx - h/2 - bh/2; break;
+        case "C":  px = cxPx - w/2;         py = cyPx - h/2;         break;
+      }
+      el.style.left = px + "px";
+      el.style.top = py + "px";
+    }
+
+    function layoutAll() {
+      document.querySelectorAll(".place[data-cell]").forEach(layoutOne);
+    }
+
+    loadFromCSV().then(layoutAll);
+    window.addEventListener("resize", layoutAll);
+    window.addEventListener("load", layoutAll);
+  })();
+
+  // ---------- Dev grid overlay (?grid=1) ----------
+  (function () {
+    if (!/[?&]grid=1\b/.test(window.location.search)) return;
+    document.body.classList.add("dev-grid-mode");
+    var cols = "ABCDEF";
+    var sections = [
+      { el: document.querySelector(".hero"), prefix: "H" },
+      { el: document.querySelector(".rsvp"), prefix: "R" }
+    ];
+    sections.forEach(function (s) {
+      if (!s.el) return;
+      var grid = document.createElement("div");
+      grid.className = "dev-grid";
+      for (var r = 1; r <= 10; r++) {
+        for (var c = 0; c < 6; c++) {
+          var cell = document.createElement("div");
+          cell.className = "cell";
+          cell.dataset.label = s.prefix + "-" + cols[c] + r;
+          grid.appendChild(cell);
+        }
+      }
+      s.el.appendChild(grid);
+    });
+    var legend = document.createElement("div");
+    legend.className = "dev-grid-legend";
+    legend.textContent = "GRID · H = hero · R = rsvp · A–F cols · 1–10 rows";
+    document.body.appendChild(legend);
+  })();
+
+  // ---------- Parallax on the botanicals ----------
   (function () {
     if (reducedMotion) return;
     var plxEls = Array.prototype.slice.call(document.querySelectorAll(".plx"));
-    var cards = Array.prototype.slice.call(document.querySelectorAll(".event-card"));
     var vh = window.innerHeight;
     window.addEventListener("resize", function () { vh = window.innerHeight; });
 
     var ticking = false;
     function update() {
       ticking = false;
-      // parallax: drift each decorative element relative to viewport centre
       plxEls.forEach(function (el) {
         var speed = parseFloat(el.dataset.plx || "0.1");
         var r = el.getBoundingClientRect();
         var offset = (r.top + r.height / 2) - vh / 2;
         el.style.transform = "translate3d(0," + (-offset * speed).toFixed(1) + "px,0)";
-      });
-      // stack: as the next card slides over, settle the previous one back
-      cards.forEach(function (card, i) {
-        var next = cards[i + 1];
-        if (!next) return;
-        var stickyTop = card.getBoundingClientRect().top;
-        var nextTop = next.getBoundingClientRect().top;
-        var p = Math.min(1, Math.max(0, 1 - (nextTop - stickyTop) / (vh * 0.75)));
-        card.style.transform = "scale(" + (1 - p * 0.05).toFixed(4) + ")";
-        card.style.filter = "brightness(" + (1 - p * 0.08).toFixed(3) + ")";
       });
     }
     function onScroll() {
