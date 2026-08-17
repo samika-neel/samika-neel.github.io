@@ -37,6 +37,7 @@
   :root {
     --paper: #f7f3ea;
     --paper-deep: #f0eadb;
+    --ivory: #f4f1e8;   /* the redesigned wedding flow sits on ivory, not the cream */
     --ink: #283828;
     --ink-soft: rgba(40, 56, 40, 0.66);
     --gold: #a5804c;
@@ -59,7 +60,7 @@
   }
 
   body {
-    background: var(--paper-deep);
+    background: var(--ivory);
     color: var(--ink);
     font-family: var(--sans);
     font-weight: 300;
@@ -77,7 +78,7 @@
     width: min(100%, 400px);   /* thin portrait column; raise 400px to scale up */
     margin: 0 auto;
     position: relative;
-    background: var(--paper-deep);
+    background: var(--ivory);
     container-type: inline-size;
     container-name: phone;
     overflow: hidden;          /* keep bleeding botanicals inside the frame */
@@ -181,6 +182,52 @@
   .reveal[data-delay="2"] { transition-delay: 0.3s; }
   .reveal[data-delay="3"] { transition-delay: 0.45s; }
   .reveal[data-delay="4"] { transition-delay: 0.6s; }
+
+  /* ================= REDESIGNED WEDDING FLOW (all on ivory) =================
+     1 monogram splash · 2 full invitation card · 3 small countdown · 4 cards */
+  .monogram-hero {
+    position: relative;
+    height: 100svh;
+    overflow: hidden;
+    background: var(--ivory);
+    scroll-snap-align: start;
+  }
+  .monogram-emblem {
+    position: absolute;
+    z-index: 1;                       /* behind the pocket front */
+    left: 50%;
+    top: var(--pocket-meet-y, 52.5%); /* the envelope mouth */
+    width: clamp(150px, 50cqw, 238px);
+    height: auto;
+    /* rises out of the pocket as the flap opens; --logo-out runs 0 → -95
+       (JS), so it ends ~95% of its height above the mouth */
+    transform: translate(-50%, calc(var(--logo-out, -95) * 1%));
+    will-change: transform;
+  }
+
+  .wedding-hero {
+    background: var(--ivory);
+    scroll-snap-align: start;
+  }
+  .wedding-hero-img {
+    display: block;
+    width: 100%;
+    height: auto;
+  }
+
+  .countdown-section {
+    padding: clamp(3.5rem, 12cqw, 5.5rem) 0;
+    background: var(--ivory);
+    text-align: center;
+    scroll-snap-align: start;
+  }
+  .countdown-section .eyebrow { display: block; margin-bottom: 1.7rem; }
+
+  .celebrations {
+    padding: 0 0 5rem;
+    background: var(--ivory);
+    scroll-snap-align: start;
+  }
 
   /* ======================================================================
      Shared botanical framing — big branches hug the corners, birds fly
@@ -635,19 +682,18 @@
     .envelope-scene { left: calc(50% - 200px); right: auto; width: 400px; }
   }
 
-  /* The lower pocket is a separate physical part of the envelope. It overlaps
-     the closed flap, stays put while the flap lifts, then slides down so the
-     long invitation appears to rise out of it. */
+  /* The lower pocket is the static front of the envelope. It sits in the page
+     flow (inside the first section) and the monogram pops out from behind it;
+     it no longer slides — it just scrolls away with the page. */
   .envelope-pocket {
     position: absolute;
     top: 0;
     left: 0;
     width: 100%;
-    height: calc(100% + 4px);
-    z-index: 1;
-    transform: translate3d(0, var(--pocket-shift, 0px), 0);
+    height: 100%;
+    z-index: 2;              /* in front of the monogram (z-index 1) */
     background: transparent;
-    will-change: transform;
+    pointer-events: none;
   }
 
   /* The viewport crops the centre of this actual 4:3 landscape sheet. Every
@@ -665,7 +711,7 @@
        HEIGHT (auto 100%), not its full width, so the phone shows ~half the
        sheet instead of a heavily magnified centre slice. */
     background-color: #ffffff;
-    background-image: url("assets/events/psd_edited/envelope_2.png");
+    background-image: url("assets/events/psd_edited/envelope_2.webp");
     background-position: center center;
     background-size: auto 100%;
     background-repeat: no-repeat;
@@ -677,7 +723,7 @@
     clip-path: polygon(0 0, 50% var(--pocket-meet-y, 52.5%), 0 100%);
     background-image:
       linear-gradient(112deg, rgba(255,255,255,0.11), transparent 45%, rgba(67,49,25,0.075)),
-      url("assets/events/psd_edited/envelope_2.png");
+      url("assets/events/psd_edited/envelope_2.webp");
     background-position: center, center center;
     background-size: 100% 100%, auto 100%;
     filter: drop-shadow(2px -1px 2px rgba(67,49,27,0.24));
@@ -687,7 +733,7 @@
     clip-path: polygon(100% 0, 50% var(--pocket-meet-y, 52.5%), 100% 100%);
     background-image:
       linear-gradient(248deg, rgba(255,255,255,0.1), transparent 45%, rgba(67,49,25,0.07)),
-      url("assets/events/psd_edited/envelope_2.png");
+      url("assets/events/psd_edited/envelope_2.webp");
     background-position: center, center center;
     background-size: 100% 100%, auto 100%;
     filter: drop-shadow(-2px -1px 2px rgba(67,49,27,0.22));
@@ -699,7 +745,7 @@
     clip-path: polygon(0 100%, 100% 100%, 50% calc(var(--pocket-meet-y, 52.5%) - 2px));
     background-image:
       linear-gradient(0deg, rgba(255,255,255,0.09), transparent 58%, rgba(79,58,30,0.09)),
-      url("assets/events/psd_edited/envelope_2.png");
+      url("assets/events/psd_edited/envelope_2.webp");
     background-position: center, center center;
     background-size: 100% 100%, auto 100%;
     filter: drop-shadow(0 -2px 2.5px rgba(65,47,25,0.26));
@@ -730,20 +776,6 @@
     stroke-linecap: round;
     stroke-linejoin: round;
     transform: translateY(1.6px);
-  }
-
-  .envelope-card-light {
-    position: absolute;
-    z-index: 2;
-    left: -20%;
-    right: -20%;
-    top: calc(var(--pocket-meet-y, 52.5%) - 58px);
-    height: 110px;
-    opacity: var(--light-o, 0);
-    transform: translate3d(0, var(--pocket-shift, 0px), 0);
-    background: radial-gradient(ellipse at 50% 20%, rgba(255, 252, 235, 0.9), transparent 66%);
-    filter: blur(8px);
-    pointer-events: none;
   }
 
   .envelope-canvas {
@@ -777,14 +809,14 @@
     z-index: 5;
     left: var(--seal-x, 50%);
     top: var(--seal-y, 52%);
-    width: clamp(52px, 15vw, 70px);
+    width: clamp(78px, 22.5vw, 105px);
     transform: translate(-50%, -50%) scale(var(--seal-s, 1));
     filter: drop-shadow(0 3px 5px rgba(53, 38, 21, 0.42));
     pointer-events: none;
     will-change: transform;
   }
   @media (min-width: 460px) {
-    .envelope-seal { width: 66px; }
+    .envelope-seal { width: 99px; }
   }
 
   .envelope-hint {
@@ -800,9 +832,8 @@
     text-transform: uppercase;
     color: rgba(40, 56, 40, 0.7);
     opacity: var(--hint-o, 1);
-    transform: translate3d(0, var(--pocket-shift, 0px), 0);
     text-shadow: 0 1px rgba(255,255,255,0.6);
-    will-change: transform, opacity;
+    will-change: opacity;
   }
   .envelope-hint i {
     display: block;
@@ -858,6 +889,50 @@
   }
   .gate-error { color: #a83a3a; font-size: 0.82rem; min-height: 1.1em; }
 
+  /* ---------- Loading screen ----------
+     Shown after the gate opens while every image + font preloads, so the
+     envelope and the scroll that follows are perfectly smooth. */
+  #preloader {
+    position: fixed;
+    inset: 0;
+    z-index: 9000;                 /* above the envelope (60), below the gate */
+    display: none;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 1.9rem;
+    background: var(--ivory);
+    transition: opacity 0.6s ease;
+  }
+  html.is-loading #preloader { display: flex; }
+  #preloader.is-hidden { opacity: 0; pointer-events: none; }
+  .preloader-mark {
+    width: clamp(96px, 30vw, 140px);
+    height: auto;
+    animation: preloaderPulse 1.8s ease-in-out infinite;
+  }
+  @keyframes preloaderPulse {
+    0%, 100% { opacity: 0.5; transform: scale(0.975); }
+    50%      { opacity: 1;   transform: scale(1); }
+  }
+  .preloader-bar {
+    width: min(58vw, 190px);
+    height: 2px;
+    background: var(--hairline);
+    border-radius: 2px;
+    overflow: hidden;
+  }
+  .preloader-bar span {
+    display: block;
+    height: 100%;
+    width: 0;
+    background: var(--gold);
+    transition: width 0.35s ease;
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .preloader-mark { animation: none; }
+  }
+
   @media (prefers-reduced-motion: reduce) {
     html { scroll-behavior: auto; }
     .reveal { opacity: 1; transform: none; transition: none; }
@@ -878,53 +953,58 @@
   <p class="gate-error" id="gate-error"></p>
 </div>
 
+<!-- ============ LOADING SCREEN ============
+     Preloads every image + font before the envelope so the reveal + scroll
+     never stutter or pop in. -->
+<div id="preloader" aria-hidden="true">
+  <img class="preloader-mark" src="assets/sn_oval.webp" alt="" />
+  <div class="preloader-bar"><span id="preloader-fill"></span></div>
+</div>
+
 <!-- ============ OPENING ENVELOPE ============
      Decorative close-up over the actual hero. It sits outside .phone because
      the phone's containment would trap a fixed child in the long page. -->
+<!-- Only the FLAP is a fixed overlay now. The lower pocket + the monogram that
+     pops out of it live in the first page section (below), so they scroll away
+     with the page once the flap has opened. -->
 <div class="envelope-scene" id="envelope-scene" aria-hidden="true">
-  <div class="envelope-pocket">
-    <div class="envelope-pocket-panel envelope-pocket-panel--left"></div>
-    <div class="envelope-pocket-panel envelope-pocket-panel--right"></div>
-    <div class="envelope-pocket-panel envelope-pocket-panel--bottom"></div>
-    <svg class="envelope-pocket-seams" viewBox="0 0 800 1000" preserveAspectRatio="none" aria-hidden="true">
-      <path class="crease-dark" d="M 0 0 L 400 525 L 800 0 M 0 1000 L 400 525 L 800 1000" />
-      <path class="crease-light" d="M 0 0 L 400 525 L 800 0 M 0 1000 L 400 525 L 800 1000" />
-    </svg>
-  </div>
-  <div class="envelope-card-light"></div>
   <canvas class="envelope-canvas" id="envelope-flap-canvas"></canvas>
   <div class="envelope-fold"></div>
-  <img class="envelope-seal" src="assets/sn_oval.png" alt="" aria-hidden="true" />
+  <img class="envelope-seal" src="assets/sn_wax_seal.webp" alt="" aria-hidden="true" />
   <p class="envelope-hint">Swipe up to open<i></i></p>
 </div>
 
   <div class="phone">
 
-  <!-- ============ HERO — the Save the Date ============ -->
-  <section class="hero">
-    <!-- Botanicals are injected here at runtime from botanicals-wedding.csv
-         (see the "Grid-anchored placement layout" script at the bottom). Edit
-         the CSV and refresh — no HTML changes needed. -->
+  <!-- ============ 1 · ENVELOPE REVEAL — monogram popping out of the pocket ====
+       The lower pocket sits here in the page flow (static). The monogram rises
+       from behind it as the flap (fixed overlay above) opens, ending ~80% out.
+       Everything here scrolls away normally once the flap has opened. -->
+  <section class="monogram-hero">
+    <img class="monogram-emblem" src="assets/sn_oval.webp" alt="Samika &amp; Neelotpal monogram" />
+    <div class="envelope-pocket">
+      <div class="envelope-pocket-panel envelope-pocket-panel--left"></div>
+      <div class="envelope-pocket-panel envelope-pocket-panel--right"></div>
+      <div class="envelope-pocket-panel envelope-pocket-panel--bottom"></div>
+      <svg class="envelope-pocket-seams" viewBox="0 0 800 1000" preserveAspectRatio="none" aria-hidden="true">
+        <path class="crease-dark" d="M 0 0 L 400 525 L 800 0 M 0 1000 L 400 525 L 800 1000" />
+        <path class="crease-light" d="M 0 0 L 400 525 L 800 0 M 0 1000 L 400 525 L 800 1000" />
+      </svg>
+    </div>
+  </section>
 
+  <!-- ============ 2 · WEDDING HERO (full invitation card) ============ -->
+  <section class="wedding-hero">
+    <img class="wedding-hero-img reveal" src="assets/events/wedding_cards/wedding_hero.webp"
+         alt="With the blessings of Shree Ganesha, Mrs. Leena &amp; Mr. Sanjeev Wadhwa and Mrs. Maya &amp; Mr. Satyabrata Nag request the pleasure of your company to celebrate the wedding of Samika and Neelotpal — to mark the beginning of their journey surrounded by those they hold closest to their hearts."
+         loading="lazy" />
+  </section>
+
+  <!-- ============ 3 · COUNTDOWN (small section) ============ -->
+  <section class="countdown-section">
     <div class="center-col">
-      <div class="art art--logo hero-logo reveal is-in" role="img" aria-label="S and N monogram"></div>
-      <p class="ganesh reveal is-in" lang="hi">॥ श्री गणेशाय नमः ॥</p>
-      <p class="hero-hosts reveal is-in">
-        Mrs. Leena &amp; Mr. Sanjeev Wadhwa<br />
-        Mrs. Maya &amp; Mr. Satyabrata Nag
-      </p>
-      <p class="hero-request reveal is-in" data-delay="1">
-        invite you to celebrate the wedding of
-      </p>
-      <h1 class="display hero-names reveal is-in" data-delay="1">
-        Samika
-        <span class="amp">&amp;</span>
-        Neelotpal
-      </h1>
-      <p class="hero-sub reveal is-in" data-delay="2">
-        <strong>November 25 – 26, 2026</strong>
-      </p>
-      <div class="countdown reveal is-in" data-delay="3" id="countdown" aria-label="Countdown to the wedding">
+      <p class="eyebrow reveal">November 25 – 26, 2026 · Jim Corbett</p>
+      <div class="countdown reveal is-in" id="countdown" aria-label="Countdown to the wedding">
         <div class="unit"><div class="num" id="cd-d">–</div><div class="lbl">Days</div></div>
         <div class="sep">·</div>
         <div class="unit"><div class="num" id="cd-h">–</div><div class="lbl">Hours</div></div>
@@ -934,27 +1014,17 @@
         <div class="unit"><div class="num" id="cd-s">–</div><div class="lbl">Secs</div></div>
       </div>
     </div>
-
-    <div class="scroll-cue" aria-hidden="true"></div>
   </section>
 
-  <!-- ============ RSVP — revealed on scroll ============ -->
-  <section class="rsvp">
-    <!-- Botanicals are injected here at runtime from botanicals-wedding.csv
-         (the R-* rows; currently hidden on this page — the event cards carry
-         their own art). -->
-
+  <!-- ============ 4 · EVENT CARDS + CONTACT ============ -->
+  <section class="celebrations">
     <div class="center-col">
-      <p class="eyebrow reveal">November 2026</p>
-      <h2 class="display celebrations-title reveal" data-delay="1">The Celebrations</h2>
-      <div class="art art--branch11 divider-sprig reveal" data-delay="2"></div>
-
-      <div class="event-cards reveal" data-delay="2">
-        <img class="event-card-img" src="assets/events/wedding_cards/mehendi_haldi.png" alt="Mehendi &amp; Haldi — 25th November 2026, 12:30 pm onwards, Bonsai Garden, Namah Resort, Jim Corbett" loading="lazy" />
-        <img class="event-card-img" src="assets/events/wedding_cards/sangeet.png" alt="Sangeet Soirée" loading="lazy" />
-        <img class="event-card-img" src="assets/events/wedding_cards/wedding_vows.png" alt="Wedding Vows" loading="lazy" />
-        <img class="event-card-img" src="assets/events/wedding_cards/after_hours.png" alt="After Hours — 26th November 2026, midnight onwards, Kosi Hall, Namah Resort, Jim Corbett" loading="lazy" />
-        <img class="event-card-img" src="assets/events/wedding_cards/rsvp.png" alt="RSVP — with the blessings of our grandparents; Wadhwa, Batra, Sahni, Arora, Babbar, Dewan, Nag, Sur, Bose, Ghosh, Bagchi, Poria &amp; Roy families" loading="lazy" />
+      <div class="event-cards reveal">
+        <img class="event-card-img" src="assets/events/wedding_cards/mehendi_haldi.webp" alt="Mehendi &amp; Haldi — 25th November 2026, 12:30 pm onwards, Bonsai Garden, Namah Resort, Jim Corbett" loading="lazy" />
+        <img class="event-card-img" src="assets/events/wedding_cards/sangeet.webp" alt="Sangeet Soirée" loading="lazy" />
+        <img class="event-card-img" src="assets/events/wedding_cards/wedding_vows.webp" alt="Wedding Vows" loading="lazy" />
+        <img class="event-card-img" src="assets/events/wedding_cards/after_hours.webp" alt="After Hours — 26th November 2026, midnight onwards, Kosi Hall, Namah Resort, Jim Corbett" loading="lazy" />
+        <img class="event-card-img" src="assets/events/wedding_cards/rsvp.webp" alt="RSVP — with the blessings of our grandparents; Wadhwa, Batra, Sahni, Arora, Babbar, Dewan, Nag, Sur, Bose, Ghosh, Bagchi, Poria &amp; Roy families" loading="lazy" />
       </div>
 
       <div class="contact-block reveal">
@@ -970,7 +1040,7 @@
             <button type="button" class="contact-num" data-name="Satyabrata Nag" data-phone="919229674479">+91&nbsp;9229674479</button>
           </p>
         </div>
-        <img class="contact-logo" src="assets/sn_oval.png" alt="S and N monogram" loading="lazy" />
+        <img class="contact-logo" src="assets/sn_oval.webp" alt="S and N monogram" loading="lazy" />
       </div>
     </div>
   </section>
@@ -1264,6 +1334,79 @@
   })();
 </script>
 <script>
+  // ---------- Loading screen ----------
+  // After the gate opens, preload every image + the custom fonts, then hand off
+  // to the envelope (fires "sn:ready"). A hard 8s ceiling means it never hangs.
+  (function () {
+    var root = document.documentElement,
+        preloader = document.getElementById("preloader"),
+        fill = document.getElementById("preloader-fill"),
+        revealed = false;
+
+    root.classList.add("is-loading"); // primed; shows the moment the gate clears
+
+    var ASSETS = [
+      "assets/events/psd_edited/envelope_2.webp",
+      "assets/sn_oval.webp",
+      "assets/sn_wax_seal.webp",
+      "assets/events/wedding_cards/wedding_hero.webp",
+      "assets/events/wedding_cards/mehendi_haldi.webp",
+      "assets/events/wedding_cards/sangeet.webp",
+      "assets/events/wedding_cards/wedding_vows.webp",
+      "assets/events/wedding_cards/after_hours.webp",
+      "assets/events/wedding_cards/rsvp.webp"
+    ];
+
+    function preloadImages() {
+      var done = 0, total = ASSETS.length;
+      return Promise.all(ASSETS.map(function (src) {
+        return new Promise(function (resolve) {
+          var img = new Image();
+          img.onload = img.onerror = function () {
+            done++;
+            if (fill) fill.style.width = Math.round(done / total * 100) + "%";
+            resolve();
+          };
+          img.src = src;
+        });
+      }));
+    }
+
+    function preloadFonts() {
+      if (!document.fonts || !document.fonts.ready) return Promise.resolve();
+      try {
+        document.fonts.load('1em "Citadel Script"');
+        document.fonts.load('italic 1em "Cormorant Garamond"');
+        document.fonts.load('500 1em "Cormorant Garamond"');
+        document.fonts.load('1em "Amita"');
+      } catch (e) {}
+      return document.fonts.ready;
+    }
+
+    function reveal() {
+      if (revealed) return;
+      revealed = true;
+      if (preloader) preloader.classList.add("is-hidden");
+      setTimeout(function () { root.classList.remove("is-loading"); }, 650);
+      document.dispatchEvent(new Event("sn:ready"));
+    }
+
+    function run() {
+      var guard = setTimeout(reveal, 8000); // never hang
+      Promise.all([preloadImages(), preloadFonts()]).then(function () {
+        clearTimeout(guard);
+        reveal();
+      });
+    }
+
+    if (document.body.classList.contains("gate-locked")) {
+      document.addEventListener("sn:unlocked", run, { once: true });
+    } else {
+      run();
+    }
+  })();
+</script>
+<script>
   // private preview gate — not real security, just keeps casual visitors out
   (function () {
     var HASH = "021bef3731721f3068b050c06b3e01999838b62858bd6146f05d7087de63deed";
@@ -1384,11 +1527,11 @@
         canvas = document.getElementById("envelope-flap-canvas"),
         ctx = canvas.getContext("2d"),
         fold = scene.querySelector(".envelope-fold"),
-        light = scene.querySelector(".envelope-card-light"),
+        logo = document.querySelector(".monogram-emblem"),
         hint = scene.querySelector(".envelope-hint");
 
     var texture = new Image();
-    texture.src = "assets/events/psd_edited/envelope_2.png";
+    texture.src = "assets/events/psd_edited/envelope_2.webp";
 
     var p = 0, target = 0, running = false, finished = false,
         vw = 390, vh = 844, dpr = 1, hingeY = 1, pocketMeetY = 443,
@@ -1416,8 +1559,9 @@
       hingeY = 1;
       pocketMeetY = vh * 0.525;
       cameraD = Math.max(1180, flapW * 1.32);
-      scene.style.setProperty("--pocket-meet-y", pocketMeetY.toFixed(1) + "px");
-      scene.style.setProperty("--envelope-w", flapW.toFixed(1) + "px");
+      // published on :root so the pocket (now in the page section) inherits them
+      root.style.setProperty("--pocket-meet-y", pocketMeetY.toFixed(1) + "px");
+      root.style.setProperty("--envelope-w", flapW.toFixed(1) + "px");
       render();
     }
 
@@ -1488,8 +1632,9 @@
       // the gesture begins, while preserving the closed-envelope silhouette.
       var restAngle = Math.PI / 120;
       var theta = restAngle + open * (Math.PI * 0.94 - restAngle);
-      var pocketTravel = easeInOut(seg(p, 0.47, 0.96));
-      var vanish = easeInOut(seg(p, 0.94, 1));
+      // once the flap is open (p≈0.5) it fades away so the popped-out monogram
+      // and the page beneath can take over.
+      var vanish = easeInOut(seg(p, 0.5, 0.9));
       /* Enough strips for a smooth outline and curl, without asking a phone to
          remap more than a thousand texture triangles on every frame. */
       var rows = 24, cols = 12, dy = flapH / rows;
@@ -1619,9 +1764,9 @@
       ctx.stroke();
       ctx.globalAlpha = 1;
 
-      var pocketShift = pocketTravel * (vh + 18);
-      scene.style.setProperty("--pocket-shift", pocketShift.toFixed(1) + "px");
-      light.style.setProperty("--light-o", (Math.sin(Math.PI * seg(p, 0.04, 0.58)) * 0.68 * (1 - pocketTravel)).toFixed(3));
+      // the monogram rises out of the static pocket in step with the flap
+      // opening, ending ~95% above the mouth (most of it clear of the pocket)
+      root.style.setProperty("--logo-out", (-95 * open).toFixed(2));
       fold.style.setProperty("--fold-o", (1 - easeInOut(seg(p, 0.43, 0.62))).toFixed(3));
       fold.style.setProperty("--fold-shadow-y", (7 + 28 * lift).toFixed(1) + "px");
       fold.style.setProperty("--fold-shadow-blur", (14 + 34 * lift).toFixed(1) + "px");
@@ -1727,12 +1872,9 @@
       listen();
     }
 
-    // wait for the passphrase gate, if it is still up
-    if (document.body.classList.contains("gate-locked")) {
-      document.addEventListener("sn:unlocked", start, { once: true });
-    } else {
-      start();
-    }
+    // The loading screen fires "sn:ready" once the gate is open AND every image
+    // and font has loaded, so the flap and the scroll never stutter.
+    document.addEventListener("sn:ready", start, { once: true });
 
     texture.addEventListener("load", render);
   })();
