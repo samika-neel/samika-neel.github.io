@@ -21,15 +21,24 @@
 <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;1,400;1,500&family=Jost:wght@300;400;500&family=Amita:wght@400;700&display=swap" rel="stylesheet" />
 <link rel="icon" type="image/png" sizes="64x64" href="assets/tinted/favicon-64.png" />
 <link rel="apple-touch-icon" href="assets/tinted/apple-touch-icon.png" />
+<link rel="stylesheet" href="site.css" />
+<script>
+  /* Arm the envelope before first paint, so the invitation is never glimpsed
+     behind it. The failsafe unlocks the page if the intro module never starts
+     (a script error, a blocked canvas) rather than leaving it stuck. */
+  (function () {
+    try {
+      if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
+      document.documentElement.classList.add("intro-ready", "intro-lock");
+      setTimeout(function () {
+        if (!window.__snIntroRunning) {
+          document.documentElement.classList.remove("intro-ready", "intro-lock");
+        }
+      }, 8000);
+    } catch (e) {}
+  })();
+</script>
 <style>
-  @font-face {
-    font-family: "Citadel Script";
-    src: url("assets/fonts/citadel-script-std-regular.otf") format("opentype");
-    font-weight: 400;
-    font-style: normal;
-    font-display: swap;
-  }
-
   :root {
     --paper: #f7f3ea;
     --paper-deep: #f0eadb;
@@ -69,6 +78,9 @@
     container-type: inline-size;
     container-name: phone;
     overflow: hidden;
+    /* the hero sets its own height — opt out of the shared page frame */
+    display: block;
+    min-height: 0;
   }
   @media (min-width: 460px) {
     body { background: #d9d1bd; }
@@ -101,6 +113,9 @@
     width: clamp(56px, 13cqw, 74px);
     margin: -1rem auto 1.4rem;
     background-image: url("assets/tinted/logo_gold.png");
+    /* lifted visually; flow height is untouched so the stack below stays put */
+    position: relative;
+    top: -1.6rem;
   }
 
   .plx { will-change: transform; }
@@ -110,7 +125,9 @@
     font-size: clamp(1.1rem, 3.4cqw, 1.35rem);
     color: var(--gold);
     margin-top: -0.6rem;
-    margin-bottom: 1.3rem;
+    margin-bottom: 0.5rem;
+    position: relative;
+    top: -1.6rem;
   }
   .eyebrow {
     font-family: var(--sans);
@@ -213,7 +230,8 @@
     display: flex;
     justify-content: center;
     gap: clamp(1.1rem, 5cqw, 2.4rem);
-    margin-top: 1.2rem;
+    /* +0.8rem offsets the tightened .ganesh margin so the countdown does not move */
+    margin-top: 2rem;
   }
   .countdown .unit { text-align: center; }
   .countdown .num {
@@ -238,241 +256,262 @@
     padding-top: 0.2em;
   }
 
-  .scroll-cue {
-    position: absolute;
-    bottom: 2.4rem; left: 50%;
-    transform: translateX(-50%);
-    z-index: 3;
-    width: 1px; height: 52px;
-    background: linear-gradient(var(--gold), rgba(165, 128, 76, 0.15));
-    animation: cue 1.8s ease-in-out infinite;
-  }
-  @keyframes cue {
-    0%, 100% { transform: translate(-50%, 0); opacity: 0.55; }
-    50%      { transform: translate(-50%, 14px); opacity: 1; }
-  }
-
-  /* ================= EXPLORE — navigation + contacts ================= */
-  .explore {
-    min-height: 222cqw;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    padding: 6rem 0 5rem;
-    background: var(--paper-deep);
+  /* ================= FOOTER ================= */
+  .footer {
+    padding: 3rem 0 4rem;
+    text-align: center;
+    position: relative;
     overflow: hidden;
-    scroll-snap-align: start;
+  }
+  .footer-logo {
+    display: block;
+    width: clamp(72px, 20cqw, 100px);
+    height: auto;
+    margin: 0 auto 1rem;
+    opacity: 0.7;
   }
 
-  .explore-sprig {
-    width: clamp(120px, 26cqw, 170px);
-    margin: 0 auto 1.6rem;
-    opacity: 0.85;
-    background-image: url("assets/tinted/branch11_ink.png");
-  }
-
-  .explore-intro {
-    margin-top: 1.4rem;
-    color: var(--ink-soft);
-    font-size: 0.95rem;
-    line-height: 1.7;
-  }
-
-  /* ---- Navigation cards ---- */
-  .nav-stack {
-    display: flex;
-    flex-direction: column;
-    gap: 0.85rem;
-    margin-top: 1.6rem;
-  }
-
-  .nav-tile {
-    display: flex;
-    align-items: center;
-    gap: 1.1rem;
-    padding: 1.3rem 1.4rem;
-    background: rgba(255, 255, 255, 0.42);
-    border: 1px solid rgba(255, 255, 255, 0.65);
-    border-radius: 14px;
-    text-decoration: none;
-    color: var(--ink);
-    box-shadow:
-      0 2px 12px rgba(40, 56, 40, 0.06),
-      0 1px 3px rgba(40, 56, 40, 0.04),
-      inset 0 1px 0 rgba(255, 255, 255, 0.7);
-    -webkit-backdrop-filter: blur(12px) saturate(1.4);
-    backdrop-filter: blur(12px) saturate(1.4);
-    transition: transform 0.3s ease, box-shadow 0.3s ease, background 0.3s ease;
-    cursor: pointer;
-  }
-  .nav-tile:hover {
-    transform: translateY(-2px);
-    background: rgba(255, 255, 255, 0.58);
-    box-shadow:
-      0 6px 20px rgba(40, 56, 40, 0.1),
-      0 2px 6px rgba(40, 56, 40, 0.06),
-      inset 0 1px 0 rgba(255, 255, 255, 0.8);
-  }
-  .nav-tile:active {
-    transform: translateY(0);
-  }
-
-  .nav-tile-icon {
-    flex-shrink: 0;
-    width: clamp(42px, 12cqw, 56px);
-    height: clamp(42px, 12cqw, 56px);
-    background-image: url("assets/icons/homepage_cards_icons_combined.png");
-    background-repeat: no-repeat;
-    background-size: 300% auto;
-    opacity: 0.82;
-  }
-  .nav-tile-icon--events   { background-position: 0% 50%; }
-  .nav-tile-icon--travel   { background-position: 50% 50%; }
-  .nav-tile-icon--wardrobe { background-position: 100% 50%; }
-
-  .nav-tile-text {
-    display: flex;
-    flex-direction: column;
-    gap: 0.2rem;
-    text-align: left;
-  }
-
-  .nav-tile-label {
-    font-family: var(--serif);
-    font-size: clamp(1.05rem, 3.2cqw, 1.25rem);
-    font-weight: 500;
-    letter-spacing: 0.04em;
-    color: var(--ink);
-    line-height: 1.2;
-  }
-
-  .nav-tile-sub {
-    font-family: var(--sans);
-    font-size: clamp(0.62rem, 1.8cqw, 0.72rem);
-    font-weight: 300;
-    letter-spacing: 0.08em;
-    color: var(--ink-soft);
-    line-height: 1.4;
-  }
-
-  /* ---- Divider ---- */
-  .section-rule {
-    width: 40px;
-    height: 1px;
-    margin: 2.8rem auto 0;
-    background: var(--hairline);
-  }
-
-  /* ---- Contact ---- */
-  .contact-block {
-    margin-top: 2.4rem;
+  /* ================= CLOSING BAND ================= */
+  .closing {
+    background: var(--forest);
+    padding: 3.4rem 1.5rem 3.8rem;
     text-align: center;
   }
-  .contact-eyebrow {
-    font-family: var(--sans);
-    font-size: 0.6rem;
-    font-weight: 400;
-    letter-spacing: 0.34em;
-    text-indent: 0.34em;
-    text-transform: uppercase;
-    color: var(--gold);
-    margin-bottom: 1.2rem;
+  .closing-text {
+    font-family: var(--serif);
+    font-style: italic;
+    font-size: clamp(1rem, 3.2cqw, 1.22rem);
+    line-height: 1.7;
+    color: var(--cream);
+    letter-spacing: 0.01em;
   }
-  .contact-list {
-    font-size: clamp(0.86rem, 2.5cqw, 0.98rem);
-    color: var(--ink-soft);
-  }
-  .contact-row {
-    margin: 0.55rem 0;
-    line-height: 1.5;
-  }
-  .contact-num {
-    font: inherit;
-    color: var(--gold);
-    background: none;
-    border: 0;
-    padding: 0;
-    cursor: pointer;
-    letter-spacing: 0.02em;
-    border-bottom: 1px solid rgba(165, 128, 76, 0.35);
-    transition: border-color 0.25s ease;
-  }
-  .contact-num:hover { border-bottom-color: var(--gold); }
-
-  .contact-logo {
+  .closing-heart {
     display: block;
-    width: clamp(90px, 24cqw, 122px);
-    height: auto;
-    margin: 2.6rem auto 0;
+    margin-top: 0.8rem;
+    /* text-presentation heart, never the emoji glyph */
+    font-family: var(--serif);
+    font-size: 0.62rem;
+    line-height: 1;
+    color: #ffffff;
+    opacity: 0.85;
   }
 
-  /* ---- Call / WhatsApp chooser ---- */
-  .dial-sheet {
+
+  /* ================= ENVELOPE INTRO =================
+     The phone is a crop through the centre of a landscape envelope. Its flap is
+     a shaded, articulated paper mesh drawn on canvas; the lower pocket is three
+     clip-path panels of the same sheet, folded over itself. The flap lifts, the
+     pocket slides out of the bottom of the screen, and the whole scene is then
+     removed. Reloading brings it back; scrolling back up does not. */
+  html.intro-lock, html.intro-lock body { overflow: hidden; overscroll-behavior: none; }
+
+  .envelope-scene {
     position: fixed;
     inset: 0;
-    z-index: 200;
-    display: flex;
-    align-items: flex-end;
-    justify-content: center;
-    padding: 1rem;
-    background: rgba(40, 56, 40, 0.5);
-    -webkit-backdrop-filter: blur(2px);
-    backdrop-filter: blur(2px);
-  }
-  .dial-sheet[hidden] { display: none; }
-  @media (min-width: 460px) {
-    .dial-sheet { left: calc(50% - 200px); right: auto; width: 400px; }
-  }
-  .dial-card {
-    width: min(100%, 340px);
-    background: var(--paper);
-    border-radius: 18px;
-    padding: 1.6rem 1.4rem 1.2rem;
-    text-align: center;
-    box-shadow: 0 -12px 40px rgba(40, 56, 40, 0.3);
-  }
-  .dial-name {
-    font-family: var(--serif);
-    font-size: 1.15rem;
-    color: var(--ink);
-  }
-  .dial-number {
-    margin-top: 0.15rem;
-    font-size: 0.82rem;
-    letter-spacing: 0.08em;
-    color: var(--ink-soft);
-  }
-  .dial-actions {
-    display: flex;
-    gap: 0.7rem;
-    margin-top: 1.2rem;
-  }
-  .dial-btn {
-    flex: 1;
-    padding: 0.9rem 0.5rem;
-    border-radius: 999px;
-    text-decoration: none;
-    font-size: 0.7rem;
-    letter-spacing: 0.22em;
-    text-indent: 0.22em;
-    text-transform: uppercase;
-    background: var(--ink);
-    color: var(--paper);
-  }
-  .dial-btn--wa { background: #1fa855; }
-  .dial-close {
-    margin-top: 0.9rem;
-    width: 100%;
-    padding: 0.7rem;
-    background: none;
-    border: 0;
-    font: inherit;
-    font-size: 0.7rem;
-    letter-spacing: 0.22em;
-    text-indent: 0.22em;
-    text-transform: uppercase;
-    color: var(--ink-soft);
+    z-index: 300;
+    display: none;
+    overflow: hidden;
+    isolation: isolate;
     cursor: pointer;
+    background: transparent;
+  }
+
+  /* Opaque only while the envelope is closed, so the invitation is never
+     glimpsed behind it; fades out as the pocket starts to slide away. */
+  .envelope-backdrop {
+    position: absolute;
+    inset: 0;
+    z-index: 0;
+    background: var(--paper-deep);
+    opacity: var(--backdrop-o, 1);
+    pointer-events: none;
+  }
+  html.intro-ready .envelope-scene { display: block; }
+  html.intro-ready .envelope-scene.is-done { display: none; }
+  @media (min-width: 460px) {
+    .envelope-scene { left: calc(50% - 200px); right: auto; width: 400px; }
+  }
+
+  /* The lower pocket is a separate physical part of the envelope: it holds
+     still while the flap lifts, then slides down and off the screen. */
+  .envelope-pocket {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: calc(100% + 4px);
+    z-index: 1;
+    transform: translate3d(0, var(--pocket-shift, 0px), 0);
+    background: transparent;
+    will-change: transform;
+  }
+
+  /* The viewport crops the centre of one real landscape sheet. Every panel
+     carries the same image, so the pocket reads as one patterned sheet folded
+     over itself rather than a flat rectangle. */
+  .envelope-pocket-panel {
+    position: absolute;
+    top: 0;
+    left: 50%;
+    width: var(--envelope-w, 1080px);
+    height: 100%;
+    transform: translateX(-50%);
+    /* the paper is opaque white with a gold floral print; the white base covers
+       any sliver past the image and while it loads. Sized to the panel HEIGHT
+       so the phone shows a natural crop, not a magnified centre slice. */
+    background-color: #ffffff;
+    background-image: url("assets/envelope/paper.webp");
+    background-position: center center;
+    background-size: auto 100%;
+    background-repeat: no-repeat;
+  }
+
+  /* Two side folds are glued first; their inner edges meet below the mouth. */
+  .envelope-pocket-panel--left {
+    z-index: 1;
+    clip-path: polygon(0 0, 50% var(--pocket-meet-y, 52.5%), 0 100%);
+    background-image:
+      linear-gradient(112deg, rgba(255,255,255,0.11), transparent 45%, rgba(67,49,25,0.075)),
+      url("assets/envelope/paper.webp");
+    background-position: center, center center;
+    background-size: 100% 100%, auto 100%;
+    filter: drop-shadow(2px -1px 2px rgba(67,49,27,0.24));
+  }
+  .envelope-pocket-panel--right {
+    z-index: 1;
+    clip-path: polygon(100% 0, 50% var(--pocket-meet-y, 52.5%), 100% 100%);
+    background-image:
+      linear-gradient(248deg, rgba(255,255,255,0.1), transparent 45%, rgba(67,49,25,0.07)),
+      url("assets/envelope/paper.webp");
+    background-position: center, center center;
+    background-size: 100% 100%, auto 100%;
+    filter: drop-shadow(-2px -1px 2px rgba(67,49,27,0.22));
+  }
+
+  /* The bottom fold is last, covering and gluing the side-fold tips. */
+  .envelope-pocket-panel--bottom {
+    z-index: 2;
+    clip-path: polygon(0 100%, 100% 100%, 50% calc(var(--pocket-meet-y, 52.5%) - 2px));
+    background-image:
+      linear-gradient(0deg, rgba(255,255,255,0.09), transparent 58%, rgba(79,58,30,0.09)),
+      url("assets/envelope/paper.webp");
+    background-position: center, center center;
+    background-size: 100% 100%, auto 100%;
+    filter: drop-shadow(0 -2px 2.5px rgba(65,47,25,0.26));
+  }
+
+  .envelope-pocket-seams {
+    position: absolute;
+    z-index: 3;
+    top: 0;
+    left: 50%;
+    width: var(--envelope-w, 1080px);
+    height: 100%;
+    transform: translateX(-50%);
+    overflow: visible;
+    pointer-events: none;
+  }
+  .envelope-pocket-seams .crease-dark {
+    fill: none;
+    stroke: rgba(77, 57, 31, 0.34);
+    stroke-width: 2.5;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+  }
+  .envelope-pocket-seams .crease-light {
+    fill: none;
+    stroke: rgba(255, 253, 243, 0.62);
+    stroke-width: 1.15;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+    transform: translateY(1.6px);
+  }
+
+  /* warm light spilling out of the mouth as the flap lifts */
+  .envelope-card-light {
+    position: absolute;
+    z-index: 2;
+    left: -20%;
+    right: -20%;
+    top: calc(var(--pocket-meet-y, 52.5%) - 58px);
+    height: 110px;
+    opacity: var(--light-o, 0);
+    transform: translate3d(0, var(--pocket-shift, 0px), 0);
+    background: radial-gradient(ellipse at 50% 20%, rgba(255, 252, 235, 0.9), transparent 66%);
+    filter: blur(8px);
+    pointer-events: none;
+  }
+
+  .envelope-canvas {
+    position: absolute;
+    inset: 0;
+    z-index: 4;
+    width: 100%;
+    height: 100%;
+    pointer-events: none;
+  }
+
+  /* The fold is kept out of the mesh so its compressed paper edge stays sharp
+     even when the flap is almost edge-on. */
+  .envelope-fold {
+    position: absolute;
+    z-index: 5;
+    top: 0;
+    left: -14%;
+    width: 128%;
+    height: 6px;
+    opacity: var(--fold-o, 1);
+    background: linear-gradient(180deg, rgba(255,255,255,0.9), rgba(103,80,49,0.31) 46%, rgba(255,255,255,0.22) 62%, transparent);
+    box-shadow: 0 var(--fold-shadow-y, 7px) var(--fold-shadow-blur, 14px) rgba(53, 38, 21, var(--fold-shadow-o, 0.2));
+  }
+
+  /* Wax seal glued to the flap's tip. The render loop tracks that tip vertex
+     every frame (--seal-x/--seal-y in px, --seal-s the perspective scale) so
+     the seal rides up with the lifting flap, as if stuck to it. */
+  .envelope-seal {
+    position: absolute;
+    z-index: 5;
+    left: var(--seal-x, 50%);
+    top: var(--seal-y, 52%);
+    width: clamp(78px, 22.5vw, 105px);
+    opacity: var(--seal-o, 1);
+    transform: translate(-50%, -50%) scale(var(--seal-s, 1));
+    filter: drop-shadow(0 3px 5px rgba(53, 38, 21, 0.42));
+    pointer-events: none;
+    will-change: transform;
+  }
+  @media (min-width: 460px) {
+    .envelope-seal { width: 99px; }
+  }
+
+  .envelope-hint {
+    position: absolute;
+    z-index: 6;
+    left: 0; right: 0;
+    bottom: max(2rem, 6svh);
+    text-align: center;
+    font-family: var(--sans);
+    font-size: 0.6rem;
+    letter-spacing: 0.38em;
+    text-indent: 0.38em;
+    text-transform: uppercase;
+    color: rgba(40, 56, 40, 0.7);
+    opacity: var(--hint-o, 1);
+    transform: translate3d(0, var(--pocket-shift, 0px), 0);
+    text-shadow: 0 1px rgba(255,255,255,0.6);
+    will-change: transform, opacity;
+  }
+  .envelope-hint i {
+    display: block;
+    width: 1px;
+    height: 32px;
+    margin: 0.9rem auto 0;
+    background: linear-gradient(rgba(40, 56, 40, 0.55), rgba(40, 56, 40, 0));
+    animation: envelopecue 1.9s ease-in-out infinite;
+  }
+  @keyframes envelopecue {
+    0%, 100% { transform: translateY(0); opacity: 0.5; }
+    50%      { transform: translateY(-10px); opacity: 1; }
   }
 
   /* ---- Dev grid ---- */
@@ -525,11 +564,34 @@
     html { scroll-behavior: auto; }
     .reveal { opacity: 1; transform: none; transition: none; }
     .plx { transform: none !important; }
-    .scroll-cue { animation: none; transform: translateX(-50%); }
+    .fab-dot { animation: none; }
+    /* skip the decorative envelope motion entirely */
+    .envelope-scene { display: none !important; }
   }
 </style>
 </head>
 <body>
+
+  <!-- ============ ENVELOPE INTRO ============
+       Outside .phone: that column is a container with overflow:hidden, which
+       would trap a fixed-position child. -->
+  <div class="envelope-scene" id="envelope-scene" aria-hidden="true">
+    <div class="envelope-backdrop"></div>
+    <div class="envelope-pocket">
+      <div class="envelope-pocket-panel envelope-pocket-panel--left"></div>
+      <div class="envelope-pocket-panel envelope-pocket-panel--right"></div>
+      <div class="envelope-pocket-panel envelope-pocket-panel--bottom"></div>
+      <svg class="envelope-pocket-seams" viewBox="0 0 800 1000" preserveAspectRatio="none" aria-hidden="true">
+        <path class="crease-dark" d="M 0 0 L 400 525 L 800 0 M 0 1000 L 400 525 L 800 1000" />
+        <path class="crease-light" d="M 0 0 L 400 525 L 800 0 M 0 1000 L 400 525 L 800 1000" />
+      </svg>
+    </div>
+    <div class="envelope-card-light"></div>
+    <canvas class="envelope-canvas" id="envelope-flap-canvas"></canvas>
+    <div class="envelope-fold"></div>
+    <img class="envelope-seal" src="assets/envelope/wax_seal.webp" alt="" aria-hidden="true" />
+    <p class="envelope-hint">Tap to open<i></i></p>
+  </div>
 
   <div class="phone">
 
@@ -559,74 +621,22 @@
         <div class="unit"><div class="num" id="cd-s">–</div><div class="lbl">Secs</div></div>
       </div>
     </div>
-
-    <div class="scroll-cue" aria-hidden="true"></div>
   </section>
 
-  <!-- ============ EXPLORE — navigation + contacts ============ -->
-  <section class="explore">
-    <div class="center-col">
-      <div class="art explore-sprig reveal"></div>
+  <!-- ============ FOOTER ============ -->
+  <div class="footer reveal">
+    <img class="footer-logo" src="assets/images/sn_oval.webp" alt="S and N monogram" loading="lazy" />
+  </div>
 
-      <nav class="nav-stack reveal" data-delay="1" aria-label="Wedding sections">
-        <a class="nav-tile" href="events.html">
-          <span class="nav-tile-icon nav-tile-icon--events" aria-hidden="true"></span>
-          <span class="nav-tile-text">
-            <span class="nav-tile-label">Events</span>
-            <span class="nav-tile-sub">Mehendi, Sangeet, Wedding &amp; more</span>
-          </span>
-        </a>
-        <a class="nav-tile" href="travel.html">
-          <span class="nav-tile-icon nav-tile-icon--travel" aria-hidden="true"></span>
-          <span class="nav-tile-text">
-            <span class="nav-tile-label">Travel &amp; Stay</span>
-            <span class="nav-tile-sub">Getting to Jim Corbett &amp; venue details</span>
-          </span>
-        </a>
-        <a class="nav-tile" href="wardrobe.html">
-          <span class="nav-tile-icon nav-tile-icon--wardrobe" aria-hidden="true"></span>
-          <span class="nav-tile-text">
-            <span class="nav-tile-label">Wardrobe Planner</span>
-            <span class="nav-tile-sub">Colour palettes &amp; dress codes</span>
-          </span>
-        </a>
-      </nav>
-
-      <div class="section-rule reveal" data-delay="3"></div>
-
-      <div class="contact-block reveal" data-delay="3">
-        <p class="contact-eyebrow">Get in touch</p>
-        <div class="contact-list">
-          <p class="contact-row">Akash Yadav &amp; Team &middot;
-            <button type="button" class="contact-num" data-name="Akash Yadav &amp; Team" data-phone="918949551681">+91&nbsp;8949551681</button>
-          </p>
-          <p class="contact-row">Sanjeev Wadhwa &middot;
-            <button type="button" class="contact-num" data-name="Sanjeev Wadhwa" data-phone="919818511000">+91&nbsp;9818511000</button>
-          </p>
-          <p class="contact-row">Satyabrata Nag &middot;
-            <button type="button" class="contact-num" data-name="Satyabrata Nag" data-phone="919229674479">+91&nbsp;9229674479</button>
-          </p>
-        </div>
-        <img class="contact-logo" src="assets/images/sn_oval.webp" alt="S and N monogram" loading="lazy" />
-      </div>
-    </div>
-  </section>
+  <!-- ============ CLOSING BAND ============ -->
+  <div class="closing">
+    <p class="closing-text">With love, from Neel and Samika</p>
+    <span class="closing-heart" aria-hidden="true">&#9829;&#xFE0E;</span>
+  </div>
 
   </div>
 
-  <!-- Call / WhatsApp chooser -->
-  <div class="dial-sheet" id="dial-sheet" hidden>
-    <div class="dial-card" role="dialog" aria-modal="true" aria-label="Contact options">
-      <p class="dial-name" id="dial-name"></p>
-      <p class="dial-number" id="dial-number"></p>
-      <div class="dial-actions">
-        <a class="dial-btn" id="dial-call" href="#">Call</a>
-        <a class="dial-btn dial-btn--wa" id="dial-wa" href="#" target="_blank" rel="noopener">WhatsApp</a>
-      </div>
-      <button type="button" class="dial-close" id="dial-close">Cancel</button>
-    </div>
-  </div>
-
+<script src="site.js"></script>
 <script>
   // ---------- Countdown ----------
   (function () {
@@ -667,6 +677,19 @@
   })();
 
   // ---------- Grid-anchored placement layout (CSV-driven) ----------
+  // botanicals-home.csv is the source of truth for every framing branch and
+  // bird on this page. Columns: asset,cell,anchor,rotation,size_pct,mirror,notes
+  //   asset      — matches .art--{asset}  (branch1..branch11, bird1, bird2, logo)
+  //   cell       — "H-A1".."H-F10"   (section-col-row; H is the hero)
+  //   anchor     — TL | TR | BL | BR | C   (which corner of the piece lands on
+  //                that corner of the cell, AFTER rotation)
+  //   rotation   — degrees, clockwise
+  //   size_pct   — % of the asset's default reference width (see botanicals.html)
+  //   mirror     — TRUE to flip horizontally, FALSE otherwise
+  //   notes      — free text, ignored by the loader
+  // Edit the CSV, save, refresh — no HTML/JS edits needed. Add ?grid=1 to the
+  // URL to see the lettered cells. The array below is only the fallback used
+  // when the CSV can't be fetched (e.g. opening this file straight off disk).
   (function () {
     var COLS = "ABCDEF";
     var CW = 100 / 6;
@@ -703,23 +726,27 @@
       { asset:"branch9",  cell:"H-A6", anchor:"C",  rotation:"30", size_pct:"80", mirror:"FALSE" },
       { asset:"branch6",  cell:"H-F6", anchor:"TL", rotation:"0", size_pct:"100", mirror:"FALSE" },
       { asset:"branch1",  cell:"H-A8", anchor:"TL", rotation:"90", size_pct:"100", mirror:"FALSE" },
-      { asset:"branch6",  cell:"H-F9", anchor:"TR", rotation:"90", size_pct:"80", mirror:"FALSE" },
-      { asset:"branch9",  cell:"R-C2", anchor:"BR", rotation:"90", size_pct:"100", mirror:"FALSE" },
-      { asset:"branch4",  cell:"R-A5", anchor:"TR", rotation:"0", size_pct:"130", mirror:"TRUE" },
-      { asset:"branch8",  cell:"R-F4", anchor:"TL", rotation:"0", size_pct:"130", mirror:"FALSE" },
-      { asset:"bird2",    cell:"R-E9", anchor:"TR", rotation:"0", size_pct:"100", mirror:"TRUE" },
-      { asset:"branch11", cell:"R-A10", anchor:"C", rotation:"45", size_pct:"140", mirror:"FALSE" },
-      { asset:"branch11", cell:"R-F10", anchor:"C", rotation:"45", size_pct:"140", mirror:"TRUE" }
+      { asset:"branch6",  cell:"H-F9", anchor:"TR", rotation:"90", size_pct:"80", mirror:"FALSE" }
     ];
 
-    function loadPlacements() {
+    function parseCSV(text) {
+      var lines = text.split(/\r?\n/).filter(function (l) { return l.trim(); });
+      if (!lines.length) return [];
+      var head = lines.shift().split(",").map(function (h) { return h.trim(); });
+      return lines.map(function (line) {
+        var cells = line.split(","), row = {};
+        head.forEach(function (h, i) { row[h] = (cells[i] || "").trim(); });
+        return row;
+      }).filter(function (row) { return row.asset && row.cell; });
+    }
+
+    function loadPlacements(rows) {
       var heroEl = document.querySelector(".hero");
-      var exploreEl = document.querySelector(".explore");
-      PLACEMENTS.forEach(function (row) {
-        var section = row.cell.charAt(0).toUpperCase();
-        var parent = section === "H" ? heroEl : section === "R" ? exploreEl : null;
-        if (!parent) return;
-        parent.appendChild(buildPlaceElement(row));
+      if (!heroEl) return;
+      heroEl.querySelectorAll(".place").forEach(function (el) { el.remove(); });
+      rows.forEach(function (row) {
+        if (row.cell.charAt(0).toUpperCase() !== "H") return;
+        heroEl.appendChild(buildPlaceElement(row));
       });
     }
 
@@ -775,8 +802,25 @@
       document.querySelectorAll(".place[data-cell]").forEach(layoutOne);
     }
 
-    loadPlacements();
-    requestAnimationFrame(function () { requestAnimationFrame(layoutAll); });
+    function build(rows) {
+      loadPlacements(rows);
+      requestAnimationFrame(function () { requestAnimationFrame(layoutAll); });
+    }
+
+    build(PLACEMENTS);
+    // The CSV wins when it is reachable; the inline array above keeps the
+    // botanicals on screen when it is not.
+    if (window.fetch) {
+      fetch("botanicals-home.csv", { cache: "no-store" })
+        .then(function (r) { return r.ok ? r.text() : null; })
+        .then(function (text) {
+          if (!text) return;
+          var rows = parseCSV(text);
+          if (rows.length) build(rows);
+        })
+        .catch(function () { /* keep the inline fallback */ });
+    }
+
     window.addEventListener("resize", layoutAll);
     window.addEventListener("load", layoutAll);
     if (document.fonts && document.fonts.ready) {
@@ -790,8 +834,7 @@
     document.body.classList.add("dev-grid-mode");
     var cols = "ABCDEF";
     var sections = [
-      { el: document.querySelector(".hero"), prefix: "H" },
-      { el: document.querySelector(".explore"), prefix: "R" }
+      { el: document.querySelector(".hero"), prefix: "H" }
     ];
     sections.forEach(function (s) {
       if (!s.el) return;
@@ -809,8 +852,406 @@
     });
     var legend = document.createElement("div");
     legend.className = "dev-grid-legend";
-    legend.textContent = "GRID · H = hero · R = explore · A–F cols · 1–10 rows";
+    legend.textContent = "GRID · H = hero · A–F cols · 1–10 rows";
     document.body.appendChild(legend);
+  })();
+
+
+  // ---------- Envelope intro ----------
+  // The flap is not a rotating triangle. It is a landscape paper mesh: rows are
+  // bent around the fold, projected through a perspective camera and texture-
+  // mapped as individual triangles, casting a soft moving shadow on the pocket
+  // beneath. A tap (anywhere, seal included) opens it on a slow timed tween; a
+  // wheel or swipe drives the same progress by hand. Past halfway the pocket
+  // slides out of the bottom of the screen and the scene is removed for good —
+  // scrolling back up does not bring it back, but a reload does.
+  (function () {
+    var scene = document.getElementById("envelope-scene");
+    var root = document.documentElement;
+    if (!scene || !root.classList.contains("intro-ready")) return;
+
+    var canvas = document.getElementById("envelope-flap-canvas"),
+        ctx = canvas && canvas.getContext("2d"),
+        fold = scene.querySelector(".envelope-fold"),
+        light = scene.querySelector(".envelope-card-light"),
+        hint = scene.querySelector(".envelope-hint");
+
+    if (!ctx) { root.classList.remove("intro-ready", "intro-lock"); return; }
+    window.__snIntroRunning = true;
+
+    var texture = new Image();
+    texture.src = "assets/envelope/paper.webp";
+
+    var p = 0, target = 0, running = false, finished = false,
+        vw = 390, vh = 844, dpr = 1, hingeY = 1, pocketMeetY = 443,
+        flapW = 1080, flapH = 540, cameraD = 1420;
+
+    // A tap plays the whole opening as a timed tween. 2600ms reads as unhurried
+    // without making the guest wait on it.
+    var TAP_MS = 2600;
+    var tween = null;
+
+    function clamp01(v) { return v < 0 ? 0 : v > 1 ? 1 : v; }
+    function seg(v, a, b) { return clamp01((v - a) / (b - a)); }
+    function easeInOut(t) { return t < 0.5 ? 4 * t * t * t : 1 - Math.pow(-2 * t + 2, 3) / 2; }
+    function smooth(t) { return t * t * (3 - 2 * t); }
+    function span() { return Math.max(390, window.innerHeight * 1.12); }
+
+    function resize() {
+      var r = scene.getBoundingClientRect();
+      // Ignore zero-size measurements (a hidden tab reports 0x0); keeping the
+      // last good size stops the envelope collapsing to a point.
+      if (r.width < 2 || r.height < 2) return;
+      vw = Math.max(1, r.width);
+      vh = Math.max(1, r.height);
+      dpr = Math.min(window.devicePixelRatio || 1, 2);
+      canvas.width = Math.round(vw * dpr);
+      canvas.height = Math.round(vh * dpr);
+      flapH = Math.max(280, Math.min(560, vh * 0.527));
+      // the phone is only the narrow central crop of a much wider envelope
+      flapW = Math.max(flapH * 2.08, vw * 4.15);
+      hingeY = 1;
+      pocketMeetY = vh * 0.525;
+      cameraD = Math.max(1180, flapW * 1.32);
+      scene.style.setProperty("--pocket-meet-y", pocketMeetY.toFixed(1) + "px");
+      scene.style.setProperty("--envelope-w", flapW.toFixed(1) + "px");
+      render();
+    }
+
+    /* Rounded landscape-envelope outline. The broad shoulders sit beyond the
+       portrait crop; only the centre slice is ever visible on a phone. */
+    function halfWidth(t) {
+      return flapW * 0.5 * Math.pow(Math.max(0, 1 - t), 1.015);
+    }
+
+    function project(x, y, z) {
+      var f = cameraD / Math.max(180, cameraD - z);
+      return { x: vw / 2 + x * f, y: hingeY + y * f, z: z };
+    }
+
+    function pathPoints(points) {
+      ctx.beginPath();
+      ctx.moveTo(points[0].x, points[0].y);
+      for (var i = 1; i < points.length; i++) ctx.lineTo(points[i].x, points[i].y);
+      ctx.closePath();
+    }
+
+    function fillTriangle(points, color) {
+      ctx.beginPath();
+      ctx.moveTo(points[0].x, points[0].y);
+      ctx.lineTo(points[1].x, points[1].y);
+      ctx.lineTo(points[2].x, points[2].y);
+      ctx.closePath();
+      ctx.fillStyle = color;
+      ctx.fill();
+    }
+
+    /* Affine texture mapping of one source triangle onto one projected paper
+       triangle. Together the triangles form a continuously bending sheet. */
+    function textureTriangle(dst, src) {
+      if (!texture.complete || !texture.naturalWidth) {
+        fillTriangle(dst, "#e9dfca");
+        return;
+      }
+      var x0 = src[0].x, y0 = src[0].y,
+          x1 = src[1].x, y1 = src[1].y,
+          x2 = src[2].x, y2 = src[2].y;
+      var det = x0 * (y1 - y2) + x1 * (y2 - y0) + x2 * (y0 - y1);
+      if (Math.abs(det) < 0.001) return;
+      var a = (dst[0].x * (y1 - y2) + dst[1].x * (y2 - y0) + dst[2].x * (y0 - y1)) / det,
+          c = (dst[0].x * (x2 - x1) + dst[1].x * (x0 - x2) + dst[2].x * (x1 - x0)) / det,
+          e = (dst[0].x * (x1 * y2 - x2 * y1) + dst[1].x * (x2 * y0 - x0 * y2) + dst[2].x * (x0 * y1 - x1 * y0)) / det,
+          b = (dst[0].y * (y1 - y2) + dst[1].y * (y2 - y0) + dst[2].y * (y0 - y1)) / det,
+          d = (dst[0].y * (x2 - x1) + dst[1].y * (x0 - x2) + dst[2].y * (x1 - x0)) / det,
+          f = (dst[0].y * (x1 * y2 - x2 * y1) + dst[1].y * (x2 * y0 - x0 * y2) + dst[2].y * (x0 * y1 - x1 * y0)) / det;
+      ctx.save();
+      ctx.beginPath();
+      ctx.moveTo(dst[0].x, dst[0].y);
+      ctx.lineTo(dst[1].x, dst[1].y);
+      ctx.lineTo(dst[2].x, dst[2].y);
+      ctx.closePath();
+      ctx.clip();
+      ctx.transform(a, b, c, d, e, f);
+      ctx.drawImage(texture, 0, 0);
+      ctx.restore();
+    }
+
+    function render() {
+      if (!ctx) return;
+      var open = easeInOut(seg(p, 0.015, 0.5));
+      // A barely lifted resting flap gives a narrow contact shadow before the
+      // gesture begins, while keeping the closed-envelope silhouette.
+      var restAngle = Math.PI / 120;
+      var theta = restAngle + open * (Math.PI * 0.94 - restAngle);
+      // the pocket only starts to leave once the flap is well open
+      var pocketTravel = easeInOut(seg(p, 0.47, 0.96));
+      // the fully-open flap stays up while the pocket slides, then goes with it
+      var vanish = easeInOut(seg(p, 0.70, 0.96));
+      /* Enough strips for a smooth outline and curl, without asking a phone to
+         remap more than a thousand texture triangles every frame. */
+      var rows = 24, cols = 12, dy = flapH / rows;
+      var geometry = [], y3 = 0, z3 = 0;
+      /* Paper scale is driven by the flap HEIGHT, not the envelope's full
+         width, so the print shows at a natural size rather than a magnified
+         centre slice — the canvas counterpart of `background-size: auto 100%`. */
+      var natW = texture.naturalWidth || 1024, natH = texture.naturalHeight || 1024;
+      var texW = vh * natW / natH;
+      var cropH = natH * flapH / vh;
+      var cropY = (natH - cropH) * 0.48;
+      // Heavier cotton-paper curl: the sheet bows as it lifts and the free tip
+      // curls back a little more, so it reads as bending paper, not a rigid
+      // triangle on a hinge.
+      var bend = Math.sin(Math.PI * open) * 0.055;
+      var tipFlex = Math.sin(Math.PI * open) * 0.085;
+
+      ctx.setTransform(1, 0, 0, 1, 0, 0);
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+      ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+      ctx.imageSmoothingEnabled = true;
+      ctx.imageSmoothingQuality = "high";
+
+      for (var r = 0; r <= rows; r++) {
+        var t = r / rows;
+        if (r > 0) {
+          var tm = (r - 0.5) / rows;
+          /* Most of the sheet rotates as one plane. Only a few degrees of
+             curvature gather near the fold and the tip. */
+          var localAngle = theta
+            - bend * Math.sin(Math.PI * tm)
+            + tipFlex * smooth(seg(tm, 0.78, 1));
+          y3 += dy * Math.cos(localAngle);
+          z3 += dy * Math.sin(localAngle);
+        }
+        var hw = halfWidth(t), row = [];
+        for (var c = 0; c <= cols; c++) {
+          var q = c / cols;
+          var x = -hw + 2 * hw * q;
+          row.push({
+            d: project(x, y3, z3),
+            /* Source X follows the point's fixed position on the original
+               sheet, so narrow rows crop the pattern at the tip rather than
+               squeezing the whole print into that smaller width. */
+            s: { x: (0.5 + x / texW) * natW, y: cropY + t * cropH },
+            angle: theta
+              - bend * Math.sin(Math.PI * t)
+              + tipFlex * smooth(seg(t, 0.78, 1))
+          });
+        }
+        geometry.push(row);
+      }
+
+      var outline = [];
+      for (r = 0; r <= rows; r++) outline.push(geometry[r][0].d);
+      for (r = rows; r >= 0; r--) outline.push(geometry[r][cols].d);
+
+      /* The cast shadow is the same lifted mesh outline projected onto the
+         envelope plane from a soft source above-left. */
+      var shadow = [];
+      for (var o = 0; o < outline.length; o++) {
+        var op = outline[o];
+        shadow.push({ x: op.x + op.z * 0.10, y: op.y + op.z * 0.24 });
+      }
+      var lift = Math.max(0, Math.sin(theta));
+      ctx.save();
+      ctx.filter = "blur(" + (4 + 29 * lift).toFixed(1) + "px)";
+      var raisedShadowFade = 1 - smooth(seg(open, 0.12, 0.52));
+      ctx.globalAlpha = (0.12 + 0.22 * lift) * raisedShadowFade * (1 - vanish);
+      pathPoints(shadow);
+      ctx.fillStyle = "#302313";
+      ctx.fill();
+      ctx.restore();
+
+      /* Opaque paper base under the print: guarantees a solid sheet at the flap
+         edges and while the texture loads, so the envelope stays sealed. */
+      ctx.globalAlpha = 1 - vanish;
+      pathPoints(outline);
+      ctx.fillStyle = "#ffffff";
+      ctx.fill();
+
+      var triangles = [];
+      for (r = 0; r < rows; r++) {
+        for (c = 0; c < cols; c++) {
+          var a = geometry[r][c], b = geometry[r][c + 1],
+              cc = geometry[r + 1][c], d = geometry[r + 1][c + 1];
+          var tCell = (r + 0.5) / rows;
+          triangles.push({ d: [a.d, cc.d, b.d], s: [a.s, cc.s, b.s], z: (a.d.z + cc.d.z + b.d.z) / 3, angle: a.angle, t: tCell });
+          triangles.push({ d: [b.d, cc.d, d.d], s: [b.s, cc.s, d.s], z: (b.d.z + cc.d.z + d.d.z) / 3, angle: d.angle, t: tCell });
+        }
+      }
+      triangles.sort(function (m, n) { return m.z - n.z; });
+      ctx.globalAlpha = 1 - vanish;
+      for (var i = 0; i < triangles.length; i++) {
+        var tri = triangles[i];
+        textureTriangle(tri.d, tri.s);
+        // Shade it like curved paper under a soft light from above:
+        //  · edge — facets turning edge-on to the camera darken
+        //  · occ  — an ambient-occlusion trough along the fold, deepening as it lifts
+        var edge = 1 - Math.abs(Math.cos(tri.angle - 0.18));
+        var occ = smooth(1 - seg(tri.t, 0.0, 0.42)) * lift;
+        var shade = 0.028 + 0.145 * edge + 0.12 * occ;
+        fillTriangle(tri.d, "rgba(48,35,20," + shade.toFixed(3) + ")");
+        // sheen — a soft highlight band riding the raised belly of the curl
+        var sheen = smooth(seg(tri.t, 0.24, 0.55)) * (1 - smooth(seg(tri.t, 0.62, 0.98))) * lift * 0.13;
+        if (sheen > 0.004) fillTriangle(tri.d, "rgba(255,253,246," + sheen.toFixed(3) + ")");
+      }
+
+      /* A restrained warm face tint; both sides keep the same paper texture. */
+      var backShown = smooth(seg(theta, Math.PI * 0.46, Math.PI * 0.62));
+      ctx.globalAlpha = (0.08 * (1 - backShown) + 0.025 * backShown) * (1 - vanish);
+      pathPoints(outline);
+      ctx.fillStyle = "#efe7d6";
+      ctx.fill();
+
+      ctx.globalAlpha = (0.34 + 0.2 * lift) * (1 - vanish);
+      pathPoints(outline);
+      ctx.lineWidth = 1.15;
+      ctx.strokeStyle = "#756044";
+      ctx.stroke();
+      ctx.globalAlpha = 1;
+
+      // the pocket slides straight down and off the bottom of the screen
+      var pocketShift = pocketTravel * (vh + 18);
+      scene.style.setProperty("--pocket-shift", pocketShift.toFixed(1) + "px");
+      // the page behind is uncovered in step with the pocket leaving
+      scene.style.setProperty("--backdrop-o", (1 - smooth(seg(p, 0.47, 0.80))).toFixed(3));
+      light.style.setProperty("--light-o", (Math.sin(Math.PI * seg(p, 0.04, 0.58)) * 0.68 * (1 - pocketTravel)).toFixed(3));
+      fold.style.setProperty("--fold-o", ((1 - easeInOut(seg(p, 0.43, 0.62))) * (1 - vanish)).toFixed(3));
+      fold.style.setProperty("--fold-shadow-y", (7 + 28 * lift).toFixed(1) + "px");
+      fold.style.setProperty("--fold-shadow-blur", (14 + 34 * lift).toFixed(1) + "px");
+      fold.style.setProperty("--fold-shadow-o", (0.2 + 0.42 * lift).toFixed(3));
+      // whatever is left of the scene fades out over the last stretch
+      scene.style.opacity = (1 - easeInOut(seg(p, 0.9, 1))).toFixed(3);
+      hint.style.setProperty("--hint-o", (1 - seg(p, 0, 0.06)).toFixed(3));
+      // Glue the seal to the flap's tip vertex (last mesh row, centre column) so
+      // it rides up with the flap, scaled by the tip's perspective factor.
+      var sealTip = geometry[rows][cols >> 1].d;
+      var fTip = cameraD / Math.max(180, cameraD - sealTip.z);
+      scene.style.setProperty("--seal-x", sealTip.x.toFixed(1) + "px");
+      scene.style.setProperty("--seal-y", sealTip.y.toFixed(1) + "px");
+      scene.style.setProperty("--seal-s", fTip.toFixed(3));
+      scene.style.setProperty("--seal-o", (1 - vanish).toFixed(3));
+    }
+
+    // Hand-driven progress (wheel / swipe): ease toward whatever the gesture asked for.
+    function frame() {
+      if (tween) return;
+      p += (target - p) * 0.16;
+      if (Math.abs(target - p) < 0.0015) p = target;
+      render();
+      if (p !== target) requestAnimationFrame(frame);
+      else if (p >= 1) finish();
+      else running = false;
+    }
+    function tick() {
+      if (!running && !tween) { running = true; requestAnimationFrame(frame); }
+    }
+    function nudge(px) {
+      if (tween) return;                 // a tap is already playing it out
+      target = clamp01(target + px / span());
+      tick();
+    }
+
+    // Timed open, used by a tap or a key press.
+    function openSlowly() {
+      if (tween || finished) return;
+      running = false;
+      var from = p, t0 = null;
+      tween = function step(ts) {
+        if (t0 === null) t0 = ts;
+        var k = clamp01((ts - t0) / (TAP_MS * (1 - from)));
+        p = target = from + (1 - from) * easeInOut(k);
+        render();
+        if (k < 1) requestAnimationFrame(tween);
+        else { tween = null; finish(); }
+      };
+      requestAnimationFrame(tween);
+    }
+
+    function onWheel(e) {
+      if (finished) return;
+      e.preventDefault();
+      nudge(e.deltaY);
+    }
+    // A tap and a swipe arrive as the same touch stream. Movement under
+    // TAP_SLOP is treated as a tap: we neither preventDefault (which would
+    // swallow the click that follows) nor drive the flap by hand.
+    var TAP_SLOP = 10;
+    var ty = null, ty0 = null, moved = 0;
+    function onTouchStart(e) {
+      ty = ty0 = e.touches[0].clientY;
+      moved = 0;
+    }
+    function onTouchMove(e) {
+      if (finished || ty === null) return;
+      var y = e.touches[0].clientY;
+      moved = Math.max(moved, Math.abs(y - ty0));
+      if (moved < TAP_SLOP) { ty = y; return; }
+      // touch multiplier: higher = the flap opens on a shorter swipe. At 3.0 a
+      // swipe of about a third of the screen height opens it fully.
+      var delta = (ty - y) * 3.0;
+      ty = y;
+      e.preventDefault();
+      nudge(delta);
+    }
+    function onTouchEnd() {
+      // a tap that never crossed the slop opens it on the slow tween
+      if (!finished && ty !== null && moved < TAP_SLOP) openSlowly();
+      ty = ty0 = null;
+    }
+    // Keyboard input keeps focus users from being trapped by the scroll lock.
+    function onKey(e) {
+      if (finished || e.metaKey || e.ctrlKey || e.altKey) return;
+      if (e.key === " " || e.key === "Enter" || e.key === "PageDown" || e.key === "ArrowDown") {
+        e.preventDefault();
+        openSlowly();
+      }
+    }
+    // A tap anywhere on the scene — the wax seal included — opens it.
+    function onClick() { openSlowly(); }
+
+    function listen() {
+      window.addEventListener("wheel", onWheel, { passive: false });
+      window.addEventListener("touchstart", onTouchStart, { passive: true });
+      window.addEventListener("touchmove", onTouchMove, { passive: false });
+      window.addEventListener("touchend", onTouchEnd, { passive: true });
+      window.addEventListener("keydown", onKey);
+      window.addEventListener("resize", resize);
+      scene.addEventListener("click", onClick);
+    }
+
+    function unlisten() {
+      window.removeEventListener("wheel", onWheel);
+      window.removeEventListener("touchstart", onTouchStart);
+      window.removeEventListener("touchmove", onTouchMove);
+      window.removeEventListener("touchend", onTouchEnd);
+      window.removeEventListener("keydown", onKey);
+      window.removeEventListener("resize", resize);
+      scene.removeEventListener("click", onClick);
+    }
+
+    // Once open, the envelope is gone for good: every listener is dropped and
+    // the scene removed, so scrolling back up never restores it. A reload does.
+    function finish() {
+      if (finished) return;
+      finished = true;
+      running = false;
+      tween = null;
+      unlisten();
+      scene.classList.add("is-done");
+      root.classList.remove("intro-lock");
+      if ("scrollRestoration" in history) history.scrollRestoration = "auto";
+      if (scene.parentNode) scene.parentNode.removeChild(scene);
+    }
+
+    function start() {
+      if ("scrollRestoration" in history) history.scrollRestoration = "manual";
+      window.scrollTo(0, 0);
+      resize();
+      listen();
+    }
+
+    start();
+    texture.addEventListener("load", function () { resize(); });
   })();
 
   // ---------- Parallax on the botanicals ----------
@@ -838,42 +1279,6 @@
     }
     window.addEventListener("scroll", onScroll, { passive: true });
     update();
-  })();
-</script>
-<script>
-  // ---------- Contact: call / WhatsApp chooser ----------
-  (function () {
-    var sheet = document.getElementById("dial-sheet");
-    if (!sheet) return;
-    var nameEl = document.getElementById("dial-name"),
-        numEl = document.getElementById("dial-number"),
-        callLink = document.getElementById("dial-call"),
-        waLink = document.getElementById("dial-wa");
-
-    function open(name, phone, display) {
-      nameEl.textContent = name;
-      numEl.textContent = display;
-      callLink.href = "tel:+" + phone;
-      waLink.href = "https://wa.me/" + phone;
-      sheet.hidden = false;
-    }
-    function close() { sheet.hidden = true; }
-
-    document.querySelectorAll(".contact-num").forEach(function (btn) {
-      btn.addEventListener("click", function () {
-        open(btn.dataset.name, btn.dataset.phone, btn.textContent.trim());
-      });
-    });
-
-    sheet.addEventListener("click", function (e) {
-      if (e.target === sheet || e.target.classList.contains("dial-btn") ||
-          e.target.id === "dial-close") {
-        close();
-      }
-    });
-    document.addEventListener("keydown", function (e) {
-      if (e.key === "Escape" && !sheet.hidden) close();
-    });
   })();
 </script>
 </body>

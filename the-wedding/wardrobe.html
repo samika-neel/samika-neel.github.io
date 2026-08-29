@@ -4,115 +4,224 @@
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 <meta name="robots" content="noindex, nofollow" />
-<title>Wardrobe Planner — Samika &amp; Neelotpal</title>
+<title>Wardrobe Guide — Samika &amp; Neelotpal</title>
 <link rel="preconnect" href="https://fonts.googleapis.com" />
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
 <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;1,400;1,500&family=Jost:wght@300;400;500&display=swap" rel="stylesheet" />
 <link rel="icon" type="image/png" sizes="64x64" href="assets/tinted/favicon-64.png" />
 <link rel="apple-touch-icon" href="assets/tinted/apple-touch-icon.png" />
+<link rel="stylesheet" href="site.css" />
 <style>
-  @font-face {
-    font-family: "Citadel Script";
-    src: url("assets/fonts/citadel-script-std-regular.otf") format("opentype");
-    font-weight: 400;
-    font-style: normal;
-    font-display: swap;
+  .phone { overflow: hidden; }
+
+  .leaf {
+    position: absolute;
+    z-index: 0;
+    pointer-events: none;
+    background-repeat: no-repeat;
+    background-size: contain;
+    opacity: 0.12;
   }
-
-  :root {
-    --paper: #f7f3ea;
-    --paper-deep: #f0eadb;
-    --ink: #283828;
-    --ink-soft: rgba(40, 56, 40, 0.66);
-    --gold: #a5804c;
-    --hairline: rgba(40, 56, 40, 0.18);
-    --serif: "Cormorant Garamond", "Times New Roman", serif;
-    --script: "Citadel Script", "Pinyon Script", "Cormorant Garamond", cursive;
-    --sans: "Jost", "Helvetica Neue", sans-serif;
+  .leaf--tl {
+    top: 10px; left: -46px;
+    width: 140px; aspect-ratio: 350 / 425;
+    background-image: url("assets/tinted/branch2_ink.png");
   }
-
-  * { margin: 0; padding: 0; box-sizing: border-box; }
-
-  body {
-    background: var(--paper-deep);
-    color: var(--ink);
-    font-family: var(--sans);
-    font-weight: 300;
-    -webkit-font-smoothing: antialiased;
+  .leaf--tr {
+    top: -10px; right: -50px;
+    width: 148px; aspect-ratio: 546 / 762;
+    background-image: url("assets/tinted/branch3_ink.png");
+    transform: scaleX(-1);
   }
+  .page-head, .page-body { position: relative; z-index: 2; }
 
-  .phone {
-    width: min(100%, 400px);
-    margin: 0 auto;
-    background: var(--paper);
-    min-height: 100dvh;
+
+  .look { margin-top: 1.6rem; }
+  .look:first-of-type { margin-top: 0; }
+
+  .look-head {
     display: flex;
-    flex-direction: column;
+    align-items: baseline;
+    gap: 0.7rem;
   }
-  @media (min-width: 460px) {
-    body { background: #d9d1bd; }
-    .phone { box-shadow: 0 26px 70px -26px rgba(40, 56, 40, 0.45); }
+  .look-name {
+    font-family: var(--serif);
+    font-size: 1.3rem;
+    font-weight: 500;
+    line-height: 1.25;
+    color: var(--ink);
   }
-
-  ::selection { background: var(--gold); color: var(--paper); }
-
-  .back-link {
-    display: inline-flex;
-    align-items: center;
-    gap: 0.35rem;
-    padding: 1rem 1.2rem;
-    font-family: var(--sans);
-    font-size: 0.82rem;
-    font-weight: 400;
-    letter-spacing: 0.06em;
+  .look-when {
+    font-size: 0.6rem;
+    letter-spacing: 0.16em;
     text-transform: uppercase;
     color: var(--gold);
-    text-decoration: none;
+    white-space: nowrap;
   }
-  .back-link:hover { text-decoration: underline; }
 
-  .coming-soon {
-    flex: 1;
+  .swatches {
     display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    text-align: center;
-    padding: 3rem 2rem;
-    gap: 0.6rem;
+    gap: 0.4rem;
+    margin: 0.85rem 0 0.75rem;
+  }
+  .swatches span {
+    flex: 1;
+    height: 34px;
+    border-radius: 7px;
+    border: 1px solid rgba(255, 255, 255, 0.55);
+    box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.45),
+                0 1px 5px rgba(40, 56, 40, 0.08);
   }
 
-  .coming-soon h1 {
-    font-family: var(--script);
-    font-size: 2.4rem;
-    font-weight: 400;
+  .look-code {
+    font-family: var(--serif);
+    font-size: 1.08rem;
+    font-style: italic;
     color: var(--ink);
-    line-height: 1.2;
+    line-height: 1.45;
   }
-
-  .coming-soon .divider {
-    width: 3rem;
+  .look-note {
+    font-size: 0.85rem;
+    line-height: 1.7;
+    color: var(--ink-soft);
+    margin-top: 0.35rem;
+  }
+  .look-rule {
     height: 1px;
     background: var(--hairline);
-    margin: 0.6rem 0;
+    margin-top: 1.5rem;
   }
 
-  .coming-soon p {
-    font-family: var(--serif);
-    font-size: 1.1rem;
-    font-style: italic;
+  .layer-list { list-style: none; margin-top: 0.8rem; }
+  .layer-list li {
+    position: relative;
+    padding-left: 1.1rem;
+    margin-bottom: 0.5rem;
+    font-size: 0.87rem;
+    line-height: 1.65;
     color: var(--ink-soft);
   }
+  .layer-list li::before {
+    content: "";
+    position: absolute;
+    left: 0; top: 0.66em;
+    width: 4px; height: 4px;
+    border-radius: 50%;
+    background: var(--gold);
+    opacity: 0.7;
+  }
+  .layer-list strong { font-weight: 500; color: var(--ink); }
 </style>
 </head>
 <body>
   <div class="phone">
-    <a class="back-link" href="index.html">&larr; Home</a>
-    <div class="coming-soon">
-      <h1>Wardrobe Planner</h1>
-      <div class="divider"></div>
-      <p>Coming soon</p>
-    </div>
+    <span class="leaf leaf--tl" aria-hidden="true"></span>
+    <span class="leaf leaf--tr" aria-hidden="true"></span>
+
+    <header class="page-head">
+      <h1>Wardrobe Guide</h1>
+      <span class="sprig" aria-hidden="true"></span>
+    </header>
+
+    <main class="page-body">
+      <!-- Haldi & Mehendi -->
+      <div class="look">
+        <div class="look-head">
+          <p class="look-name">Haldi &amp; Mehendi</p>
+          <p class="look-when">25 Nov &middot; Day</p>
+        </div>
+        <div class="swatches" aria-hidden="true">
+          <span style="background:#f2c14e"></span>
+          <span style="background:#e98a3c"></span>
+          <span style="background:#d95f6a"></span>
+          <span style="background:#5aa469"></span>
+          <span style="background:#4b7fbd"></span>
+        </div>
+        <p class="look-code">A pop of colour</p>
+        <p class="look-note">
+          Bright hues, playful accents, and your happiest shade. In warm golden hues, the
+          celebrations begin — with colour, laughter, music and cherished traditions.
+        </p>
+        <div class="look-rule"></div>
+      </div>
+
+      <!-- Sangeet -->
+      <div class="look">
+        <div class="look-head">
+          <p class="look-name">Sangeet Soirée</p>
+          <p class="look-when">25 Nov &middot; Evening</p>
+        </div>
+        <div class="swatches" aria-hidden="true">
+          <span style="background:#4a2545"></span>
+          <span style="background:#7b3f61"></span>
+          <span style="background:#1f3251"></span>
+          <span style="background:#b08d57"></span>
+          <span style="background:#c9ccd4"></span>
+        </div>
+        <p class="look-code">Glitz, glam &amp; statement silhouettes</p>
+        <p class="look-note">
+          You bring the spark, we bring the music. An evening of dance and grand celebration — do
+          carry a jacket or shawl, the lawns turn crisp after dark.
+        </p>
+        <div class="look-rule"></div>
+      </div>
+
+      <!-- The Wedding -->
+      <div class="look">
+        <div class="look-head">
+          <p class="look-name">The Wedding</p>
+          <p class="look-when">26 Nov &middot; Afternoon</p>
+        </div>
+        <div class="swatches" aria-hidden="true">
+          <span style="background:#f3e0e4"></span>
+          <span style="background:#e7e2ce"></span>
+          <span style="background:#d6e3dd"></span>
+          <span style="background:#dcd6e8"></span>
+          <span style="background:#f6ece0"></span>
+        </div>
+        <p class="look-code">Pastel hues, celebratory daywear</p>
+        <p class="look-note">
+          Bestow your blessings beneath the winter sun and into golden hour, as Samika &amp; Neel
+          exchange their vows.
+        </p>
+        <div class="look-rule"></div>
+      </div>
+
+      <!-- After Hours -->
+      <div class="look">
+        <div class="look-head">
+          <p class="look-name">After Hours</p>
+          <p class="look-when">26 Nov &middot; Midnight</p>
+        </div>
+        <p class="look-code" style="margin-top:0.7rem">Whatever you can dance in</p>
+        <p class="look-note">
+          No dress code — the night is yours. Comfortable shoes are the only real advice we have.
+        </p>
+      </div>
+
+      <!-- Dressing for the weather -->
+      <section class="sec">
+        <p class="sec-eyebrow">Dressing for the hills</p>
+        <h2 class="sec-title">Late November at Corbett</h2>
+        <div class="sec-rule"></div>
+        <p class="prose">
+          Crisp, pleasant days and distinctly chilly nights — highs of about <strong>25&deg;C</strong>
+          and lows of around <strong>12&deg;C</strong>.
+        </p>
+        <ul class="layer-list">
+          <li><strong>Daytime</strong> — light, breathable ethnic or casual wear.</li>
+          <li><strong>Evenings</strong> — warm layers, a jacket, shawl or stole for the outdoor events.</li>
+          <li><strong>Footwear</strong> — the ceremonies are on lawns and gardens, so block heels or flats will serve you far better than stilettos.</li>
+        </ul>
+        <a class="link-out" href="travel.html"><span class="ico">&#10022;</span> Travel &amp; stay details</a>
+      </section>
+
+      <div class="page-end">
+        <img src="assets/images/sn_oval.webp" alt="S and N monogram" loading="lazy" />
+      </div>
+    </main>
   </div>
+
+<script src="site.js"></script>
 </body>
 </html>
