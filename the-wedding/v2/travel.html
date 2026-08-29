@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<meta name="robots" content="noindex, nofollow" />
+<title>Travel &amp; Stay — Samika &amp; Neelotpal</title>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;1,400;1,500&family=Jost:wght@300;400;500&display=swap" rel="stylesheet" />
+<link rel="icon" type="image/png" sizes="64x64" href="../assets/tinted/favicon-64.png" />
+<link rel="apple-touch-icon" href="../assets/tinted/apple-touch-icon.png" />
+<style>
+  @font-face {
+    font-family: "Citadel Script";
+    src: url("../assets/fonts/citadel-script-std-regular.otf") format("opentype");
+    font-weight: 400;
+    font-style: normal;
+    font-display: swap;
+  }
+
+  :root {
+    --paper: #f7f3ea;
+    --paper-deep: #f0eadb;
+    --ink: #283828;
+    --ink-soft: rgba(40, 56, 40, 0.66);
+    --gold: #a5804c;
+    --hairline: rgba(40, 56, 40, 0.18);
+    --serif: "Cormorant Garamond", "Times New Roman", serif;
+    --script: "Citadel Script", "Pinyon Script", "Cormorant Garamond", cursive;
+    --sans: "Jost", "Helvetica Neue", sans-serif;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    background: var(--paper-deep);
+    color: var(--ink);
+    font-family: var(--sans);
+    font-weight: 300;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  .phone {
+    width: min(100%, 400px);
+    margin: 0 auto;
+    background: var(--paper);
+    min-height: 100dvh;
+    display: flex;
+    flex-direction: column;
+  }
+  @media (min-width: 460px) {
+    body { background: #d9d1bd; }
+    .phone { box-shadow: 0 26px 70px -26px rgba(40, 56, 40, 0.45); }
+  }
+
+  ::selection { background: var(--gold); color: var(--paper); }
+
+  .back-link {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.35rem;
+    padding: 1rem 1.2rem;
+    font-family: var(--sans);
+    font-size: 0.82rem;
+    font-weight: 400;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    color: var(--gold);
+    text-decoration: none;
+  }
+  .back-link:hover { text-decoration: underline; }
+
+  .coming-soon {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    padding: 3rem 2rem;
+    gap: 0.6rem;
+  }
+
+  .coming-soon h1 {
+    font-family: var(--script);
+    font-size: 2.4rem;
+    font-weight: 400;
+    color: var(--ink);
+    line-height: 1.2;
+  }
+
+  .coming-soon .divider {
+    width: 3rem;
+    height: 1px;
+    background: var(--hairline);
+    margin: 0.6rem 0;
+  }
+
+  .coming-soon p {
+    font-family: var(--serif);
+    font-size: 1.1rem;
+    font-style: italic;
+    color: var(--ink-soft);
+  }
+</style>
+</head>
+<body>
+  <div class="phone">
+    <a class="back-link" href="index.html">&larr; Home</a>
+    <div class="coming-soon">
+      <h1>Travel &amp; Stay</h1>
+      <div class="divider"></div>
+      <p>Coming soon</p>
+    </div>
+  </div>
+</body>
+</html>
