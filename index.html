@@ -608,16 +608,21 @@
       branch11: 110, bird1: 90, bird2: 90, logo: 90
     };
 
-    function parseCSV(text) {
-      var lines = text.replace(/\r\n/g, "\n").split("\n").filter(function (l) { return l.trim() !== ""; });
-      var header = lines[0].split(",").map(function (h) { return h.trim(); });
-      return lines.slice(1).map(function (line) {
-        var cells = line.split(",").map(function (c) { return c.trim(); });
-        var row = {};
-        header.forEach(function (h, i) { row[h] = cells[i] !== undefined ? cells[i] : ""; });
-        return row;
-      });
-    }
+    var PLACEMENTS = [
+      { asset:"branch10", cell:"H-A1", anchor:"TL", rotation:"0", size_pct:"85", mirror:"FALSE" },
+      { asset:"branch3",  cell:"H-F1", anchor:"TR", rotation:"0", size_pct:"100", mirror:"FALSE" },
+      { asset:"bird1",    cell:"H-F5", anchor:"TR", rotation:"0", size_pct:"100", mirror:"TRUE" },
+      { asset:"branch9",  cell:"H-A6", anchor:"C",  rotation:"30", size_pct:"80", mirror:"FALSE" },
+      { asset:"branch6",  cell:"H-F6", anchor:"TL", rotation:"0", size_pct:"100", mirror:"FALSE" },
+      { asset:"branch1",  cell:"H-A8", anchor:"TL", rotation:"90", size_pct:"100", mirror:"FALSE" },
+      { asset:"branch6",  cell:"H-F9", anchor:"TR", rotation:"90", size_pct:"80", mirror:"FALSE" },
+      { asset:"branch9",  cell:"R-C2", anchor:"BR", rotation:"90", size_pct:"100", mirror:"FALSE" },
+      { asset:"branch4",  cell:"R-A5", anchor:"TR", rotation:"0", size_pct:"130", mirror:"TRUE" },
+      { asset:"branch8",  cell:"R-F4", anchor:"TL", rotation:"0", size_pct:"130", mirror:"FALSE" },
+      { asset:"bird2",    cell:"R-E9", anchor:"TR", rotation:"0", size_pct:"100", mirror:"TRUE" },
+      { asset:"branch11", cell:"R-A10", anchor:"C", rotation:"45", size_pct:"140", mirror:"FALSE" },
+      { asset:"branch11", cell:"R-F10", anchor:"C", rotation:"45", size_pct:"140", mirror:"TRUE" }
+    ];
 
     function buildPlaceElement(row) {
       var el = document.createElement("div");
@@ -636,31 +641,15 @@
       return el;
     }
 
-    function loadFromCSV() {
-      // cache: "no-store" + a timestamp param — the dev server sends no
-      // Cache-Control header, so browsers can otherwise serve a stale copy
-      // of the CSV on refresh even after you've saved new edits to disk.
-      return fetch("botanicals.csv?t=" + Date.now(), { cache: "no-store" })
-        .then(function (res) {
-          if (!res.ok) throw new Error("botanicals.csv fetch failed: " + res.status);
-          return res.text();
-        })
-        .then(function (text) {
-          var rows = parseCSV(text);
-          var heroEl = document.querySelector(".hero");
-          var rsvpEl = document.querySelector(".rsvp");
-          rows.forEach(function (row) {
-            if (!row.asset || !row.cell) return;
-            var section = row.cell.charAt(0).toUpperCase();
-            var parent = section === "H" ? heroEl : section === "R" ? rsvpEl : null;
-            if (!parent) return;
-            var el = buildPlaceElement(row);
-            parent.appendChild(el);
-          });
-        })
-        .catch(function (err) {
-          console.warn("Botanical placement CSV not loaded:", err);
-        });
+    function loadPlacements() {
+      var heroEl = document.querySelector(".hero");
+      var rsvpEl = document.querySelector(".rsvp");
+      PLACEMENTS.forEach(function (row) {
+        var section = row.cell.charAt(0).toUpperCase();
+        var parent = section === "H" ? heroEl : section === "R" ? rsvpEl : null;
+        if (!parent) return;
+        parent.appendChild(buildPlaceElement(row));
+      });
     }
 
     function layoutOne(el) {
@@ -715,9 +704,13 @@
       document.querySelectorAll(".place[data-cell]").forEach(layoutOne);
     }
 
-    loadFromCSV().then(layoutAll);
+    loadPlacements();
+    requestAnimationFrame(function () { requestAnimationFrame(layoutAll); });
     window.addEventListener("resize", layoutAll);
     window.addEventListener("load", layoutAll);
+    if (document.fonts && document.fonts.ready) {
+      document.fonts.ready.then(layoutAll);
+    }
   })();
 
   // ---------- Dev grid overlay (?grid=1) ----------
