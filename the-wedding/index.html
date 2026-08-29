@@ -29,6 +29,11 @@
   (function () {
     try {
       if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
+      // Already opened on this device? Navigating back to the invitation should
+      // not re-seal it. Clearing site data brings it back, which is fine.
+      try {
+        if (localStorage.getItem("sn:envelope-opened") === "1") return;
+      } catch (e) {}
       document.documentElement.classList.add("intro-ready", "intro-lock");
       setTimeout(function () {
         if (!window.__snIntroRunning) {
@@ -287,13 +292,46 @@
   }
   .closing-heart {
     display: block;
-    margin-top: 0.8rem;
+    margin: 0.5rem auto 0;
+    /* padding only — keeps the glyph tiny while giving it a tappable target */
+    padding: 0.55rem 0.9rem;
+    background: none;
+    border: 0;
     /* text-presentation heart, never the emoji glyph */
     font-family: var(--serif);
     font-size: 0.62rem;
     line-height: 1;
     color: #ffffff;
     opacity: 0.85;
+    cursor: pointer;
+    -webkit-tap-highlight-color: transparent;
+    transition: transform 0.25s cubic-bezier(0.34, 1.6, 0.64, 1), opacity 0.25s ease;
+  }
+  .closing-heart:hover { opacity: 1; }
+  .closing-heart:active { transform: scale(1.5); opacity: 1; }
+  .closing-heart.is-lit { animation: heartbeat 0.5s ease-out; }
+  @keyframes heartbeat {
+    0%   { transform: scale(1); }
+    35%  { transform: scale(1.75); }
+    100% { transform: scale(1); }
+  }
+
+  /* Fireworks the heart sets off. Sits above the page but under the envelope,
+     and never intercepts a tap. */
+  .sparks {
+    position: fixed;
+    inset: 0;
+    z-index: 250;
+    pointer-events: none;
+    /* Explicit size, not inset alone: a <canvas> carries an intrinsic aspect
+       ratio from its width/height attributes, which otherwise wins over
+       top/bottom and collapses it to half its width. It also stays in the
+       layout always — a hidden canvas measures 0x0. */
+    width: 100%;
+    height: 100%;
+  }
+  @media (min-width: 460px) {
+    .sparks { left: calc(50% - 200px); right: auto; width: 400px; height: 100%; }
   }
 
 
@@ -473,15 +511,17 @@
     z-index: 5;
     left: var(--seal-x, 50%);
     top: var(--seal-y, 52%);
-    width: clamp(78px, 22.5vw, 105px);
+    /* the oval is 467x600, so it is sized narrower than the old square wax
+       stamp to keep roughly the same footprint on the flap */
+    width: clamp(60px, 17.5vw, 82px);
     opacity: var(--seal-o, 1);
     transform: translate(-50%, -50%) scale(var(--seal-s, 1));
-    filter: drop-shadow(0 3px 5px rgba(53, 38, 21, 0.42));
+    filter: drop-shadow(0 3px 5px rgba(53, 38, 21, 0.3));
     pointer-events: none;
     will-change: transform;
   }
   @media (min-width: 460px) {
-    .envelope-seal { width: 99px; }
+    .envelope-seal { width: 77px; }
   }
 
   .envelope-hint {
@@ -589,7 +629,7 @@
     <div class="envelope-card-light"></div>
     <canvas class="envelope-canvas" id="envelope-flap-canvas"></canvas>
     <div class="envelope-fold"></div>
-    <img class="envelope-seal" src="assets/envelope/wax_seal.webp" alt="" aria-hidden="true" />
+    <img class="envelope-seal" src="assets/images/sn_oval.webp" alt="" aria-hidden="true" />
     <p class="envelope-hint">Tap to open<i></i></p>
   </div>
 
@@ -631,10 +671,12 @@
   <!-- ============ CLOSING BAND ============ -->
   <div class="closing">
     <p class="closing-text">With love, from Neel and Samika</p>
-    <span class="closing-heart" aria-hidden="true">&#9829;&#xFE0E;</span>
+    <button class="closing-heart" id="closing-heart" type="button" aria-label="A little something">&#9829;&#xFE0E;</button>
   </div>
 
   </div>
+
+  <canvas class="sparks" id="sparks" aria-hidden="true"></canvas>
 
 <script src="site.js"></script>
 <script>
@@ -856,6 +898,159 @@
     document.body.appendChild(legend);
   })();
 
+
+
+  // ---------- Easter egg: the heart at the foot of the page ----------
+  // One tap sets off ~3 seconds of fireworks. Three taps in quick succession
+  // open our song. Particles are plain dots on a canvas — a few hundred at a
+  // time, and the loop stops itself once the last one dies.
+  (function () {
+    var heart = document.getElementById("closing-heart"),
+        canvas = document.getElementById("sparks");
+    if (!heart || !canvas) return;
+
+    var ctx = canvas.getContext("2d");
+    var reduced = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+
+    var SONG = "https://www.youtube.com/watch?v=usVq_4K_m_w";
+    var TAPS_FOR_SONG = 3;
+    var TAP_WINDOW = 1400;   // ms between taps for them to count as a run
+    var SHOW_MS = 3000;      // how long new shells keep launching
+
+    // warm palette, so the bursts sit inside the invitation's colours
+    var COLOURS = ["#f6e7c4", "#a5804c", "#ffffff", "#e8c9a0", "#d8a7a0"];
+
+    var particles = [], shells = [], running = false, showEndsAt = 0,
+        dpr = 1, w = 0, h = 0, taps = 0, lastTap = 0;
+
+    function resize() {
+      var r = canvas.getBoundingClientRect();
+      // fall back to the viewport if the box cannot be measured for any reason
+      var rw = r.width > 2 ? r.width : Math.min(window.innerWidth, 400);
+      var rh = r.height > 2 ? r.height : window.innerHeight;
+      dpr = Math.min(window.devicePixelRatio || 1, 2);
+      w = rw; h = rh;
+      canvas.width = Math.round(w * dpr);
+      canvas.height = Math.round(h * dpr);
+    }
+
+    function burst(x, y) {
+      var n = 70 + Math.floor(Math.random() * 30);
+      var hue = COLOURS[Math.floor(Math.random() * COLOURS.length)];
+      var speed = 2.4 + Math.random() * 1.5;
+      for (var i = 0; i < n; i++) {
+        var a = (Math.PI * 2 * i) / n + Math.random() * 0.16;
+        // a little speed jitter keeps the ring from looking mechanical
+        var v = speed * (0.55 + Math.random() * 0.62);
+        particles.push({
+          x: x, y: y,
+          vx: Math.cos(a) * v,
+          vy: Math.sin(a) * v,
+          life: 1,
+          decay: 0.008 + Math.random() * 0.012,
+          size: 1 + Math.random() * 1.6,
+          colour: Math.random() < 0.22 ? "#ffffff" : hue
+        });
+      }
+    }
+
+    // a shell climbs from the bottom, then explodes at its apex
+    function launch() {
+      shells.push({
+        x: w * (0.18 + Math.random() * 0.64),
+        y: h + 8,
+        vy: -(h * 0.011 + Math.random() * h * 0.004),
+        apex: h * (0.16 + Math.random() * 0.34)
+      });
+    }
+
+    function frame() {
+      var now = Date.now();
+
+      // keep sending shells up for the first SHOW_MS
+      if (now < showEndsAt && Math.random() < 0.06) launch();
+
+      ctx.setTransform(1, 0, 0, 1, 0, 0);
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+      ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+      ctx.globalCompositeOperation = "lighter";
+
+      for (var s = shells.length - 1; s >= 0; s--) {
+        var sh = shells[s];
+        sh.y += sh.vy;
+        sh.vy += 0.06;                       // gravity slows the climb
+        ctx.globalAlpha = 0.9;
+        ctx.fillStyle = "#f6e7c4";
+        ctx.beginPath();
+        ctx.arc(sh.x, sh.y, 1.6, 0, Math.PI * 2);
+        ctx.fill();
+        if (sh.y <= sh.apex || sh.vy >= 0) {
+          burst(sh.x, sh.y);
+          shells.splice(s, 1);
+        }
+      }
+
+      for (var i = particles.length - 1; i >= 0; i--) {
+        var p = particles[i];
+        p.x += p.vx;
+        p.y += p.vy;
+        p.vy += 0.035;                       // gravity
+        p.vx *= 0.985;                       // air drag
+        p.vy *= 0.985;
+        p.life -= p.decay;
+        if (p.life <= 0) { particles.splice(i, 1); continue; }
+        ctx.globalAlpha = Math.max(0, p.life);
+        ctx.fillStyle = p.colour;
+        ctx.beginPath();
+        ctx.arc(p.x, p.y, p.size, 0, Math.PI * 2);
+        ctx.fill();
+      }
+
+      ctx.globalAlpha = 1;
+      ctx.globalCompositeOperation = "source-over";
+
+      if (particles.length || shells.length || now < showEndsAt) {
+        requestAnimationFrame(frame);
+      } else {
+        // nothing left to draw: stop the loop and leave the canvas clear
+        running = false;
+        ctx.setTransform(1, 0, 0, 1, 0, 0);
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+      }
+    }
+
+    function celebrate() {
+      if (reduced) return;
+      resize();
+      showEndsAt = Date.now() + SHOW_MS;
+      // one straight away, so the tap feels answered
+      launch();
+      burst(w / 2, h * (0.3 + Math.random() * 0.2));
+      if (!running) { running = true; requestAnimationFrame(frame); }
+    }
+
+    heart.addEventListener("click", function () {
+      var now = Date.now();
+      taps = now - lastTap < TAP_WINDOW ? taps + 1 : 1;
+      lastTap = now;
+
+      heart.classList.remove("is-lit");
+      void heart.offsetWidth;                // restart the beat animation
+      heart.classList.add("is-lit");
+
+      celebrate();
+
+      // Opened straight from the tap handler — anything deferred (a timeout,
+      // a promise) would be swallowed by mobile pop-up blocking.
+      if (taps >= TAPS_FOR_SONG) {
+        taps = 0;
+        window.open(SONG, "_blank", "noopener");
+      }
+    });
+
+    window.addEventListener("resize", resize);
+    resize();
+  })();
 
   // ---------- Envelope intro ----------
   // The flap is not a rotating triangle. It is a landscape paper mesh: rows are
@@ -1239,6 +1434,7 @@
       unlisten();
       scene.classList.add("is-done");
       root.classList.remove("intro-lock");
+      try { localStorage.setItem("sn:envelope-opened", "1"); } catch (e) {}
       if ("scrollRestoration" in history) history.scrollRestoration = "auto";
       if (scene.parentNode) scene.parentNode.removeChild(scene);
     }

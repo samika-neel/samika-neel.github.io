@@ -15,32 +15,21 @@
   .cards {
     display: flex;
     flex-direction: column;
-    padding-top: 0.5rem;
+    /* a thin white rule separates each invitation from the next */
+    gap: 3px;
+    background: #ffffff;
+    padding: 3px 0 0;
   }
 
-  .card-wrap {
-    overflow: hidden;
-    cursor: zoom-in;
-    position: relative;
-  }
-  .card-wrap.zoomed { cursor: zoom-out; }
+  .card-wrap { display: block; }
 
   .card-wrap img {
     display: block;
     width: 100%;
     height: auto;
-    transition: transform 0.35s cubic-bezier(0.25, 0.46, 0.45, 0.94);
-    transform-origin: center center;
     -webkit-user-select: none;
     user-select: none;
-    -webkit-touch-callout: none;
   }
-
-  .card-wrap.zoomed img {
-    transform: scale(2.2);
-    cursor: grab;
-  }
-  .card-wrap.zoomed.dragging img { cursor: grabbing; }
 
   .events-end { padding-bottom: 5.5rem; }
 </style>
@@ -49,71 +38,17 @@
   <div class="phone">
     <div class="cards">
       <div class="card-wrap"><img src="assets/events/main_wedding_emb.webp" alt="Wedding invitation — Samika and Neelotpal" loading="eager" /></div>
-      <div class="card-wrap"><img src="assets/events/satsang_emb.webp" alt="Satsang" loading="lazy" /></div>
-      <div class="card-wrap"><img src="assets/events/mehendi_haldi_emb.webp" alt="Mehendi & Haldi" loading="lazy" /></div>
-      <div class="card-wrap"><img src="assets/events/sangeet_emb.webp" alt="Sangeet" loading="lazy" /></div>
-      <div class="card-wrap"><img src="assets/events/wedding_vows_emb.webp" alt="Wedding Vows" loading="lazy" /></div>
-      <div class="card-wrap"><img src="assets/events/after_hours_emb.webp" alt="After Hours" loading="lazy" /></div>
+      <div class="card-wrap"><img src="assets/events/mehendi.webp" alt="Mehendi &amp; Haldi — 25 November 2026, Bonsai Garden" loading="lazy" /></div>
+      <div class="card-wrap"><img src="assets/events/sangeet.webp" alt="Sangeet — 25 November 2026, Kosi Lawns" loading="lazy" /></div>
+      <div class="card-wrap"><img src="assets/events/wedding.webp" alt="The Wedding — 26 November 2026, Kosi Lawns" loading="lazy" /></div>
+      <div class="card-wrap"><img src="assets/events/after_hours.webp" alt="After Hours — 26 November 2026, Kosi Hall" loading="lazy" /></div>
+      <div class="card-wrap"><img src="assets/events/rsvp.webp" alt="RSVP" loading="lazy" /></div>
     </div>
     <div class="page-end events-end">
       <img src="assets/images/sn_oval.webp" alt="S and N monogram" loading="lazy" />
-      <p>Tap any card to zoom in</p>
     </div>
   </div>
 
 <script src="site.js"></script>
-<script>
-(function () {
-  document.querySelectorAll(".card-wrap").forEach(function (wrap) {
-    var img = wrap.querySelector("img");
-    var ox = 0, oy = 0, sx, sy, dragging = false;
-
-    wrap.addEventListener("click", function (e) {
-      if (dragging) return;
-      if (wrap.classList.contains("zoomed")) {
-        wrap.classList.remove("zoomed");
-        img.style.transformOrigin = "center center";
-        img.style.transform = "";
-        ox = 0; oy = 0;
-      } else {
-        var rect = wrap.getBoundingClientRect();
-        var px = ((e.clientX - rect.left) / rect.width) * 100;
-        var py = ((e.clientY - rect.top) / rect.height) * 100;
-        img.style.transformOrigin = px + "% " + py + "%";
-        wrap.classList.add("zoomed");
-        ox = 0; oy = 0;
-      }
-    });
-
-    wrap.addEventListener("pointerdown", function (e) {
-      if (!wrap.classList.contains("zoomed")) return;
-      dragging = false;
-      sx = e.clientX - ox;
-      sy = e.clientY - oy;
-      wrap.classList.add("dragging");
-      wrap.setPointerCapture(e.pointerId);
-    });
-
-    wrap.addEventListener("pointermove", function (e) {
-      if (!wrap.classList.contains("dragging")) return;
-      dragging = true;
-      ox = e.clientX - sx;
-      oy = e.clientY - sy;
-      var rect = wrap.getBoundingClientRect();
-      var maxPan = rect.width * 0.6;
-      ox = Math.max(-maxPan, Math.min(maxPan, ox));
-      oy = Math.max(-maxPan, Math.min(maxPan, oy));
-      img.style.transform = "scale(2.2) translate(" + (ox / 2.2) + "px, " + (oy / 2.2) + "px)";
-    });
-
-    wrap.addEventListener("pointerup", function () {
-      wrap.classList.remove("dragging");
-      if (dragging) {
-        setTimeout(function () { dragging = false; }, 0);
-      }
-    });
-  });
-})();
-</script>
 </body>
 </html>
