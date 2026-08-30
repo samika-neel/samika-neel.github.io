@@ -21,6 +21,25 @@
 
   var here = (location.pathname.split("/").pop() || "index.html").toLowerCase();
 
+  /* ---------------- Cloudflare Web Analytics ----------------
+     Every page under /the-wedding/ loads this file, so injecting the beacon
+     here covers all of them at once. save-the-date.html is the separate public
+     landing page and carries the same snippet inline.
+
+     Cookieless and privacy-first, so it needs no consent banner. Paste the
+     token from Cloudflare → Web Analytics → your site; while it is blank
+     nothing is injected, so the page stays clean rather than half-wired. */
+  var CF_BEACON_TOKEN = "54a4a3ceeaad49988fc08e6e9201ca8f";
+
+  function loadAnalytics() {
+    if (!CF_BEACON_TOKEN) return;
+    var s = document.createElement("script");
+    s.type = "module";
+    s.src = "https://static.cloudflareinsights.com/beacon.min.js";
+    s.setAttribute("data-cf-beacon", JSON.stringify({ token: CF_BEACON_TOKEN }));
+    document.head.appendChild(s);
+  }
+
   /* -------- Bottom-left home button (every page but the invitation) -------- */
   function buildHomeButton() {
     if (here === "index.html") return;
@@ -193,6 +212,7 @@
   }
 
   function init() {
+    loadAnalytics();
     buildHomeButton();
     buildMenu();
     buildDialSheet();

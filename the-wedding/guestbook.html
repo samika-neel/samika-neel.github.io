@@ -172,7 +172,7 @@
           <input type="text" id="gb-website" name="website" tabindex="-1" autocomplete="off" />
         </div>
 
-        <button class="gb-submit" id="gb-submit" type="submit">Sign the guest book</button>
+        <button class="gb-submit" id="gb-submit" type="submit">Send your message</button>
         <p class="gb-note" id="gb-note" hidden role="status"></p>
       </form>
 
@@ -244,7 +244,7 @@
       }
 
       submit.disabled = true;
-      submit.textContent = "Signing…";
+      submit.textContent = "Sending…";
 
       // A plain string body is a "simple" request, so the browser sends it
       // without a preflight — which Apps Script would not answer.
@@ -285,7 +285,7 @@
 
     function fail(text) {
       submit.disabled = false;
-      submit.textContent = "Sign the guest book";
+      submit.textContent = "Send your message";
       say(text);
     }
   })();
