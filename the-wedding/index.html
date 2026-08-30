@@ -74,6 +74,12 @@
     --serif: "Cormorant Garamond", "Times New Roman", serif;
     --script: "Citadel Script", "Pinyon Script", "Cormorant Garamond", cursive;
     --sans: "Jost", "Helvetica Neue", sans-serif;
+
+    /* One rhythm for the hero stack: the wider step is 20% more than the
+       tighter one. s1 sits above the eyebrow and above the countdown,
+       s2 between the eyebrow, the names and the invitation line. */
+    --s2: 1.5rem;
+    --s1: 1.8rem;
   }
 
   * { margin: 0; padding: 0; box-sizing: border-box; }
@@ -150,12 +156,10 @@
     font-family: "Amita", var(--serif);
     font-size: clamp(1.1rem, 3.4cqw, 1.35rem);
     color: var(--gold);
-    margin-top: -0.6rem;
-    margin-bottom: 0.5rem;
-    position: relative;
-    top: -1.6rem;
+    margin-top: 0.9rem;
   }
   .eyebrow {
+    margin-top: var(--s1);
     font-family: var(--sans);
     font-size: clamp(0.65rem, 1.8cqw, 0.78rem);
     font-weight: 400;
@@ -223,6 +227,7 @@
   }
 
   .hero-names {
+    margin-top: var(--s2);
     /* 10% down from clamp(4.2rem, 16cqw, 8rem) */
     font-size: clamp(3.78rem, 14.4cqw, 7.2rem);
     letter-spacing: 0;
@@ -238,7 +243,7 @@
     margin: 0.2em 0;
   }
   .save-line {
-    margin-top: 1.9rem;
+    margin-top: var(--s2);
     font-family: var(--serif);
     font-style: italic;
     font-size: clamp(1.15rem, 4cqw, 1.6rem);
@@ -257,8 +262,7 @@
     display: flex;
     justify-content: center;
     gap: clamp(1.1rem, 5cqw, 2.4rem);
-    /* +0.8rem offsets the tightened .ganesh margin so the countdown does not move */
-    margin-top: 2rem;
+    margin-top: var(--s1);
   }
   .countdown .unit { text-align: center; }
   .countdown .num {

@@ -15,6 +15,7 @@
     ["faq.html",      "FAQ"],
     ["photos.html",   "Photos &amp; Videos"],
     ["contact.html",  "RSVP &amp; Contact"],
+    ["guestbook.html","Guest Book"],
     ["artwork.html",  "The Artwork"]
   ];
 
