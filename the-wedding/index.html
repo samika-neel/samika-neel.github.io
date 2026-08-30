@@ -29,11 +29,29 @@
   (function () {
     try {
       if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
-      // Already opened on this device? Navigating back to the invitation should
-      // not re-seal it. Clearing site data brings it back, which is fine.
-      try {
-        if (localStorage.getItem("sn:envelope-opened") === "1") return;
-      } catch (e) {}
+
+      /* The envelope belongs to arriving at the invitation, not to moving
+         around inside it. The browser tells us how this page was reached:
+
+           reload        → they asked for the invitation again, so seal it
+           back_forward  → they are returning, not arriving: skip
+           navigate      → a fresh arrival (a shared link, a typed URL) unless
+                           the referrer is one of our own pages, which means
+                           they came Home from Events, FAQ and so on
+
+         A missing or stripped referrer falls through to showing it, which is
+         the friendlier way to be wrong. */
+      var entries = performance.getEntriesByType && performance.getEntriesByType("navigation");
+      var navType = entries && entries.length ? entries[0].type
+        : (performance.navigation && performance.navigation.type === 1 ? "reload" : "navigate");
+
+      if (navType === "back_forward") return;
+
+      if (navType !== "reload" && document.referrer) {
+        var from = new URL(document.referrer);
+        if (from.origin === location.origin && from.pathname !== location.pathname) return;
+      }
+
       document.documentElement.classList.add("intro-ready", "intro-lock");
       setTimeout(function () {
         if (!window.__snIntroRunning) {
@@ -1434,7 +1452,6 @@
       unlisten();
       scene.classList.add("is-done");
       root.classList.remove("intro-lock");
-      try { localStorage.setItem("sn:envelope-opened", "1"); } catch (e) {}
       if ("scrollRestoration" in history) history.scrollRestoration = "auto";
       if (scene.parentNode) scene.parentNode.removeChild(scene);
     }
