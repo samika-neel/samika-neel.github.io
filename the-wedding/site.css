@@ -61,7 +61,8 @@ body {
 /* ---------- Page head ---------- */
 .page-head {
   text-align: center;
-  padding: 5.2rem 1.6rem 0;
+  /* clears the 62px menu FAB now parked in the top-left corner */
+  padding: 6.6rem 1.6rem 0;
 }
 .page-head h1 {
   font-family: var(--script);
@@ -359,11 +360,11 @@ body {
    =========================================================== */
 .fab {
   position: fixed;
-  bottom: 2rem;
-  right: max(calc(50% - 200px + 1rem), 1rem);
+  top: 1.25rem;
+  left: max(calc(50% - 200px + 1rem), 1rem);
   z-index: 100;
-  width: 52px;
-  height: 52px;
+  width: 62px;
+  height: 62px;
   border-radius: 50%;
   border: 1px solid rgba(255, 255, 255, 0.55);
   background: rgba(247, 243, 234, 0.72);
@@ -390,10 +391,10 @@ body {
 
 .fab-dot {
   position: absolute;
-  top: 6px;
-  right: 6px;
-  width: 10px;
-  height: 10px;
+  top: 7px;
+  right: 7px;
+  width: 11px;
+  height: 11px;
   border-radius: 50%;
   background: #34a853;
   box-shadow: 0 0 6px rgba(52, 168, 83, 0.5);
@@ -404,24 +405,25 @@ body {
   50% { opacity: 0.6; transform: scale(0.85); }
 }
 
-.fab-icon { width: 22px; height: 22px; position: relative; }
+.fab-icon { width: 26px; height: 26px; position: relative; }
 .fab-icon span {
   display: block;
   position: absolute;
   left: 2px;
   right: 2px;
-  height: 2px;
-  background: var(--ink);
+  height: 2.4px;
+  /* deeper than --ink, so the rules read clearly through the glass */
+  background: #16211a;
   border-radius: 1px;
   transition: transform 0.3s ease, opacity 0.3s ease;
 }
-.fab-icon span:nth-child(1) { top: 4px; }
-.fab-icon span:nth-child(2) { top: 10px; }
-.fab-icon span:nth-child(3) { top: 16px; }
+.fab-icon span:nth-child(1) { top: 5px; }
+.fab-icon span:nth-child(2) { top: 12px; }
+.fab-icon span:nth-child(3) { top: 19px; }
 
-.fab.is-open .fab-icon span:nth-child(1) { transform: translateY(6px) rotate(45deg); }
+.fab.is-open .fab-icon span:nth-child(1) { transform: translateY(7px) rotate(45deg); }
 .fab.is-open .fab-icon span:nth-child(2) { opacity: 0; }
-.fab.is-open .fab-icon span:nth-child(3) { transform: translateY(-6px) rotate(-45deg); }
+.fab.is-open .fab-icon span:nth-child(3) { transform: translateY(-7px) rotate(-45deg); }
 .fab.is-open .fab-dot { display: none; }
 
 /* bottom-left home button, mirroring the menu FAB */
@@ -497,10 +499,8 @@ body {
 .drawer-nav li:last-child { border-bottom: none; }
 
 .drawer-link {
-  display: flex;
-  flex-direction: column;
-  gap: 0.15rem;
-  padding: 1.1rem 0;
+  display: block;
+  padding: 1.25rem 0;
   text-decoration: none;
   color: var(--ink);
   transition: opacity 0.2s;
@@ -509,17 +509,13 @@ body {
 .drawer-link[aria-current="page"] .drawer-link-label { color: var(--gold); }
 
 .drawer-link-label {
-  font-family: var(--serif);
-  font-size: 1.2rem;
+  font-family: var(--sans);
+  font-size: 0.86rem;
   font-weight: 500;
-  letter-spacing: 0.03em;
-  line-height: 1.2;
-}
-.drawer-link-sub {
-  font-size: 0.7rem;
-  font-weight: 300;
-  letter-spacing: 0.06em;
-  color: var(--ink-soft);
+  letter-spacing: 0.19em;
+  text-indent: 0.19em;
+  text-transform: uppercase;
+  line-height: 1.25;
 }
 
 .drawer-home {

@@ -9,11 +9,13 @@
   "use strict";
 
   var MENU = [
-    ["events.html",   "Events",          "Mehendi, Sangeet, Wedding &amp; more"],
-    ["travel.html",   "Travel &amp; Stay",   "Getting to Jim Corbett &amp; venue details"],
-    ["wardrobe.html", "Wardrobe Guide",  "Colour palettes &amp; dress codes"],
-    ["faq.html",      "FAQ",             "Common questions answered"],
-    ["contact.html",  "RSVP &amp; Contact",  "Get in touch with the families"]
+    ["events.html",   "Events"],
+    ["travel.html",   "Travel &amp; Stay"],
+    ["wardrobe.html", "Wardrobe Guide"],
+    ["faq.html",      "FAQ"],
+    ["photos.html",   "Photos &amp; Videos"],
+    ["contact.html",  "RSVP &amp; Contact"],
+    ["artwork.html",  "The Artwork"]
   ];
 
   var here = (location.pathname.split("/").pop() || "index.html").toLowerCase();
@@ -54,8 +56,7 @@
     var items = MENU.map(function (m) {
       var current = m[0].toLowerCase() === here ? ' aria-current="page"' : "";
       return '<li><a class="drawer-link" href="' + m[0] + '"' + current + '>' +
-             '<span class="drawer-link-label">' + m[1] + "</span>" +
-             '<span class="drawer-link-sub">' + m[2] + "</span></a></li>";
+             '<span class="drawer-link-label">' + m[1] + "</span></a></li>";
     }).join("");
 
     drawer.innerHTML =

@@ -134,6 +134,9 @@
 
   .hero-logo {
     width: clamp(56px, 13cqw, 74px);
+    /* .art sets pointer-events:none; this one is tappable */
+    pointer-events: auto;
+    cursor: pointer;
     margin: -1rem auto 1.4rem;
     background-image: url("assets/tinted/logo_gold.png");
     /* lifted visually; flow height is untouched so the stack below stays put */
@@ -220,7 +223,8 @@
   }
 
   .hero-names {
-    font-size: clamp(4.2rem, 16cqw, 8rem);
+    /* 10% down from clamp(4.2rem, 16cqw, 8rem) */
+    font-size: clamp(3.78rem, 14.4cqw, 7.2rem);
     letter-spacing: 0;
     line-height: 0.95;
   }
@@ -292,6 +296,8 @@
     height: auto;
     margin: 0 auto 1rem;
     opacity: 0.7;
+    cursor: pointer;
+    -webkit-tap-highlight-color: transparent;
   }
 
   /* ================= CLOSING BAND ================= */
@@ -317,7 +323,7 @@
     border: 0;
     /* text-presentation heart, never the emoji glyph */
     font-family: var(--serif);
-    font-size: 0.62rem;
+    font-size: 0.93rem;
     line-height: 1;
     color: #ffffff;
     opacity: 0.85;
@@ -328,6 +334,8 @@
   .closing-heart:hover { opacity: 1; }
   .closing-heart:active { transform: scale(1.5); opacity: 1; }
   .closing-heart.is-lit { animation: heartbeat 0.5s ease-out; }
+  .hero-logo.is-lit,
+  .footer-logo.is-lit { animation: heartbeat 0.6s ease-out; }
   @keyframes heartbeat {
     0%   { transform: scale(1); }
     35%  { transform: scale(1.75); }
@@ -529,9 +537,9 @@
     z-index: 5;
     left: var(--seal-x, 50%);
     top: var(--seal-y, 52%);
-    /* the oval is 467x600, so it is sized narrower than the old square wax
-       stamp to keep roughly the same footprint on the flap */
-    width: clamp(60px, 17.5vw, 82px);
+    /* the oval is 467x600; 50% up from the size that matched the old wax
+       stamp's footprint on the flap */
+    width: clamp(90px, 26.25vw, 123px);
     opacity: var(--seal-o, 1);
     transform: translate(-50%, -50%) scale(var(--seal-s, 1));
     filter: drop-shadow(0 3px 5px rgba(53, 38, 21, 0.3));
@@ -539,7 +547,7 @@
     will-change: transform;
   }
   @media (min-width: 460px) {
-    .envelope-seal { width: 77px; }
+    .envelope-seal { width: 116px; }
   }
 
   .envelope-hint {
@@ -656,7 +664,7 @@
   <!-- ============ HERO ============ -->
   <section class="hero">
     <div class="center-col">
-      <div class="art art--logo hero-logo reveal is-in" role="img" aria-label="S and N monogram"></div>
+      <div class="art art--logo hero-logo reveal is-in" id="hero-logo" role="img" aria-label="S and N monogram"></div>
       <p class="ganesh reveal is-in" lang="hi">॥ श्री गणेशाय नमः ॥</p>
       <p class="eyebrow reveal is-in">Together with their families</p>
       <h1 class="display hero-names reveal is-in" data-delay="1">
@@ -683,7 +691,7 @@
 
   <!-- ============ FOOTER ============ -->
   <div class="footer reveal">
-    <img class="footer-logo" src="assets/images/sn_oval.webp" alt="S and N monogram" loading="lazy" />
+    <img class="footer-logo" id="footer-logo" src="assets/images/sn_oval.webp" alt="S and N monogram" loading="lazy" />
   </div>
 
   <!-- ============ CLOSING BAND ============ -->
@@ -918,14 +926,17 @@
 
 
 
-  // ---------- Easter egg: the heart at the foot of the page ----------
-  // One tap sets off ~3 seconds of fireworks. Three taps in quick succession
-  // open our song. Particles are plain dots on a canvas — a few hundred at a
-  // time, and the loop stops itself once the last one dies.
+  // ---------- Easter eggs ----------
+  // Tapping either SN monogram — the crest at the top or the one closing the
+  // page — sets off ~3 seconds of fireworks. Three taps on the heart open our
+  // song. Particles are plain dots on a canvas: a few hundred at a time, and
+  // the loop stops itself once the last one dies.
   (function () {
     var heart = document.getElementById("closing-heart"),
-        canvas = document.getElementById("sparks");
-    if (!heart || !canvas) return;
+        canvas = document.getElementById("sparks"),
+        monograms = [document.getElementById("hero-logo"),
+                     document.getElementById("footer-logo")].filter(Boolean);
+    if (!canvas || (!heart && !monograms.length)) return;
 
     var ctx = canvas.getContext("2d");
     var reduced = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
@@ -943,9 +954,11 @@
 
     function resize() {
       var r = canvas.getBoundingClientRect();
-      // fall back to the viewport if the box cannot be measured for any reason
-      var rw = r.width > 2 ? r.width : Math.min(window.innerWidth, 400);
-      var rh = r.height > 2 ? r.height : window.innerHeight;
+      // Fall back to the viewport if the box cannot be measured, and never
+      // below a sane floor: a zero-size layout (a hidden or not-yet-sized tab)
+      // would otherwise leave a 0x0 canvas that can never draw.
+      var rw = Math.max(r.width > 2 ? r.width : Math.min(window.innerWidth || 400, 400), 200);
+      var rh = Math.max(r.height > 2 ? r.height : (window.innerHeight || 800), 320);
       dpr = Math.min(window.devicePixelRatio || 1, 2);
       w = rw; h = rh;
       canvas.width = Math.round(w * dpr);
@@ -1047,24 +1060,36 @@
       if (!running) { running = true; requestAnimationFrame(frame); }
     }
 
-    heart.addEventListener("click", function () {
-      var now = Date.now();
-      taps = now - lastTap < TAP_WINDOW ? taps + 1 : 1;
-      lastTap = now;
+    function pulse(el) {
+      el.classList.remove("is-lit");
+      void el.offsetWidth;                   // restart the beat animation
+      el.classList.add("is-lit");
+    }
 
-      heart.classList.remove("is-lit");
-      void heart.offsetWidth;                // restart the beat animation
-      heart.classList.add("is-lit");
-
-      celebrate();
-
-      // Opened straight from the tap handler — anything deferred (a timeout,
-      // a promise) would be swallowed by mobile pop-up blocking.
-      if (taps >= TAPS_FOR_SONG) {
-        taps = 0;
-        window.open(SONG, "_blank", "noopener");
-      }
+    // either monogram sets off the fireworks
+    monograms.forEach(function (el) {
+      el.addEventListener("click", function () {
+        pulse(el);
+        celebrate();
+      });
     });
+
+    // the heart opens our song on the third tap in a row
+    if (heart) {
+      heart.addEventListener("click", function () {
+        var now = Date.now();
+        taps = now - lastTap < TAP_WINDOW ? taps + 1 : 1;
+        lastTap = now;
+        pulse(heart);
+
+        // Opened straight from the tap handler — anything deferred (a timeout,
+        // a promise) would be swallowed by mobile pop-up blocking.
+        if (taps >= TAPS_FOR_SONG) {
+          taps = 0;
+          window.open(SONG, "_blank", "noopener");
+        }
+      });
+    }
 
     window.addEventListener("resize", resize);
     resize();

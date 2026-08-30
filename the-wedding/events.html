@@ -12,17 +12,17 @@
 <link rel="apple-touch-icon" href="assets/tinted/apple-touch-icon.png" />
 <link rel="stylesheet" href="site.css" />
 <style>
+  /* The cards carry their own white margins, so they butt straight up
+     against each other with no gap of ours in between. */
   .cards {
     display: flex;
     flex-direction: column;
-    /* a thin white rule separates each invitation from the next */
-    gap: 3px;
-    background: #ffffff;
-    padding: 3px 0 0;
+    opacity: 0;
+    transition: opacity 0.6s ease;
   }
+  .cards.is-ready { opacity: 1; }
 
   .card-wrap { display: block; }
-
   .card-wrap img {
     display: block;
     width: 100%;
@@ -31,24 +31,124 @@
     user-select: none;
   }
 
-  .events-end { padding-bottom: 5.5rem; }
+  /* ---- Loading the full-quality invitations ---- */
+  .loader {
+    position: fixed;
+    inset: 0;
+    z-index: 200;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 1.4rem;
+    background: var(--paper);
+    transition: opacity 0.5s ease;
+  }
+  @media (min-width: 460px) {
+    .loader { left: calc(50% - 200px); right: auto; width: 400px; }
+  }
+  .loader.is-gone { opacity: 0; pointer-events: none; }
+
+  .loader-mark {
+    width: 74px;
+    height: auto;
+    opacity: 0.75;
+  }
+  .loader-label {
+    font-family: var(--sans);
+    font-size: 0.58rem;
+    font-weight: 400;
+    letter-spacing: 0.3em;
+    text-indent: 0.3em;
+    text-transform: uppercase;
+    color: var(--gold);
+  }
+  .loader-track {
+    width: min(190px, 56vw);
+    height: 1px;
+    background: var(--hairline);
+    overflow: hidden;
+  }
+  .loader-fill {
+    display: block;
+    height: 100%;
+    width: 0%;
+    background: var(--gold);
+    transition: width 0.3s ease;
+  }
+
+  /* a quiet dark band closes the page */
+  .events-end { padding: 2.2rem 0 2.4rem; }
+  .events-closing {
+    height: 5.5rem;
+    background: var(--forest);
+  }
 </style>
 </head>
 <body>
   <div class="phone">
-    <div class="cards">
-      <div class="card-wrap"><img src="assets/events/main_wedding_emb.webp" alt="Wedding invitation — Samika and Neelotpal" loading="eager" /></div>
-      <div class="card-wrap"><img src="assets/events/mehendi.webp" alt="Mehendi &amp; Haldi — 25 November 2026, Bonsai Garden" loading="lazy" /></div>
-      <div class="card-wrap"><img src="assets/events/sangeet.webp" alt="Sangeet — 25 November 2026, Kosi Lawns" loading="lazy" /></div>
-      <div class="card-wrap"><img src="assets/events/wedding.webp" alt="The Wedding — 26 November 2026, Kosi Lawns" loading="lazy" /></div>
-      <div class="card-wrap"><img src="assets/events/after_hours.webp" alt="After Hours — 26 November 2026, Kosi Hall" loading="lazy" /></div>
-      <div class="card-wrap"><img src="assets/events/rsvp.webp" alt="RSVP" loading="lazy" /></div>
+    <div class="cards" id="cards">
+      <div class="card-wrap"><img data-src="assets/events/main_wedding_emb.webp" alt="Wedding invitation — Samika and Neelotpal" /></div>
+      <div class="card-wrap"><img data-src="assets/events/mehendi.webp" alt="Mehendi &amp; Haldi — 25 November 2026, Bonsai Garden" /></div>
+      <div class="card-wrap"><img data-src="assets/events/sangeet.webp" alt="Sangeet Soirée — 25 November 2026, Kosi Lawns" /></div>
+      <div class="card-wrap"><img data-src="assets/events/wedding.webp" alt="Wedding Vows — 26 November 2026, Kosi Lawns" /></div>
+      <div class="card-wrap"><img data-src="assets/events/rsvp.webp" alt="RSVP" /></div>
     </div>
     <div class="page-end events-end">
       <img src="assets/images/sn_oval.webp" alt="S and N monogram" loading="lazy" />
     </div>
+    <div class="events-closing"></div>
+  </div>
+
+  <div class="loader" id="loader">
+    <img class="loader-mark" src="assets/images/sn_oval.webp" alt="" aria-hidden="true" />
+    <p class="loader-label">Unfolding the invitations</p>
+    <span class="loader-track"><span class="loader-fill" id="loader-fill"></span></span>
   </div>
 
 <script src="site.js"></script>
+<script>
+  // The invitations are the point of this page, so they are fetched at full
+  // quality up front rather than streamed in as you scroll: every card is
+  // preloaded behind a progress bar, then the whole set is revealed at once.
+  // A hard ceiling means a slow connection never traps anyone on the loader.
+  (function () {
+    var loader = document.getElementById("loader"),
+        fill = document.getElementById("loader-fill"),
+        cards = document.getElementById("cards"),
+        imgs = [].slice.call(cards.querySelectorAll("img[data-src]"));
+
+    var total = imgs.length, done = 0, finished = false;
+
+    function step() {
+      done++;
+      fill.style.width = Math.round((done / total) * 100) + "%";
+      if (done >= total) reveal();
+    }
+
+    function reveal() {
+      if (finished) return;
+      finished = true;
+      fill.style.width = "100%";
+      cards.classList.add("is-ready");
+      loader.classList.add("is-gone");
+      // drop it once it has faded, so it can never swallow a tap
+      setTimeout(function () {
+        if (loader.parentNode) loader.parentNode.removeChild(loader);
+      }, 600);
+    }
+
+    imgs.forEach(function (img) {
+      var probe = new Image();
+      probe.onload = probe.onerror = step;      // a failed card must not hang the page
+      probe.src = img.getAttribute("data-src");
+      img.src = img.getAttribute("data-src");
+      img.removeAttribute("data-src");
+    });
+
+    if (!total) reveal();
+    setTimeout(reveal, 12000);
+  })();
+</script>
 </body>
 </html>

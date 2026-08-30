@@ -35,18 +35,18 @@
   }
   .page-head, .page-body { position: relative; z-index: 2; }
 
-
-  .look { margin-top: 1.6rem; }
-  .look:first-of-type { margin-top: 0; }
+  .look { margin-top: 2.4rem; }
+  .look:first-of-type { margin-top: 0.4rem; }
 
   .look-head {
     display: flex;
     align-items: baseline;
-    gap: 0.7rem;
+    flex-wrap: wrap;
+    gap: 0.55rem;
   }
   .look-name {
     font-family: var(--serif);
-    font-size: 1.3rem;
+    font-size: 1.32rem;
     font-weight: 500;
     line-height: 1.25;
     color: var(--ink);
@@ -59,44 +59,31 @@
     white-space: nowrap;
   }
 
+  /* Flat rectangles: no radius, no border, no shadow. */
   .swatches {
-    display: flex;
-    gap: 0.4rem;
-    margin: 0.85rem 0 0.75rem;
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 3px;
+    margin: 0.9rem 0 0.8rem;
   }
   .swatches span {
-    flex: 1;
-    height: 34px;
-    border-radius: 7px;
-    border: 1px solid rgba(255, 255, 255, 0.55);
-    box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.45),
-                0 1px 5px rgba(40, 56, 40, 0.08);
+    display: block;
+    aspect-ratio: 23 / 10;
   }
 
   .look-code {
     font-family: var(--serif);
-    font-size: 1.08rem;
+    font-size: 1.06rem;
     font-style: italic;
-    color: var(--ink);
     line-height: 1.45;
-  }
-  .look-note {
-    font-size: 0.85rem;
-    line-height: 1.7;
-    color: var(--ink-soft);
-    margin-top: 0.35rem;
-  }
-  .look-rule {
-    height: 1px;
-    background: var(--hairline);
-    margin-top: 1.5rem;
+    color: var(--ink);
   }
 
-  .layer-list { list-style: none; margin-top: 0.8rem; }
+  .layer-list { list-style: none; margin-top: 0.9rem; }
   .layer-list li {
     position: relative;
     padding-left: 1.1rem;
-    margin-bottom: 0.5rem;
+    margin-bottom: 0.55rem;
     font-size: 0.87rem;
     line-height: 1.65;
     color: var(--ink-soft);
@@ -124,96 +111,74 @@
     </header>
 
     <main class="page-body">
-      <!-- Haldi & Mehendi -->
+
       <div class="look">
         <div class="look-head">
-          <p class="look-name">Haldi &amp; Mehendi</p>
+          <p class="look-name">Haldi and Mehendi</p>
           <p class="look-when">25 Nov &middot; Day</p>
         </div>
         <div class="swatches" aria-hidden="true">
-          <span style="background:#f2c14e"></span>
-          <span style="background:#e98a3c"></span>
-          <span style="background:#d95f6a"></span>
-          <span style="background:#5aa469"></span>
-          <span style="background:#4b7fbd"></span>
+          <span style="background:#D57089"></span>
+          <span style="background:#F0D999"></span>
+          <span style="background:#E5903F"></span>
+          <span style="background:#7EA2AE"></span>
+          <span style="background:#8C9931"></span>
+          <span style="background:#C3281B"></span>
         </div>
-        <p class="look-code">A pop of colour</p>
-        <p class="look-note">
-          Bright hues, playful accents, and your happiest shade. In warm golden hues, the
-          celebrations begin — with colour, laughter, music and cherished traditions.
-        </p>
-        <div class="look-rule"></div>
+        <p class="look-code">A pop of colour &amp; playful prints</p>
       </div>
 
-      <!-- Sangeet -->
       <div class="look">
         <div class="look-head">
-          <p class="look-name">Sangeet Soirée</p>
+          <p class="look-name">Sangeet Soiree</p>
           <p class="look-when">25 Nov &middot; Evening</p>
         </div>
         <div class="swatches" aria-hidden="true">
-          <span style="background:#4a2545"></span>
-          <span style="background:#7b3f61"></span>
-          <span style="background:#1f3251"></span>
-          <span style="background:#b08d57"></span>
-          <span style="background:#c9ccd4"></span>
+          <span style="background:#9A2223"></span>
+          <span style="background:#323E59"></span>
+          <span style="background:#BEA466"></span>
+          <span style="background:#DCD6C9"></span>
+          <span style="background:#4B561C"></span>
+          <span style="background:#000000"></span>
         </div>
-        <p class="look-code">Glitz, glam &amp; statement silhouettes</p>
-        <p class="look-note">
-          You bring the spark, we bring the music. An evening of dance and grand celebration — do
-          carry a jacket or shawl, the lawns turn crisp after dark.
-        </p>
-        <div class="look-rule"></div>
+        <p class="look-code">Glitz, glam &amp; statement silhouette</p>
       </div>
 
-      <!-- The Wedding -->
       <div class="look">
         <div class="look-head">
           <p class="look-name">The Wedding</p>
-          <p class="look-when">26 Nov &middot; Afternoon</p>
+          <p class="look-when">26 Nov &middot; Day</p>
         </div>
         <div class="swatches" aria-hidden="true">
-          <span style="background:#f3e0e4"></span>
-          <span style="background:#e7e2ce"></span>
-          <span style="background:#d6e3dd"></span>
-          <span style="background:#dcd6e8"></span>
-          <span style="background:#f6ece0"></span>
+          <span style="background:#F0D2D3"></span>
+          <span style="background:#FCF0B4"></span>
+          <span style="background:#D6D5B1"></span>
+          <span style="background:#F1DFEA"></span>
+          <span style="background:#C4DBE3"></span>
+          <span style="background:#E3A682"></span>
         </div>
-        <p class="look-code">Pastel hues, celebratory daywear</p>
-        <p class="look-note">
-          Bestow your blessings beneath the winter sun and into golden hour, as Samika &amp; Neel
-          exchange their vows.
-        </p>
-        <div class="look-rule"></div>
+        <p class="look-code">Pastel hues &amp; elegant festive wear</p>
       </div>
 
-      <!-- After Hours -->
       <div class="look">
         <div class="look-head">
           <p class="look-name">After Hours</p>
-          <p class="look-when">26 Nov &middot; Midnight</p>
         </div>
-        <p class="look-code" style="margin-top:0.7rem">Whatever you can dance in</p>
-        <p class="look-note">
-          No dress code — the night is yours. Comfortable shoes are the only real advice we have.
-        </p>
+        <p class="look-code" style="margin-top:0.7rem">Just show up in your most comfiest pyajamas!</p>
       </div>
 
-      <!-- Dressing for the weather -->
       <section class="sec">
-        <p class="sec-eyebrow">Dressing for the hills</p>
-        <h2 class="sec-title">Late November at Corbett</h2>
+        <p class="sec-eyebrow">Dressing for the weather</p>
         <div class="sec-rule"></div>
         <p class="prose">
-          Crisp, pleasant days and distinctly chilly nights — highs of about <strong>25&deg;C</strong>
-          and lows of around <strong>12&deg;C</strong>.
+          Crisp, pleasant days and distinctly chilly nights — highs of about
+          <strong>25&deg;C</strong> and lows of around <strong>12&deg;C</strong>.
         </p>
         <ul class="layer-list">
           <li><strong>Daytime</strong> — light, breathable ethnic or casual wear.</li>
           <li><strong>Evenings</strong> — warm layers, a jacket, shawl or stole for the outdoor events.</li>
           <li><strong>Footwear</strong> — the ceremonies are on lawns and gardens, so block heels or flats will serve you far better than stilettos.</li>
         </ul>
-        <a class="link-out" href="travel.html"><span class="ico">&#10022;</span> Travel &amp; stay details</a>
       </section>
 
       <div class="page-end">
