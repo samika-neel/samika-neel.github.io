@@ -1,0 +1,1629 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="robots" content="noindex, nofollow" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Sample C &middot; Top bar</title>
+<meta name="description" content="Samika & Neelotpal — November 25–26, 2026 at Namah by Radisson, Jim Corbett." />
+<meta property="og:type" content="website" />
+<meta property="og:title" content="Samika & Neelotpal" />
+<meta property="og:description" content="November 25–26, 2026 · Namah by Radisson, Jim Corbett." />
+<meta property="og:url" content="https://samika-neel.github.io/" />
+<meta property="og:image" content="https://samika-neel.github.io/assets/images/og-image.jpg" />
+<meta property="og:image:width" content="1200" />
+<meta property="og:image:height" content="630" />
+<meta name="twitter:card" content="summary_large_image" />
+<meta name="twitter:title" content="Samika & Neelotpal" />
+<meta name="twitter:description" content="November 25–26, 2026 · Namah by Radisson, Jim Corbett." />
+<meta name="twitter:image" content="https://samika-neel.github.io/assets/images/og-image.jpg" />
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;1,400;1,500&family=Jost:wght@300;400;500&family=Amita:wght@400;700&display=swap" rel="stylesheet" />
+<link rel="icon" type="image/png" sizes="64x64" href="assets/tinted/favicon-64.png" />
+<link rel="apple-touch-icon" href="assets/tinted/apple-touch-icon.png" />
+<link rel="stylesheet" href="site.css" />
+<script>
+  /* Arm the envelope before first paint, so the invitation is never glimpsed
+     behind it. The failsafe unlocks the page if the intro module never starts
+     (a script error, a blocked canvas) rather than leaving it stuck. */
+  (function () {
+    try {
+      if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
+
+      /* The envelope belongs to arriving at the invitation, not to moving
+         around inside it. The browser tells us how this page was reached:
+
+           reload        → they asked for the invitation again, so seal it
+           back_forward  → they are returning, not arriving: skip
+           navigate      → a fresh arrival (a shared link, a typed URL) unless
+                           the referrer is one of our own pages, which means
+                           they came Home from Events, FAQ and so on
+
+         A missing or stripped referrer falls through to showing it, which is
+         the friendlier way to be wrong. */
+      if (location.search.indexOf('intro') === -1) return;
+      var entries = performance.getEntriesByType && performance.getEntriesByType("navigation");
+      var navType = entries && entries.length ? entries[0].type
+        : (performance.navigation && performance.navigation.type === 1 ? "reload" : "navigate");
+
+      if (navType === "back_forward") return;
+
+      if (navType !== "reload" && document.referrer) {
+        var from = new URL(document.referrer);
+        if (from.origin === location.origin && from.pathname !== location.pathname) return;
+      }
+
+      document.documentElement.classList.add("intro-ready", "intro-lock");
+      setTimeout(function () {
+        if (!window.__snIntroRunning) {
+          document.documentElement.classList.remove("intro-ready", "intro-lock");
+        }
+      }, 8000);
+    } catch (e) {}
+  })();
+</script>
+<style>
+  :root {
+    --paper: #f7f3ea;
+    --paper-deep: #f0eadb;
+    --ink: #283828;
+    --ink-soft: rgba(40, 56, 40, 0.66);
+    --gold: #a5804c;
+    --forest: #223226;
+    --cream: #f0e9d8;
+    --hairline: rgba(40, 56, 40, 0.18);
+    --serif: "Cormorant Garamond", "Times New Roman", serif;
+    --script: "Citadel Script", "Pinyon Script", "Cormorant Garamond", cursive;
+    --sans: "Jost", "Helvetica Neue", sans-serif;
+
+    /* One rhythm for the hero stack: the wider step is 20% more than the
+       tighter one. s1 sits above the eyebrow and above the countdown,
+       s2 between the eyebrow, the names and the invitation line. */
+    --s2: 1.5rem;
+    --s1: 1.8rem;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  html {
+    scroll-behavior: smooth;
+    scroll-snap-type: y proximity;
+  }
+
+  body {
+    background: var(--paper-deep);
+    color: var(--ink);
+    font-family: var(--sans);
+    font-weight: 300;
+    line-height: 1.65;
+    overflow-x: hidden;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  .phone {
+    width: min(100%, 400px);
+    margin: 0 auto;
+    position: relative;
+    background: var(--paper-deep);
+    container-type: inline-size;
+    container-name: phone;
+    overflow: hidden;
+    /* the hero sets its own height — opt out of the shared page frame */
+    display: block;
+    min-height: 0;
+  }
+  @media (min-width: 460px) {
+    body { background: #d9d1bd; }
+    .phone { box-shadow: 0 26px 70px -26px rgba(40, 56, 40, 0.45); }
+  }
+
+  ::selection { background: var(--gold); color: var(--paper); }
+
+  .art {
+    display: block;
+    background-repeat: no-repeat;
+    background-size: contain;
+    background-position: center;
+    pointer-events: none;
+  }
+  .art--branch1  { background-image: url("assets/tinted/branch1_ink.png");  aspect-ratio: 883 / 788; }
+  .art--branch2  { background-image: url("assets/tinted/branch2_ink.png");  aspect-ratio: 350 / 425; }
+  .art--branch3  { background-image: url("assets/tinted/branch3_ink.png");  aspect-ratio: 546 / 762; }
+  .art--branch4  { background-image: url("assets/tinted/branch4_ink.png");  aspect-ratio: 685 / 1207; }
+  .art--branch6  { background-image: url("assets/tinted/branch6_ink.png");  aspect-ratio: 998 / 1077; }
+  .art--branch8  { background-image: url("assets/tinted/branch8_ink.png");  aspect-ratio: 819 / 965; }
+  .art--branch9  { background-image: url("assets/tinted/branch9_ink.png");  aspect-ratio: 588 / 742; }
+  .art--branch10 { background-image: url("assets/tinted/branch10_ink.png"); aspect-ratio: 976 / 1383; }
+  .art--branch11 { background-image: url("assets/tinted/branch11_ink.png"); aspect-ratio: 481 / 400; }
+  .art--bird1    { background-image: url("assets/tinted/bird1_ink.png");    aspect-ratio: 259 / 276; }
+  .art--bird2    { background-image: url("assets/tinted/bird2_ink.png");    aspect-ratio: 253 / 253; }
+  .art--logo     { background-image: url("assets/tinted/logo_ink.png");     aspect-ratio: 265 / 188; }
+
+  .hero-logo {
+    width: clamp(56px, 13cqw, 74px);
+    /* .art sets pointer-events:none; this one is tappable */
+    pointer-events: auto;
+    cursor: pointer;
+    margin: -1rem auto 1.4rem;
+    background-image: url("assets/tinted/logo_gold.png");
+    /* lifted visually; flow height is untouched so the stack below stays put */
+    position: relative;
+    top: -1.6rem;
+  }
+
+  .plx { will-change: transform; }
+
+  .ganesh {
+    font-family: "Amita", var(--serif);
+    font-size: clamp(1.1rem, 3.4cqw, 1.35rem);
+    color: var(--gold);
+    margin-top: 0.9rem;
+  }
+  .eyebrow {
+    margin-top: var(--s1);
+    font-family: var(--sans);
+    font-size: clamp(0.65rem, 1.8cqw, 0.78rem);
+    font-weight: 400;
+    letter-spacing: 0.42em;
+    text-indent: 0.42em;
+    text-transform: uppercase;
+    color: var(--gold);
+  }
+  .display {
+    font-family: var(--script);
+    font-weight: 400;
+    line-height: 1.1;
+  }
+
+  .divider-sprig {
+    width: 64px;
+    margin: 1.4rem auto;
+    opacity: 0.8;
+    background-image: url("assets/tinted/branch11_gold.png");
+  }
+
+  section { position: relative; }
+
+  .center-col {
+    position: relative;
+    z-index: 3;
+    max-width: 34rem;
+    margin: 0 auto;
+    padding: 0 1.5rem;
+    text-align: center;
+  }
+
+  .reveal {
+    opacity: 0;
+    transform: translateY(26px);
+    transition: opacity 1s cubic-bezier(0.2, 0.6, 0.2, 1), transform 1s cubic-bezier(0.2, 0.6, 0.2, 1);
+  }
+  .reveal.is-in { opacity: 1; transform: none; }
+  .reveal[data-delay="1"] { transition-delay: 0.15s; }
+  .reveal[data-delay="2"] { transition-delay: 0.3s; }
+  .reveal[data-delay="3"] { transition-delay: 0.45s; }
+  .reveal[data-delay="4"] { transition-delay: 0.6s; }
+
+  .place {
+    position: absolute;
+    z-index: 1;
+    transform-origin: center center;
+    pointer-events: none;
+  }
+  .place .art--branch10 {
+    aspect-ratio: 430 / 1383;
+    background-size: cover;
+    background-position: left top;
+  }
+
+  /* ================= HERO ================= */
+  .hero {
+    min-height: 222cqw;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 7rem 0 6rem;
+    overflow: hidden;
+    scroll-snap-align: start;
+  }
+
+  .hero-names {
+    margin-top: var(--s2);
+    /* 10% down from clamp(4.2rem, 16cqw, 8rem) */
+    font-size: clamp(3.78rem, 14.4cqw, 7.2rem);
+    letter-spacing: 0;
+    line-height: 0.95;
+  }
+  .hero-names .amp {
+    display: block;
+    font-family: var(--serif);
+    font-style: italic;
+    font-weight: 400;
+    font-size: 0.28em;
+    color: var(--gold);
+    margin: 0.2em 0;
+  }
+  .save-line {
+    margin-top: var(--s2);
+    font-family: var(--serif);
+    font-style: italic;
+    font-size: clamp(1.15rem, 4cqw, 1.6rem);
+    color: var(--gold);
+  }
+  .hero-sub {
+    margin-top: 1rem;
+    font-size: clamp(0.8rem, 2.4cqw, 0.95rem);
+    letter-spacing: 0.22em;
+    text-transform: uppercase;
+    color: var(--ink-soft);
+  }
+  .hero-sub strong { font-weight: 400; color: var(--ink); }
+
+  .countdown {
+    display: flex;
+    justify-content: center;
+    gap: clamp(1.1rem, 5cqw, 2.4rem);
+    margin-top: var(--s1);
+  }
+  .countdown .unit { text-align: center; }
+  .countdown .num {
+    font-family: var(--serif);
+    font-size: clamp(1.7rem, 6cqw, 2.4rem);
+    font-weight: 500;
+    line-height: 1;
+    font-variant-numeric: tabular-nums;
+  }
+  .countdown .lbl {
+    margin-top: 0.35rem;
+    font-size: 0.6rem;
+    letter-spacing: 0.3em;
+    text-transform: uppercase;
+    color: var(--gold);
+  }
+  .countdown .sep {
+    font-family: var(--serif);
+    font-size: clamp(1.4rem, 5cqw, 2rem);
+    color: var(--hairline);
+    align-self: flex-start;
+    padding-top: 0.2em;
+  }
+
+  /* ================= FOOTER ================= */
+  .footer {
+    padding: 3rem 0 4rem;
+    text-align: center;
+    position: relative;
+    overflow: hidden;
+  }
+  .footer-logo {
+    display: block;
+    width: clamp(72px, 20cqw, 100px);
+    height: auto;
+    margin: 0 auto 1rem;
+    opacity: 0.7;
+    cursor: pointer;
+    -webkit-tap-highlight-color: transparent;
+  }
+
+  /* ================= CLOSING BAND ================= */
+  .closing {
+    background: var(--forest);
+    padding: 3.4rem 1.5rem 3.8rem;
+    text-align: center;
+  }
+  .closing-text {
+    font-family: var(--serif);
+    font-style: italic;
+    font-size: clamp(1rem, 3.2cqw, 1.22rem);
+    line-height: 1.7;
+    color: var(--cream);
+    letter-spacing: 0.01em;
+  }
+  .closing-heart {
+    display: block;
+    margin: 0.5rem auto 0;
+    /* padding only — keeps the glyph tiny while giving it a tappable target */
+    padding: 0.55rem 0.9rem;
+    background: none;
+    border: 0;
+    /* text-presentation heart, never the emoji glyph */
+    font-family: var(--serif);
+    font-size: 0.93rem;
+    line-height: 1;
+    color: #ffffff;
+    opacity: 0.85;
+    cursor: pointer;
+    -webkit-tap-highlight-color: transparent;
+    transition: transform 0.25s cubic-bezier(0.34, 1.6, 0.64, 1), opacity 0.25s ease;
+  }
+  .closing-heart:hover { opacity: 1; }
+  .closing-heart:active { transform: scale(1.5); opacity: 1; }
+  .closing-heart.is-lit { animation: heartbeat 0.5s ease-out; }
+  .hero-logo.is-lit,
+  .footer-logo.is-lit { animation: heartbeat 0.6s ease-out; }
+  @keyframes heartbeat {
+    0%   { transform: scale(1); }
+    35%  { transform: scale(1.75); }
+    100% { transform: scale(1); }
+  }
+
+  /* Fireworks the heart sets off. Sits above the page but under the envelope,
+     and never intercepts a tap. */
+  .sparks {
+    position: fixed;
+    inset: 0;
+    z-index: 250;
+    pointer-events: none;
+    /* Explicit size, not inset alone: a <canvas> carries an intrinsic aspect
+       ratio from its width/height attributes, which otherwise wins over
+       top/bottom and collapses it to half its width. It also stays in the
+       layout always — a hidden canvas measures 0x0. */
+    width: 100%;
+    height: 100%;
+  }
+  @media (min-width: 460px) {
+    .sparks { left: calc(50% - 200px); right: auto; width: 400px; height: 100%; }
+  }
+
+
+  /* ================= ENVELOPE INTRO =================
+     The phone is a crop through the centre of a landscape envelope. Its flap is
+     a shaded, articulated paper mesh drawn on canvas; the lower pocket is three
+     clip-path panels of the same sheet, folded over itself. The flap lifts, the
+     pocket slides out of the bottom of the screen, and the whole scene is then
+     removed. Reloading brings it back; scrolling back up does not. */
+  html.intro-lock, html.intro-lock body { overflow: hidden; overscroll-behavior: none; }
+
+  .envelope-scene {
+    position: fixed;
+    inset: 0;
+    z-index: 300;
+    display: none;
+    overflow: hidden;
+    isolation: isolate;
+    cursor: pointer;
+    background: transparent;
+  }
+
+  /* Opaque only while the envelope is closed, so the invitation is never
+     glimpsed behind it; fades out as the pocket starts to slide away. */
+  .envelope-backdrop {
+    position: absolute;
+    inset: 0;
+    z-index: 0;
+    background: var(--paper-deep);
+    opacity: var(--backdrop-o, 1);
+    pointer-events: none;
+  }
+  html.intro-ready .envelope-scene { display: block; }
+  html.intro-ready .envelope-scene.is-done { display: none; }
+  @media (min-width: 460px) {
+    .envelope-scene { left: calc(50% - 200px); right: auto; width: 400px; }
+  }
+
+  /* The lower pocket is a separate physical part of the envelope: it holds
+     still while the flap lifts, then slides down and off the screen. */
+  .envelope-pocket {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: calc(100% + 4px);
+    z-index: 1;
+    transform: translate3d(0, var(--pocket-shift, 0px), 0);
+    background: transparent;
+    will-change: transform;
+  }
+
+  /* The viewport crops the centre of one real landscape sheet. Every panel
+     carries the same image, so the pocket reads as one patterned sheet folded
+     over itself rather than a flat rectangle. */
+  .envelope-pocket-panel {
+    position: absolute;
+    top: 0;
+    left: 50%;
+    width: var(--envelope-w, 1080px);
+    height: 100%;
+    transform: translateX(-50%);
+    /* the paper is opaque white with a gold floral print; the white base covers
+       any sliver past the image and while it loads. Sized to the panel HEIGHT
+       so the phone shows a natural crop, not a magnified centre slice. */
+    background-color: #ffffff;
+    background-image: url("assets/envelope/paper.webp");
+    background-position: center center;
+    background-size: auto 100%;
+    background-repeat: no-repeat;
+  }
+
+  /* Two side folds are glued first; their inner edges meet below the mouth. */
+  .envelope-pocket-panel--left {
+    z-index: 1;
+    clip-path: polygon(0 0, 50% var(--pocket-meet-y, 52.5%), 0 100%);
+    background-image:
+      linear-gradient(112deg, rgba(255,255,255,0.11), transparent 45%, rgba(67,49,25,0.075)),
+      url("assets/envelope/paper.webp");
+    background-position: center, center center;
+    background-size: 100% 100%, auto 100%;
+    filter: drop-shadow(2px -1px 2px rgba(67,49,27,0.24));
+  }
+  .envelope-pocket-panel--right {
+    z-index: 1;
+    clip-path: polygon(100% 0, 50% var(--pocket-meet-y, 52.5%), 100% 100%);
+    background-image:
+      linear-gradient(248deg, rgba(255,255,255,0.1), transparent 45%, rgba(67,49,25,0.07)),
+      url("assets/envelope/paper.webp");
+    background-position: center, center center;
+    background-size: 100% 100%, auto 100%;
+    filter: drop-shadow(-2px -1px 2px rgba(67,49,27,0.22));
+  }
+
+  /* The bottom fold is last, covering and gluing the side-fold tips. */
+  .envelope-pocket-panel--bottom {
+    z-index: 2;
+    clip-path: polygon(0 100%, 100% 100%, 50% calc(var(--pocket-meet-y, 52.5%) - 2px));
+    background-image:
+      linear-gradient(0deg, rgba(255,255,255,0.09), transparent 58%, rgba(79,58,30,0.09)),
+      url("assets/envelope/paper.webp");
+    background-position: center, center center;
+    background-size: 100% 100%, auto 100%;
+    filter: drop-shadow(0 -2px 2.5px rgba(65,47,25,0.26));
+  }
+
+  .envelope-pocket-seams {
+    position: absolute;
+    z-index: 3;
+    top: 0;
+    left: 50%;
+    width: var(--envelope-w, 1080px);
+    height: 100%;
+    transform: translateX(-50%);
+    overflow: visible;
+    pointer-events: none;
+  }
+  .envelope-pocket-seams .crease-dark {
+    fill: none;
+    stroke: rgba(77, 57, 31, 0.34);
+    stroke-width: 2.5;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+  }
+  .envelope-pocket-seams .crease-light {
+    fill: none;
+    stroke: rgba(255, 253, 243, 0.62);
+    stroke-width: 1.15;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+    transform: translateY(1.6px);
+  }
+
+  /* warm light spilling out of the mouth as the flap lifts */
+  .envelope-card-light {
+    position: absolute;
+    z-index: 2;
+    left: -20%;
+    right: -20%;
+    top: calc(var(--pocket-meet-y, 52.5%) - 58px);
+    height: 110px;
+    opacity: var(--light-o, 0);
+    transform: translate3d(0, var(--pocket-shift, 0px), 0);
+    background: radial-gradient(ellipse at 50% 20%, rgba(255, 252, 235, 0.9), transparent 66%);
+    filter: blur(8px);
+    pointer-events: none;
+  }
+
+  .envelope-canvas {
+    position: absolute;
+    inset: 0;
+    z-index: 4;
+    width: 100%;
+    height: 100%;
+    pointer-events: none;
+  }
+
+  /* The fold is kept out of the mesh so its compressed paper edge stays sharp
+     even when the flap is almost edge-on. */
+  .envelope-fold {
+    position: absolute;
+    z-index: 5;
+    top: 0;
+    left: -14%;
+    width: 128%;
+    height: 6px;
+    opacity: var(--fold-o, 1);
+    background: linear-gradient(180deg, rgba(255,255,255,0.9), rgba(103,80,49,0.31) 46%, rgba(255,255,255,0.22) 62%, transparent);
+    box-shadow: 0 var(--fold-shadow-y, 7px) var(--fold-shadow-blur, 14px) rgba(53, 38, 21, var(--fold-shadow-o, 0.2));
+  }
+
+  /* Wax seal glued to the flap's tip. The render loop tracks that tip vertex
+     every frame (--seal-x/--seal-y in px, --seal-s the perspective scale) so
+     the seal rides up with the lifting flap, as if stuck to it. */
+  .envelope-seal {
+    position: absolute;
+    z-index: 5;
+    left: var(--seal-x, 50%);
+    top: var(--seal-y, 52%);
+    /* the oval is 467x600; 50% up from the size that matched the old wax
+       stamp's footprint on the flap */
+    width: clamp(90px, 26.25vw, 123px);
+    opacity: var(--seal-o, 1);
+    transform: translate(-50%, -50%) scale(var(--seal-s, 1));
+    filter: drop-shadow(0 3px 5px rgba(53, 38, 21, 0.3));
+    pointer-events: none;
+    will-change: transform;
+  }
+  @media (min-width: 460px) {
+    .envelope-seal { width: 116px; }
+  }
+
+  .envelope-hint {
+    position: absolute;
+    z-index: 6;
+    left: 0; right: 0;
+    bottom: max(2rem, 6svh);
+    text-align: center;
+    font-family: var(--sans);
+    font-size: 0.6rem;
+    letter-spacing: 0.38em;
+    text-indent: 0.38em;
+    text-transform: uppercase;
+    color: rgba(40, 56, 40, 0.7);
+    opacity: var(--hint-o, 1);
+    transform: translate3d(0, var(--pocket-shift, 0px), 0);
+    text-shadow: 0 1px rgba(255,255,255,0.6);
+    will-change: transform, opacity;
+  }
+  .envelope-hint i {
+    display: block;
+    width: 1px;
+    height: 32px;
+    margin: 0.9rem auto 0;
+    background: linear-gradient(rgba(40, 56, 40, 0.55), rgba(40, 56, 40, 0));
+    animation: envelopecue 1.9s ease-in-out infinite;
+  }
+  @keyframes envelopecue {
+    0%, 100% { transform: translateY(0); opacity: 0.5; }
+    50%      { transform: translateY(-10px); opacity: 1; }
+  }
+
+  /* ---- Dev grid ---- */
+  .dev-grid {
+    position: absolute;
+    inset: 0;
+    z-index: 900;
+    pointer-events: none;
+    display: grid;
+    grid-template-columns: repeat(6, 1fr);
+    grid-template-rows: repeat(10, 1fr);
+    font-family: var(--sans);
+  }
+  .dev-grid .cell {
+    border-right: 1px dashed rgba(200, 60, 60, 0.32);
+    border-bottom: 1px dashed rgba(200, 60, 60, 0.32);
+    position: relative;
+  }
+  .dev-grid .cell:nth-child(6n) { border-right: none; }
+  .dev-grid .cell:nth-last-child(-n+6) { border-bottom: none; }
+  .dev-grid .cell::after {
+    content: attr(data-label);
+    position: absolute;
+    top: 4px; left: 5px;
+    font-size: 11px; font-weight: 500;
+    letter-spacing: 0.02em;
+    color: rgba(200, 60, 60, 0.9);
+    background: rgba(247, 243, 234, 0.7);
+    padding: 1px 5px; border-radius: 3px;
+    line-height: 1.4;
+  }
+  .dev-grid-legend {
+    position: fixed;
+    bottom: 10px; right: 10px;
+    z-index: 1000;
+    background: rgba(40, 56, 40, 0.9);
+    color: var(--paper);
+    font-family: var(--sans);
+    font-size: 11px;
+    padding: 8px 12px;
+    border-radius: 6px;
+    letter-spacing: 0.05em;
+  }
+  body.dev-grid-mode .place {
+    outline: 1px solid #00ff88;
+    outline-offset: 0px;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    html { scroll-behavior: auto; }
+    .reveal { opacity: 1; transform: none; transition: none; }
+    .plx { transform: none !important; }
+    .fab-dot { animation: none; }
+    /* skip the decorative envelope motion entirely */
+    .envelope-scene { display: none !important; }
+  }
+
+  /* ================= TOP BAR (appears on scroll) ================= */
+  .topbar {
+    position: fixed; top: 0; left: 50%; transform: translate(-50%, -100%);
+    width: min(100%, 400px); z-index: 110;
+    display: flex; align-items: center; justify-content: space-between;
+    padding: 0 1.1rem; height: 56px;
+    background: rgba(247, 243, 234, 0.86);
+    border-bottom: 1px solid var(--hairline);
+    -webkit-backdrop-filter: blur(14px) saturate(1.6);
+    backdrop-filter: blur(14px) saturate(1.6);
+    transition: transform 0.42s cubic-bezier(0.22, 0.61, 0.36, 1);
+  }
+  .topbar.is-visible { transform: translate(-50%, 0); }
+  .topbar-brand {
+    font-family: var(--serif); font-size: 1.15rem; letter-spacing: 0.08em;
+    color: var(--ink); text-decoration: none;
+  }
+  .topbar-brand em { font-style: italic; color: var(--gold); }
+  .topbar-menu {
+    display: flex; align-items: center; gap: 0.55rem;
+    background: none; border: 0; cursor: pointer; padding: 0.4rem 0.1rem;
+    font-family: var(--sans); font-size: 0.7rem; font-weight: 500;
+    letter-spacing: 0.19em; text-indent: 0.19em;
+    text-transform: uppercase; color: #16211a;
+  }
+  .topbar-bars { width: 20px; height: 14px; position: relative; display: block; }
+  .topbar-bars span {
+    position: absolute; left: 0; right: 0; height: 2.2px; border-radius: 2px;
+    background: #16211a;
+  }
+  .topbar-bars span:nth-child(1) { top: 0; }
+  .topbar-bars span:nth-child(2) { top: 6px; }
+  .topbar-bars span:nth-child(3) { top: 12px; }
+  /* one menu at a time: the glass FAB steps aside once the bar is up */
+  .fab { transition: transform 0.3s ease, box-shadow 0.3s ease, opacity 0.3s ease; }
+  body.bar-up .fab { opacity: 0; pointer-events: none; }
+
+
+  /* ================= SAMPLE SWITCHER (review only) ================= */
+  .samplebar { background: var(--forest); padding: 0 1.3rem 2.4rem; text-align: center; }
+  .samplebar-note {
+    font-family: var(--sans); font-size: 0.56rem; font-weight: 400;
+    letter-spacing: 0.3em; text-indent: 0.3em; text-transform: uppercase;
+    color: rgba(240, 233, 216, 0.5);
+  }
+  .samplebar-links {
+    margin-top: 1rem; display: flex; justify-content: center;
+    gap: 0.6rem; flex-wrap: wrap;
+  }
+  .samplebar-links a {
+    font-family: var(--sans); font-size: 0.68rem; font-weight: 500;
+    letter-spacing: 0.16em; text-indent: 0.16em; text-transform: uppercase;
+    text-decoration: none; color: var(--cream);
+    padding: 0.5rem 0.85rem; border: 1px solid rgba(240, 233, 216, 0.25);
+  }
+  .samplebar-links a[aria-current="page"] {
+    background: rgba(240, 233, 216, 0.14);
+    border-color: rgba(240, 233, 216, 0.5);
+  }
+
+</style>
+</head>
+<body>
+
+  <!-- ============ ENVELOPE INTRO ============
+       Outside .phone: that column is a container with overflow:hidden, which
+       would trap a fixed-position child. -->
+  <div class="envelope-scene" id="envelope-scene" aria-hidden="true">
+    <div class="envelope-backdrop"></div>
+    <div class="envelope-pocket">
+      <div class="envelope-pocket-panel envelope-pocket-panel--left"></div>
+      <div class="envelope-pocket-panel envelope-pocket-panel--right"></div>
+      <div class="envelope-pocket-panel envelope-pocket-panel--bottom"></div>
+      <svg class="envelope-pocket-seams" viewBox="0 0 800 1000" preserveAspectRatio="none" aria-hidden="true">
+        <path class="crease-dark" d="M 0 0 L 400 525 L 800 0 M 0 1000 L 400 525 L 800 1000" />
+        <path class="crease-light" d="M 0 0 L 400 525 L 800 0 M 0 1000 L 400 525 L 800 1000" />
+      </svg>
+    </div>
+    <div class="envelope-card-light"></div>
+    <canvas class="envelope-canvas" id="envelope-flap-canvas"></canvas>
+    <div class="envelope-fold"></div>
+    <img class="envelope-seal" src="assets/images/sn_oval.webp" alt="" aria-hidden="true" />
+    <p class="envelope-hint">Tap to open<i></i></p>
+  </div>
+
+  <div class="phone">
+
+  <!-- ============ HERO ============ -->
+  <section class="hero">
+    <div class="center-col">
+      <div class="art art--logo hero-logo reveal is-in" id="hero-logo" role="img" aria-label="S and N monogram"></div>
+      <p class="ganesh reveal is-in" lang="hi">॥ श्री गणेशाय नमः ॥</p>
+      <p class="eyebrow reveal is-in">Together with their families</p>
+      <h1 class="display hero-names reveal is-in" data-delay="1">
+        Samika
+        <span class="amp">&amp;</span>
+        Neelotpal
+      </h1>
+      <p class="save-line reveal is-in" data-delay="2">invite you to celebrate their wedding</p>
+      <p class="hero-sub reveal is-in" data-delay="2">
+        <strong>November 25 – 26, 2026</strong><br />
+        Jim Corbett &middot; Uttarakhand
+      </p>
+      <div class="countdown reveal is-in" data-delay="3" id="countdown" aria-label="Countdown to the wedding">
+        <div class="unit"><div class="num" id="cd-d">–</div><div class="lbl">Days</div></div>
+        <div class="sep">·</div>
+        <div class="unit"><div class="num" id="cd-h">–</div><div class="lbl">Hours</div></div>
+        <div class="sep">·</div>
+        <div class="unit"><div class="num" id="cd-m">–</div><div class="lbl">Mins</div></div>
+        <div class="sep">·</div>
+        <div class="unit"><div class="num" id="cd-s">–</div><div class="lbl">Secs</div></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ FOOTER ============ -->
+  <div class="footer reveal">
+    <img class="footer-logo" id="footer-logo" src="assets/images/sn_oval.webp" alt="S and N monogram" loading="lazy" />
+  </div>
+
+  <!-- ============ CLOSING BAND ============ -->
+  <div class="closing">
+    <p class="closing-text">With love, from Neel and Samika</p>
+    <button class="closing-heart" id="closing-heart" type="button" aria-label="A little something">&#9829;&#xFE0E;</button>
+  </div>
+
+  <div class="samplebar">
+    <p class="samplebar-note">Design sample C &middot; which do you prefer?</p>
+    <div class="samplebar-links">
+        <a href="sample-a.html">A</a>
+        <a href="sample-b.html">B</a>
+        <a href="sample-c.html" aria-current="page">C</a>
+        <a href="sample-d.html">D</a>
+    </div>
+  </div>
+
+  </div>
+
+  <canvas class="sparks" id="sparks" aria-hidden="true"></canvas>
+
+<script src="site.js"></script>
+<script>
+
+  (function () {
+    var bar = document.createElement("header");
+    bar.className = "topbar";
+    bar.innerHTML =
+      '<a class="topbar-brand" href="index.html">S <em>&amp;</em> N</a>' +
+      '<button class="topbar-menu" type="button" aria-label="Open menu">' +
+      '<span class="topbar-bars"><span></span><span></span><span></span></span>Menu</button>';
+    document.body.appendChild(bar);
+
+    bar.querySelector(".topbar-menu").addEventListener("click", function () {
+      var fab = document.querySelector(".fab");
+      if (fab) fab.click();
+    });
+
+    /* The page is barely taller than the viewport, so "past the hero" is
+       never reachable — the bar comes in on any real scroll instead. */
+    function sync() {
+      var on = window.scrollY > 140;
+      bar.classList.toggle("is-visible", on);
+      document.body.classList.toggle("bar-up", on);
+    }
+    window.addEventListener("scroll", sync, { passive: true });
+    window.addEventListener("resize", sync);
+    sync();
+  })();
+
+</script>
+<script>
+  // ---------- Countdown ----------
+  (function () {
+    var target = new Date("2026-11-26T16:00:00+05:30").getTime();
+    var d = document.getElementById("cd-d"),
+        h = document.getElementById("cd-h"),
+        m = document.getElementById("cd-m"),
+        s = document.getElementById("cd-s");
+    function tick() {
+      var diff = Math.max(0, target - Date.now());
+      d.textContent = Math.floor(diff / 864e5);
+      h.textContent = String(Math.floor(diff / 36e5) % 24).padStart(2, "0");
+      m.textContent = String(Math.floor(diff / 6e4) % 60).padStart(2, "0");
+      s.textContent = String(Math.floor(diff / 1e3) % 60).padStart(2, "0");
+    }
+    tick();
+    setInterval(tick, 1000);
+  })();
+
+  var reducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+
+  // ---------- Reveal on scroll ----------
+  (function () {
+    var els = document.querySelectorAll(".reveal");
+    if (reducedMotion || !("IntersectionObserver" in window)) {
+      els.forEach(function (el) { el.classList.add("is-in"); });
+      return;
+    }
+    var io = new IntersectionObserver(function (entries) {
+      entries.forEach(function (e) {
+        if (e.isIntersecting) {
+          e.target.classList.add("is-in");
+          io.unobserve(e.target);
+        }
+      });
+    }, { threshold: 0.18, rootMargin: "0px 0px -6% 0px" });
+    els.forEach(function (el) { io.observe(el); });
+  })();
+
+  // ---------- Grid-anchored placement layout (CSV-driven) ----------
+  // botanicals-home.csv is the source of truth for every framing branch and
+  // bird on this page. Columns: asset,cell,anchor,rotation,size_pct,mirror,notes
+  //   asset      — matches .art--{asset}  (branch1..branch11, bird1, bird2, logo)
+  //   cell       — "H-A1".."H-F10"   (section-col-row; H is the hero)
+  //   anchor     — TL | TR | BL | BR | C   (which corner of the piece lands on
+  //                that corner of the cell, AFTER rotation)
+  //   rotation   — degrees, clockwise
+  //   size_pct   — % of the asset's default reference width (see botanicals.html)
+  //   mirror     — TRUE to flip horizontally, FALSE otherwise
+  //   notes      — free text, ignored by the loader
+  // Edit the CSV, save, refresh — no HTML/JS edits needed. Add ?grid=1 to the
+  // URL to see the lettered cells. The array below is only the fallback used
+  // when the CSV can't be fetched (e.g. opening this file straight off disk).
+  (function () {
+    var COLS = "ABCDEF";
+    var CW = 100 / 6;
+    var CH = 222 / 10;
+    var phoneEl = document.querySelector(".phone");
+
+    var DEFAULT_W = {
+      branch1: 220, branch2: 140, branch3: 200, branch4: 160,
+      branch6: 240, branch8: 230, branch9: 160, branch10: 200,
+      branch11: 110, bird1: 90, bird2: 90, logo: 90
+    };
+
+    function buildPlaceElement(row) {
+      var el = document.createElement("div");
+      el.className = "place";
+      el.dataset.cell = row.cell;
+      el.dataset.anchor = (row.anchor || "C").toUpperCase();
+      el.dataset.rot = row.rotation || "0";
+      var pct = parseFloat(row.size_pct || "100") / 100;
+      var defaultW = DEFAULT_W[row.asset] || 200;
+      el.dataset.w = Math.round(defaultW * pct);
+      el.dataset.mirror = /^true$/i.test(row.mirror || "") ? "1" : "0";
+
+      var art = document.createElement("div");
+      art.className = "art art--" + row.asset;
+      el.appendChild(art);
+      return el;
+    }
+
+    var PLACEMENTS = [
+      { asset:"branch10", cell:"H-A1", anchor:"TL", rotation:"0", size_pct:"85", mirror:"FALSE" },
+      { asset:"branch3",  cell:"H-F1", anchor:"TR", rotation:"0", size_pct:"100", mirror:"FALSE" },
+      { asset:"bird1",    cell:"H-F5", anchor:"TR", rotation:"0", size_pct:"100", mirror:"TRUE" },
+      { asset:"branch9",  cell:"H-A6", anchor:"C",  rotation:"30", size_pct:"80", mirror:"FALSE" },
+      { asset:"branch6",  cell:"H-F6", anchor:"TL", rotation:"0", size_pct:"100", mirror:"FALSE" },
+      { asset:"branch1",  cell:"H-A8", anchor:"TL", rotation:"90", size_pct:"100", mirror:"FALSE" },
+      { asset:"branch6",  cell:"H-F9", anchor:"TR", rotation:"90", size_pct:"80", mirror:"FALSE" }
+    ];
+
+    function parseCSV(text) {
+      var lines = text.split(/\r?\n/).filter(function (l) { return l.trim(); });
+      if (!lines.length) return [];
+      var head = lines.shift().split(",").map(function (h) { return h.trim(); });
+      return lines.map(function (line) {
+        var cells = line.split(","), row = {};
+        head.forEach(function (h, i) { row[h] = (cells[i] || "").trim(); });
+        return row;
+      }).filter(function (row) { return row.asset && row.cell; });
+    }
+
+    function loadPlacements(rows) {
+      var heroEl = document.querySelector(".hero");
+      if (!heroEl) return;
+      heroEl.querySelectorAll(".place").forEach(function (el) { el.remove(); });
+      rows.forEach(function (row) {
+        if (row.cell.charAt(0).toUpperCase() !== "H") return;
+        heroEl.appendChild(buildPlaceElement(row));
+      });
+    }
+
+    function layoutOne(el) {
+      var m = (el.dataset.cell || "").match(/^([HR])-([A-F])(\d+)$/);
+      if (!m) return;
+      var colIdx = COLS.indexOf(m[2]);
+      var row = parseInt(m[3], 10);
+      var anchor = (el.dataset.anchor || "C").toUpperCase();
+      var rot = parseFloat(el.dataset.rot || "0");
+      var wPx = parseFloat(el.dataset.w || "200");
+      var mirror = el.dataset.mirror === "1" ? -1 : 1;
+
+      el.style.width = wPx + "px";
+      el.style.transform = "scaleX(" + mirror + ") rotate(" + rot + "deg)";
+      el.style.left = "0px";
+      el.style.top = "0px";
+
+      var w = el.offsetWidth;
+      var h = el.offsetHeight;
+      var phoneW = phoneEl.getBoundingClientRect().width;
+      var cqw = phoneW / 100;
+
+      var cxCqw, cyCqw;
+      switch (anchor) {
+        case "TL": cxCqw = colIdx * CW;         cyCqw = (row - 1) * CH;   break;
+        case "TR": cxCqw = (colIdx + 1) * CW;   cyCqw = (row - 1) * CH;   break;
+        case "BL": cxCqw = colIdx * CW;         cyCqw = row * CH;         break;
+        case "BR": cxCqw = (colIdx + 1) * CW;   cyCqw = row * CH;         break;
+        case "C":  cxCqw = (colIdx + 0.5) * CW; cyCqw = (row - 0.5) * CH; break;
+        default: return;
+      }
+      var cxPx = cxCqw * cqw;
+      var cyPx = cyCqw * cqw;
+
+      var rRad = rot * Math.PI / 180;
+      var bw = Math.abs(w * Math.cos(rRad)) + Math.abs(h * Math.sin(rRad));
+      var bh = Math.abs(w * Math.sin(rRad)) + Math.abs(h * Math.cos(rRad));
+
+      var px, py;
+      switch (anchor) {
+        case "TL": px = cxPx - w/2 + bw/2; py = cyPx - h/2 + bh/2; break;
+        case "TR": px = cxPx - w/2 - bw/2; py = cyPx - h/2 + bh/2; break;
+        case "BL": px = cxPx - w/2 + bw/2; py = cyPx - h/2 - bh/2; break;
+        case "BR": px = cxPx - w/2 - bw/2; py = cyPx - h/2 - bh/2; break;
+        case "C":  px = cxPx - w/2;         py = cyPx - h/2;         break;
+      }
+      el.style.left = px + "px";
+      el.style.top = py + "px";
+    }
+
+    function layoutAll() {
+      document.querySelectorAll(".place[data-cell]").forEach(layoutOne);
+    }
+
+    function build(rows) {
+      loadPlacements(rows);
+      requestAnimationFrame(function () { requestAnimationFrame(layoutAll); });
+    }
+
+    build(PLACEMENTS);
+    // The CSV wins when it is reachable; the inline array above keeps the
+    // botanicals on screen when it is not.
+    if (window.fetch) {
+      fetch("botanicals-home.csv", { cache: "no-store" })
+        .then(function (r) { return r.ok ? r.text() : null; })
+        .then(function (text) {
+          if (!text) return;
+          var rows = parseCSV(text);
+          if (rows.length) build(rows);
+        })
+        .catch(function () { /* keep the inline fallback */ });
+    }
+
+    window.addEventListener("resize", layoutAll);
+    window.addEventListener("load", layoutAll);
+    if (document.fonts && document.fonts.ready) {
+      document.fonts.ready.then(layoutAll);
+    }
+  })();
+
+  // ---------- Dev grid overlay (?grid=1) ----------
+  (function () {
+    if (!/[?&]grid=1\b/.test(window.location.search)) return;
+    document.body.classList.add("dev-grid-mode");
+    var cols = "ABCDEF";
+    var sections = [
+      { el: document.querySelector(".hero"), prefix: "H" }
+    ];
+    sections.forEach(function (s) {
+      if (!s.el) return;
+      var grid = document.createElement("div");
+      grid.className = "dev-grid";
+      for (var r = 1; r <= 10; r++) {
+        for (var c = 0; c < 6; c++) {
+          var cell = document.createElement("div");
+          cell.className = "cell";
+          cell.dataset.label = s.prefix + "-" + cols[c] + r;
+          grid.appendChild(cell);
+        }
+      }
+      s.el.appendChild(grid);
+    });
+    var legend = document.createElement("div");
+    legend.className = "dev-grid-legend";
+    legend.textContent = "GRID · H = hero · A–F cols · 1–10 rows";
+    document.body.appendChild(legend);
+  })();
+
+
+
+  // ---------- Easter eggs ----------
+  // Tapping either SN monogram — the crest at the top or the one closing the
+  // page — sets off ~3 seconds of fireworks. Three taps on the heart open our
+  // song. Particles are plain dots on a canvas: a few hundred at a time, and
+  // the loop stops itself once the last one dies.
+  (function () {
+    var heart = document.getElementById("closing-heart"),
+        canvas = document.getElementById("sparks"),
+        monograms = [document.getElementById("hero-logo"),
+                     document.getElementById("footer-logo")].filter(Boolean);
+    if (!canvas || (!heart && !monograms.length)) return;
+
+    var ctx = canvas.getContext("2d");
+    var reduced = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+
+    var SONG = "https://www.youtube.com/watch?v=usVq_4K_m_w";
+    var TAPS_FOR_SONG = 3;
+    var TAP_WINDOW = 1400;   // ms between taps for them to count as a run
+    var SHOW_MS = 3000;      // how long new shells keep launching
+
+    // warm palette, so the bursts sit inside the invitation's colours
+    var COLOURS = ["#f6e7c4", "#a5804c", "#ffffff", "#e8c9a0", "#d8a7a0"];
+
+    var particles = [], shells = [], running = false, showEndsAt = 0,
+        dpr = 1, w = 0, h = 0, taps = 0, lastTap = 0;
+
+    function resize() {
+      var r = canvas.getBoundingClientRect();
+      // Fall back to the viewport if the box cannot be measured, and never
+      // below a sane floor: a zero-size layout (a hidden or not-yet-sized tab)
+      // would otherwise leave a 0x0 canvas that can never draw.
+      var rw = Math.max(r.width > 2 ? r.width : Math.min(window.innerWidth || 400, 400), 200);
+      var rh = Math.max(r.height > 2 ? r.height : (window.innerHeight || 800), 320);
+      dpr = Math.min(window.devicePixelRatio || 1, 2);
+      w = rw; h = rh;
+      canvas.width = Math.round(w * dpr);
+      canvas.height = Math.round(h * dpr);
+    }
+
+    function burst(x, y) {
+      var n = 70 + Math.floor(Math.random() * 30);
+      var hue = COLOURS[Math.floor(Math.random() * COLOURS.length)];
+      var speed = 2.4 + Math.random() * 1.5;
+      for (var i = 0; i < n; i++) {
+        var a = (Math.PI * 2 * i) / n + Math.random() * 0.16;
+        // a little speed jitter keeps the ring from looking mechanical
+        var v = speed * (0.55 + Math.random() * 0.62);
+        particles.push({
+          x: x, y: y,
+          vx: Math.cos(a) * v,
+          vy: Math.sin(a) * v,
+          life: 1,
+          decay: 0.008 + Math.random() * 0.012,
+          size: 1 + Math.random() * 1.6,
+          colour: Math.random() < 0.22 ? "#ffffff" : hue
+        });
+      }
+    }
+
+    // a shell climbs from the bottom, then explodes at its apex
+    function launch() {
+      shells.push({
+        x: w * (0.18 + Math.random() * 0.64),
+        y: h + 8,
+        vy: -(h * 0.011 + Math.random() * h * 0.004),
+        apex: h * (0.16 + Math.random() * 0.34)
+      });
+    }
+
+    function frame() {
+      var now = Date.now();
+
+      // keep sending shells up for the first SHOW_MS
+      if (now < showEndsAt && Math.random() < 0.06) launch();
+
+      ctx.setTransform(1, 0, 0, 1, 0, 0);
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+      ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+      ctx.globalCompositeOperation = "lighter";
+
+      for (var s = shells.length - 1; s >= 0; s--) {
+        var sh = shells[s];
+        sh.y += sh.vy;
+        sh.vy += 0.06;                       // gravity slows the climb
+        ctx.globalAlpha = 0.9;
+        ctx.fillStyle = "#f6e7c4";
+        ctx.beginPath();
+        ctx.arc(sh.x, sh.y, 1.6, 0, Math.PI * 2);
+        ctx.fill();
+        if (sh.y <= sh.apex || sh.vy >= 0) {
+          burst(sh.x, sh.y);
+          shells.splice(s, 1);
+        }
+      }
+
+      for (var i = particles.length - 1; i >= 0; i--) {
+        var p = particles[i];
+        p.x += p.vx;
+        p.y += p.vy;
+        p.vy += 0.035;                       // gravity
+        p.vx *= 0.985;                       // air drag
+        p.vy *= 0.985;
+        p.life -= p.decay;
+        if (p.life <= 0) { particles.splice(i, 1); continue; }
+        ctx.globalAlpha = Math.max(0, p.life);
+        ctx.fillStyle = p.colour;
+        ctx.beginPath();
+        ctx.arc(p.x, p.y, p.size, 0, Math.PI * 2);
+        ctx.fill();
+      }
+
+      ctx.globalAlpha = 1;
+      ctx.globalCompositeOperation = "source-over";
+
+      if (particles.length || shells.length || now < showEndsAt) {
+        requestAnimationFrame(frame);
+      } else {
+        // nothing left to draw: stop the loop and leave the canvas clear
+        running = false;
+        ctx.setTransform(1, 0, 0, 1, 0, 0);
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+      }
+    }
+
+    function celebrate() {
+      if (reduced) return;
+      resize();
+      showEndsAt = Date.now() + SHOW_MS;
+      // one straight away, so the tap feels answered
+      launch();
+      burst(w / 2, h * (0.3 + Math.random() * 0.2));
+      if (!running) { running = true; requestAnimationFrame(frame); }
+    }
+
+    function pulse(el) {
+      el.classList.remove("is-lit");
+      void el.offsetWidth;                   // restart the beat animation
+      el.classList.add("is-lit");
+    }
+
+    // either monogram sets off the fireworks
+    monograms.forEach(function (el) {
+      el.addEventListener("click", function () {
+        pulse(el);
+        celebrate();
+      });
+    });
+
+    // the heart opens our song on the third tap in a row
+    if (heart) {
+      heart.addEventListener("click", function () {
+        var now = Date.now();
+        taps = now - lastTap < TAP_WINDOW ? taps + 1 : 1;
+        lastTap = now;
+        pulse(heart);
+
+        // Opened straight from the tap handler — anything deferred (a timeout,
+        // a promise) would be swallowed by mobile pop-up blocking.
+        if (taps >= TAPS_FOR_SONG) {
+          taps = 0;
+          window.open(SONG, "_blank", "noopener");
+        }
+      });
+    }
+
+    window.addEventListener("resize", resize);
+    resize();
+  })();
+
+  // ---------- Envelope intro ----------
+  // The flap is not a rotating triangle. It is a landscape paper mesh: rows are
+  // bent around the fold, projected through a perspective camera and texture-
+  // mapped as individual triangles, casting a soft moving shadow on the pocket
+  // beneath. A tap (anywhere, seal included) opens it on a slow timed tween; a
+  // wheel or swipe drives the same progress by hand. Past halfway the pocket
+  // slides out of the bottom of the screen and the scene is removed for good —
+  // scrolling back up does not bring it back, but a reload does.
+  (function () {
+    var scene = document.getElementById("envelope-scene");
+    var root = document.documentElement;
+    if (!scene || !root.classList.contains("intro-ready")) return;
+
+    var canvas = document.getElementById("envelope-flap-canvas"),
+        ctx = canvas && canvas.getContext("2d"),
+        fold = scene.querySelector(".envelope-fold"),
+        light = scene.querySelector(".envelope-card-light"),
+        hint = scene.querySelector(".envelope-hint");
+
+    if (!ctx) { root.classList.remove("intro-ready", "intro-lock"); return; }
+    window.__snIntroRunning = true;
+
+    var texture = new Image();
+    texture.src = "assets/envelope/paper.webp";
+
+    var p = 0, target = 0, running = false, finished = false,
+        vw = 390, vh = 844, dpr = 1, hingeY = 1, pocketMeetY = 443,
+        flapW = 1080, flapH = 540, cameraD = 1420;
+
+    // A tap plays the whole opening as a timed tween. 2600ms reads as unhurried
+    // without making the guest wait on it.
+    var TAP_MS = 2600;
+    var tween = null;
+
+    function clamp01(v) { return v < 0 ? 0 : v > 1 ? 1 : v; }
+    function seg(v, a, b) { return clamp01((v - a) / (b - a)); }
+    function easeInOut(t) { return t < 0.5 ? 4 * t * t * t : 1 - Math.pow(-2 * t + 2, 3) / 2; }
+    function smooth(t) { return t * t * (3 - 2 * t); }
+    function span() { return Math.max(390, window.innerHeight * 1.12); }
+
+    function resize() {
+      var r = scene.getBoundingClientRect();
+      // Ignore zero-size measurements (a hidden tab reports 0x0); keeping the
+      // last good size stops the envelope collapsing to a point.
+      if (r.width < 2 || r.height < 2) return;
+      vw = Math.max(1, r.width);
+      vh = Math.max(1, r.height);
+      dpr = Math.min(window.devicePixelRatio || 1, 2);
+      canvas.width = Math.round(vw * dpr);
+      canvas.height = Math.round(vh * dpr);
+      flapH = Math.max(280, Math.min(560, vh * 0.527));
+      // the phone is only the narrow central crop of a much wider envelope
+      flapW = Math.max(flapH * 2.08, vw * 4.15);
+      hingeY = 1;
+      pocketMeetY = vh * 0.525;
+      cameraD = Math.max(1180, flapW * 1.32);
+      scene.style.setProperty("--pocket-meet-y", pocketMeetY.toFixed(1) + "px");
+      scene.style.setProperty("--envelope-w", flapW.toFixed(1) + "px");
+      render();
+    }
+
+    /* Rounded landscape-envelope outline. The broad shoulders sit beyond the
+       portrait crop; only the centre slice is ever visible on a phone. */
+    function halfWidth(t) {
+      return flapW * 0.5 * Math.pow(Math.max(0, 1 - t), 1.015);
+    }
+
+    function project(x, y, z) {
+      var f = cameraD / Math.max(180, cameraD - z);
+      return { x: vw / 2 + x * f, y: hingeY + y * f, z: z };
+    }
+
+    function pathPoints(points) {
+      ctx.beginPath();
+      ctx.moveTo(points[0].x, points[0].y);
+      for (var i = 1; i < points.length; i++) ctx.lineTo(points[i].x, points[i].y);
+      ctx.closePath();
+    }
+
+    function fillTriangle(points, color) {
+      ctx.beginPath();
+      ctx.moveTo(points[0].x, points[0].y);
+      ctx.lineTo(points[1].x, points[1].y);
+      ctx.lineTo(points[2].x, points[2].y);
+      ctx.closePath();
+      ctx.fillStyle = color;
+      ctx.fill();
+    }
+
+    /* Affine texture mapping of one source triangle onto one projected paper
+       triangle. Together the triangles form a continuously bending sheet. */
+    function textureTriangle(dst, src) {
+      if (!texture.complete || !texture.naturalWidth) {
+        fillTriangle(dst, "#e9dfca");
+        return;
+      }
+      var x0 = src[0].x, y0 = src[0].y,
+          x1 = src[1].x, y1 = src[1].y,
+          x2 = src[2].x, y2 = src[2].y;
+      var det = x0 * (y1 - y2) + x1 * (y2 - y0) + x2 * (y0 - y1);
+      if (Math.abs(det) < 0.001) return;
+      var a = (dst[0].x * (y1 - y2) + dst[1].x * (y2 - y0) + dst[2].x * (y0 - y1)) / det,
+          c = (dst[0].x * (x2 - x1) + dst[1].x * (x0 - x2) + dst[2].x * (x1 - x0)) / det,
+          e = (dst[0].x * (x1 * y2 - x2 * y1) + dst[1].x * (x2 * y0 - x0 * y2) + dst[2].x * (x0 * y1 - x1 * y0)) / det,
+          b = (dst[0].y * (y1 - y2) + dst[1].y * (y2 - y0) + dst[2].y * (y0 - y1)) / det,
+          d = (dst[0].y * (x2 - x1) + dst[1].y * (x0 - x2) + dst[2].y * (x1 - x0)) / det,
+          f = (dst[0].y * (x1 * y2 - x2 * y1) + dst[1].y * (x2 * y0 - x0 * y2) + dst[2].y * (x0 * y1 - x1 * y0)) / det;
+      ctx.save();
+      ctx.beginPath();
+      ctx.moveTo(dst[0].x, dst[0].y);
+      ctx.lineTo(dst[1].x, dst[1].y);
+      ctx.lineTo(dst[2].x, dst[2].y);
+      ctx.closePath();
+      ctx.clip();
+      ctx.transform(a, b, c, d, e, f);
+      ctx.drawImage(texture, 0, 0);
+      ctx.restore();
+    }
+
+    function render() {
+      if (!ctx) return;
+      var open = easeInOut(seg(p, 0.015, 0.5));
+      // A barely lifted resting flap gives a narrow contact shadow before the
+      // gesture begins, while keeping the closed-envelope silhouette.
+      var restAngle = Math.PI / 120;
+      var theta = restAngle + open * (Math.PI * 0.94 - restAngle);
+      // the pocket only starts to leave once the flap is well open
+      var pocketTravel = easeInOut(seg(p, 0.47, 0.96));
+      // the fully-open flap stays up while the pocket slides, then goes with it
+      var vanish = easeInOut(seg(p, 0.70, 0.96));
+      /* Enough strips for a smooth outline and curl, without asking a phone to
+         remap more than a thousand texture triangles every frame. */
+      var rows = 24, cols = 12, dy = flapH / rows;
+      var geometry = [], y3 = 0, z3 = 0;
+      /* Paper scale is driven by the flap HEIGHT, not the envelope's full
+         width, so the print shows at a natural size rather than a magnified
+         centre slice — the canvas counterpart of `background-size: auto 100%`. */
+      var natW = texture.naturalWidth || 1024, natH = texture.naturalHeight || 1024;
+      var texW = vh * natW / natH;
+      var cropH = natH * flapH / vh;
+      var cropY = (natH - cropH) * 0.48;
+      // Heavier cotton-paper curl: the sheet bows as it lifts and the free tip
+      // curls back a little more, so it reads as bending paper, not a rigid
+      // triangle on a hinge.
+      var bend = Math.sin(Math.PI * open) * 0.055;
+      var tipFlex = Math.sin(Math.PI * open) * 0.085;
+
+      ctx.setTransform(1, 0, 0, 1, 0, 0);
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+      ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+      ctx.imageSmoothingEnabled = true;
+      ctx.imageSmoothingQuality = "high";
+
+      for (var r = 0; r <= rows; r++) {
+        var t = r / rows;
+        if (r > 0) {
+          var tm = (r - 0.5) / rows;
+          /* Most of the sheet rotates as one plane. Only a few degrees of
+             curvature gather near the fold and the tip. */
+          var localAngle = theta
+            - bend * Math.sin(Math.PI * tm)
+            + tipFlex * smooth(seg(tm, 0.78, 1));
+          y3 += dy * Math.cos(localAngle);
+          z3 += dy * Math.sin(localAngle);
+        }
+        var hw = halfWidth(t), row = [];
+        for (var c = 0; c <= cols; c++) {
+          var q = c / cols;
+          var x = -hw + 2 * hw * q;
+          row.push({
+            d: project(x, y3, z3),
+            /* Source X follows the point's fixed position on the original
+               sheet, so narrow rows crop the pattern at the tip rather than
+               squeezing the whole print into that smaller width. */
+            s: { x: (0.5 + x / texW) * natW, y: cropY + t * cropH },
+            angle: theta
+              - bend * Math.sin(Math.PI * t)
+              + tipFlex * smooth(seg(t, 0.78, 1))
+          });
+        }
+        geometry.push(row);
+      }
+
+      var outline = [];
+      for (r = 0; r <= rows; r++) outline.push(geometry[r][0].d);
+      for (r = rows; r >= 0; r--) outline.push(geometry[r][cols].d);
+
+      /* The cast shadow is the same lifted mesh outline projected onto the
+         envelope plane from a soft source above-left. */
+      var shadow = [];
+      for (var o = 0; o < outline.length; o++) {
+        var op = outline[o];
+        shadow.push({ x: op.x + op.z * 0.10, y: op.y + op.z * 0.24 });
+      }
+      var lift = Math.max(0, Math.sin(theta));
+      ctx.save();
+      ctx.filter = "blur(" + (4 + 29 * lift).toFixed(1) + "px)";
+      var raisedShadowFade = 1 - smooth(seg(open, 0.12, 0.52));
+      ctx.globalAlpha = (0.12 + 0.22 * lift) * raisedShadowFade * (1 - vanish);
+      pathPoints(shadow);
+      ctx.fillStyle = "#302313";
+      ctx.fill();
+      ctx.restore();
+
+      /* Opaque paper base under the print: guarantees a solid sheet at the flap
+         edges and while the texture loads, so the envelope stays sealed. */
+      ctx.globalAlpha = 1 - vanish;
+      pathPoints(outline);
+      ctx.fillStyle = "#ffffff";
+      ctx.fill();
+
+      var triangles = [];
+      for (r = 0; r < rows; r++) {
+        for (c = 0; c < cols; c++) {
+          var a = geometry[r][c], b = geometry[r][c + 1],
+              cc = geometry[r + 1][c], d = geometry[r + 1][c + 1];
+          var tCell = (r + 0.5) / rows;
+          triangles.push({ d: [a.d, cc.d, b.d], s: [a.s, cc.s, b.s], z: (a.d.z + cc.d.z + b.d.z) / 3, angle: a.angle, t: tCell });
+          triangles.push({ d: [b.d, cc.d, d.d], s: [b.s, cc.s, d.s], z: (b.d.z + cc.d.z + d.d.z) / 3, angle: d.angle, t: tCell });
+        }
+      }
+      triangles.sort(function (m, n) { return m.z - n.z; });
+      ctx.globalAlpha = 1 - vanish;
+      for (var i = 0; i < triangles.length; i++) {
+        var tri = triangles[i];
+        textureTriangle(tri.d, tri.s);
+        // Shade it like curved paper under a soft light from above:
+        //  · edge — facets turning edge-on to the camera darken
+        //  · occ  — an ambient-occlusion trough along the fold, deepening as it lifts
+        var edge = 1 - Math.abs(Math.cos(tri.angle - 0.18));
+        var occ = smooth(1 - seg(tri.t, 0.0, 0.42)) * lift;
+        var shade = 0.028 + 0.145 * edge + 0.12 * occ;
+        fillTriangle(tri.d, "rgba(48,35,20," + shade.toFixed(3) + ")");
+        // sheen — a soft highlight band riding the raised belly of the curl
+        var sheen = smooth(seg(tri.t, 0.24, 0.55)) * (1 - smooth(seg(tri.t, 0.62, 0.98))) * lift * 0.13;
+        if (sheen > 0.004) fillTriangle(tri.d, "rgba(255,253,246," + sheen.toFixed(3) + ")");
+      }
+
+      /* A restrained warm face tint; both sides keep the same paper texture. */
+      var backShown = smooth(seg(theta, Math.PI * 0.46, Math.PI * 0.62));
+      ctx.globalAlpha = (0.08 * (1 - backShown) + 0.025 * backShown) * (1 - vanish);
+      pathPoints(outline);
+      ctx.fillStyle = "#efe7d6";
+      ctx.fill();
+
+      ctx.globalAlpha = (0.34 + 0.2 * lift) * (1 - vanish);
+      pathPoints(outline);
+      ctx.lineWidth = 1.15;
+      ctx.strokeStyle = "#756044";
+      ctx.stroke();
+      ctx.globalAlpha = 1;
+
+      // the pocket slides straight down and off the bottom of the screen
+      var pocketShift = pocketTravel * (vh + 18);
+      scene.style.setProperty("--pocket-shift", pocketShift.toFixed(1) + "px");
+      // the page behind is uncovered in step with the pocket leaving
+      scene.style.setProperty("--backdrop-o", (1 - smooth(seg(p, 0.47, 0.80))).toFixed(3));
+      light.style.setProperty("--light-o", (Math.sin(Math.PI * seg(p, 0.04, 0.58)) * 0.68 * (1 - pocketTravel)).toFixed(3));
+      fold.style.setProperty("--fold-o", ((1 - easeInOut(seg(p, 0.43, 0.62))) * (1 - vanish)).toFixed(3));
+      fold.style.setProperty("--fold-shadow-y", (7 + 28 * lift).toFixed(1) + "px");
+      fold.style.setProperty("--fold-shadow-blur", (14 + 34 * lift).toFixed(1) + "px");
+      fold.style.setProperty("--fold-shadow-o", (0.2 + 0.42 * lift).toFixed(3));
+      // whatever is left of the scene fades out over the last stretch
+      scene.style.opacity = (1 - easeInOut(seg(p, 0.9, 1))).toFixed(3);
+      hint.style.setProperty("--hint-o", (1 - seg(p, 0, 0.06)).toFixed(3));
+      // Glue the seal to the flap's tip vertex (last mesh row, centre column) so
+      // it rides up with the flap, scaled by the tip's perspective factor.
+      var sealTip = geometry[rows][cols >> 1].d;
+      var fTip = cameraD / Math.max(180, cameraD - sealTip.z);
+      scene.style.setProperty("--seal-x", sealTip.x.toFixed(1) + "px");
+      scene.style.setProperty("--seal-y", sealTip.y.toFixed(1) + "px");
+      scene.style.setProperty("--seal-s", fTip.toFixed(3));
+      scene.style.setProperty("--seal-o", (1 - vanish).toFixed(3));
+    }
+
+    // Hand-driven progress (wheel / swipe): ease toward whatever the gesture asked for.
+    function frame() {
+      if (tween) return;
+      p += (target - p) * 0.16;
+      if (Math.abs(target - p) < 0.0015) p = target;
+      render();
+      if (p !== target) requestAnimationFrame(frame);
+      else if (p >= 1) finish();
+      else running = false;
+    }
+    function tick() {
+      if (!running && !tween) { running = true; requestAnimationFrame(frame); }
+    }
+    function nudge(px) {
+      if (tween) return;                 // a tap is already playing it out
+      target = clamp01(target + px / span());
+      tick();
+    }
+
+    // Timed open, used by a tap or a key press.
+    function openSlowly() {
+      if (tween || finished) return;
+      running = false;
+      var from = p, t0 = null;
+      tween = function step(ts) {
+        if (t0 === null) t0 = ts;
+        var k = clamp01((ts - t0) / (TAP_MS * (1 - from)));
+        p = target = from + (1 - from) * easeInOut(k);
+        render();
+        if (k < 1) requestAnimationFrame(tween);
+        else { tween = null; finish(); }
+      };
+      requestAnimationFrame(tween);
+    }
+
+    function onWheel(e) {
+      if (finished) return;
+      e.preventDefault();
+      nudge(e.deltaY);
+    }
+    // A tap and a swipe arrive as the same touch stream. Movement under
+    // TAP_SLOP is treated as a tap: we neither preventDefault (which would
+    // swallow the click that follows) nor drive the flap by hand.
+    var TAP_SLOP = 10;
+    var ty = null, ty0 = null, moved = 0;
+    function onTouchStart(e) {
+      ty = ty0 = e.touches[0].clientY;
+      moved = 0;
+    }
+    function onTouchMove(e) {
+      if (finished || ty === null) return;
+      var y = e.touches[0].clientY;
+      moved = Math.max(moved, Math.abs(y - ty0));
+      if (moved < TAP_SLOP) { ty = y; return; }
+      // touch multiplier: higher = the flap opens on a shorter swipe. At 3.0 a
+      // swipe of about a third of the screen height opens it fully.
+      var delta = (ty - y) * 3.0;
+      ty = y;
+      e.preventDefault();
+      nudge(delta);
+    }
+    function onTouchEnd() {
+      // a tap that never crossed the slop opens it on the slow tween
+      if (!finished && ty !== null && moved < TAP_SLOP) openSlowly();
+      ty = ty0 = null;
+    }
+    // Keyboard input keeps focus users from being trapped by the scroll lock.
+    function onKey(e) {
+      if (finished || e.metaKey || e.ctrlKey || e.altKey) return;
+      if (e.key === " " || e.key === "Enter" || e.key === "PageDown" || e.key === "ArrowDown") {
+        e.preventDefault();
+        openSlowly();
+      }
+    }
+    // A tap anywhere on the scene — the wax seal included — opens it.
+    function onClick() { openSlowly(); }
+
+    function listen() {
+      window.addEventListener("wheel", onWheel, { passive: false });
+      window.addEventListener("touchstart", onTouchStart, { passive: true });
+      window.addEventListener("touchmove", onTouchMove, { passive: false });
+      window.addEventListener("touchend", onTouchEnd, { passive: true });
+      window.addEventListener("keydown", onKey);
+      window.addEventListener("resize", resize);
+      scene.addEventListener("click", onClick);
+    }
+
+    function unlisten() {
+      window.removeEventListener("wheel", onWheel);
+      window.removeEventListener("touchstart", onTouchStart);
+      window.removeEventListener("touchmove", onTouchMove);
+      window.removeEventListener("touchend", onTouchEnd);
+      window.removeEventListener("keydown", onKey);
+      window.removeEventListener("resize", resize);
+      scene.removeEventListener("click", onClick);
+    }
+
+    // Once open, the envelope is gone for good: every listener is dropped and
+    // the scene removed, so scrolling back up never restores it. A reload does.
+    function finish() {
+      if (finished) return;
+      finished = true;
+      running = false;
+      tween = null;
+      unlisten();
+      scene.classList.add("is-done");
+      root.classList.remove("intro-lock");
+      if ("scrollRestoration" in history) history.scrollRestoration = "auto";
+      if (scene.parentNode) scene.parentNode.removeChild(scene);
+    }
+
+    function start() {
+      if ("scrollRestoration" in history) history.scrollRestoration = "manual";
+      window.scrollTo(0, 0);
+      resize();
+      listen();
+    }
+
+    start();
+    texture.addEventListener("load", function () { resize(); });
+  })();
+
+  // ---------- Parallax on the botanicals ----------
+  (function () {
+    if (reducedMotion) return;
+    var plxEls = Array.prototype.slice.call(document.querySelectorAll(".plx"));
+    var vh = window.innerHeight;
+    window.addEventListener("resize", function () { vh = window.innerHeight; });
+
+    var ticking = false;
+    function update() {
+      ticking = false;
+      plxEls.forEach(function (el) {
+        var speed = parseFloat(el.dataset.plx || "0.1");
+        var r = el.getBoundingClientRect();
+        var offset = (r.top + r.height / 2) - vh / 2;
+        el.style.transform = "translate3d(0," + (-offset * speed).toFixed(1) + "px,0)";
+      });
+    }
+    function onScroll() {
+      if (!ticking) {
+        ticking = true;
+        requestAnimationFrame(update);
+      }
+    }
+    window.addEventListener("scroll", onScroll, { passive: true });
+    update();
+  })();
+</script>
+</body>
+</html>
