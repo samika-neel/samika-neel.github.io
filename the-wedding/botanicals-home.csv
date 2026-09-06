@@ -1,8 +1,8 @@
 asset,cell,anchor,rotation,size_pct,mirror,notes
-branch10,H-C1,TR,15,20,FALSE,left column cascade
+branch10,H-C1,TR,15,90,FALSE,left column cascade
 branch3,H-F1,TR,0,100,FALSE,top strip
 bird1,H-F5,TR,0,100,TRUE,bird flying inward
-branch9,H-A6,C,25,100,FALSE,
+branch9,H-A6,C,35,90,FALSE,
 branch6,H-F6,TL,0,100,FALSE,right edge mid
 branch1,H-A8,TL,90,100,FALSE,
 branch6,H-F9,TR,90,80,FALSE,right edge lower
