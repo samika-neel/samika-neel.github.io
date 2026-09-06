@@ -25,11 +25,14 @@
     height: auto;
   }
 
-  /* The cards carry their own white margins, so they butt straight up
-     against each other with no gap of ours in between. */
+  /* The embossed cards are full-bleed — unlike the flat ones before them they
+     carry no white margin of their own — so the hairline between them is ours,
+     showing through the gap from the strip behind. */
   .cards {
     display: flex;
     flex-direction: column;
+    gap: 3px;
+    background: #fff;
     opacity: 0;
     transition: opacity 0.6s ease;
   }

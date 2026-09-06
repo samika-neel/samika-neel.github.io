@@ -161,8 +161,8 @@
   .eyebrow {
     margin-top: var(--s1);
     font-family: var(--sans);
-    font-size: clamp(0.65rem, 1.8cqw, 0.78rem);
-    font-weight: 400;
+    font-size: clamp(0.69rem, 1.92cqw, 0.83rem);
+    font-weight: 500;
     letter-spacing: 0.42em;
     text-indent: 0.42em;
     text-transform: uppercase;
@@ -244,9 +244,14 @@
   }
   .save-line {
     margin-top: var(--s2);
-    font-family: var(--serif);
-    font-style: italic;
-    font-size: clamp(1.15rem, 4cqw, 1.6rem);
+    font-family: var(--sans);
+    font-size: clamp(0.69rem, 1.92cqw, 0.83rem);
+    font-weight: 500;
+    /* Looser tracking would set this longer line wider than the eyebrow above
+       the names, and wrap "WEDDING" onto a line of its own. */
+    letter-spacing: 0.22em;
+    text-indent: 0.22em;
+    text-transform: uppercase;
     color: var(--gold);
   }
   .hero-sub {

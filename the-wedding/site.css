@@ -363,9 +363,10 @@ body {
   top: 1.25rem;
   left: max(calc(50% - 200px + 1rem), 1rem);
   z-index: 100;
-  width: 62px;
-  height: 62px;
-  border-radius: 50%;
+  height: 52px;
+  border-radius: 26px;
+  gap: 0.6rem;
+  padding: 0 1.15rem 0 1rem;
   border: 1px solid rgba(255, 255, 255, 0.55);
   background: rgba(247, 243, 234, 0.72);
   box-shadow:
@@ -389,12 +390,11 @@ body {
 }
 .fab:active { transform: scale(0.96); }
 
+/* Rides inline ahead of the rules — on the pill, a corner dot reads as an
+   unread badge sitting on the label. */
 .fab-dot {
-  position: absolute;
-  top: 7px;
-  right: 7px;
-  width: 11px;
-  height: 11px;
+  width: 7px;
+  height: 7px;
   border-radius: 50%;
   background: #34a853;
   box-shadow: 0 0 6px rgba(52, 168, 83, 0.5);
@@ -405,7 +405,17 @@ body {
   50% { opacity: 0.6; transform: scale(0.85); }
 }
 
-.fab-icon { width: 26px; height: 26px; position: relative; }
+.fab-icon { width: 20px; height: 16px; position: relative; }
+.fab::after {
+  content: "MENU";
+  font-family: var(--sans);
+  font-size: 0.7rem;
+  font-weight: 500;
+  letter-spacing: 0.19em;
+  text-indent: 0.19em;
+  line-height: 1;
+  color: #16211a;
+}
 .fab-icon span {
   display: block;
   position: absolute;
@@ -417,9 +427,9 @@ body {
   border-radius: 1px;
   transition: transform 0.3s ease, opacity 0.3s ease;
 }
-.fab-icon span:nth-child(1) { top: 5px; }
-.fab-icon span:nth-child(2) { top: 12px; }
-.fab-icon span:nth-child(3) { top: 19px; }
+.fab-icon span:nth-child(1) { top: 0; }
+.fab-icon span:nth-child(2) { top: 7px; }
+.fab-icon span:nth-child(3) { top: 14px; }
 
 .fab.is-open .fab-icon span:nth-child(1) { transform: translateY(7px) rotate(45deg); }
 .fab.is-open .fab-icon span:nth-child(2) { opacity: 0; }
