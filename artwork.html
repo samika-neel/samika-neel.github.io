@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<meta name="robots" content="noindex, nofollow" />
+<title>The Artwork — Samika &amp; Neelotpal</title>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;1,400;1,500&family=Jost:wght@300;400;500&display=swap" rel="stylesheet" />
+<link rel="icon" type="image/png" sizes="64x64" href="assets/tinted/favicon-64.png" />
+<link rel="apple-touch-icon" href="assets/tinted/apple-touch-icon.png" />
+<link rel="stylesheet" href="site.css" />
+<style>
+  .phone { overflow: hidden; }
+
+  .leaf {
+    position: absolute;
+    z-index: 0;
+    pointer-events: none;
+    background-repeat: no-repeat;
+    background-size: contain;
+    opacity: 0.12;
+  }
+  /* swapped: branch3 now hangs on the left, branch2 on the right. Each keeps
+     the facing that lets it hug its edge, so the mirroring flips with them. */
+  .leaf--tl {
+    top: -10px; left: -50px;
+    width: 148px; aspect-ratio: 546 / 762;
+    background-image: url("assets/tinted/branch3_ink.png");
+  }
+  .leaf--tr {
+    top: 10px; right: -46px;
+    width: 140px; aspect-ratio: 350 / 425;
+    background-image: url("assets/tinted/branch2_ink.png");
+    transform: scaleX(-1);
+  }
+  .page-head, .page-body { position: relative; z-index: 2; }
+</style>
+</head>
+<body>
+  <div class="phone">
+    <span class="leaf leaf--tl" aria-hidden="true"></span>
+    <span class="leaf leaf--tr" aria-hidden="true"></span>
+
+    <header class="page-head">
+      <h1>The Artwork</h1>
+      <span class="sprig" aria-hidden="true"></span>
+    </header>
+
+    <main class="page-body">
+      <section class="sec">
+        <p class="sec-eyebrow">The Toile</p>
+        <div class="sec-rule"></div>
+        <p class="prose">
+          The custom toile print brings the journey of Samika and Neel to life through a garden of carnations and
+          delicate feverfew, alive with hummingbirds in flight.
+        </p>
+        <p class="prose">
+          At its heart are the hydrangeas, clusters of individual blooms coming together as one,
+          reflecting two lives, two families and many journeys now intertwined.
+        </p>
+        <p class="prose">
+          A garden of their story, rooted in friendship, shaped across continents, now growing
+          together.
+        </p>
+      </section>
+
+      <div class="page-end">
+        <img src="assets/images/sn_oval.webp" alt="S and N monogram" loading="lazy" />
+      </div>
+    </main>
+  </div>
+
+<script src="site.js"></script>
+</body>
+</html>
