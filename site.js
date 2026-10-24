@@ -10,6 +10,7 @@
 
   var MENU = [
     ["events.html",   "Events"],
+    ["itinerary.html","Itinerary"],
     ["travel.html",   "Travel &amp; Stay"],
     ["wardrobe.html", "Wardrobe Guide"],
     ["faq.html",      "FAQ"],
